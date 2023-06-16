@@ -9,7 +9,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "financialProject",
+            "prefix": "fpd",
             "style": "camelCase"
           }
         ],
@@ -17,7 +17,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "financial-project",
+            "prefix": "fpd",
             "style": "kebab-case"
           }
         ]

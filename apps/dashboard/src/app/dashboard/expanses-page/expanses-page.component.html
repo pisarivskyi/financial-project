@@ -1,0 +1,22 @@
+<ng-container *ngIf="(isLoading$ | async) === false; else loadingTemplate">
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Amount</th>
+      <th>Currency</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let expanse of expanses$ | async">
+      <td>{{ expanse.name }}</td>
+      <td>{{ expanse.amount }}</td>
+      <td>{{ expanse.currency }}</td>
+    </tr>
+    </tbody>
+  </table>
+</ng-container>
+
+<ng-template #loadingTemplate>
+  loading expanses...
+</ng-template>

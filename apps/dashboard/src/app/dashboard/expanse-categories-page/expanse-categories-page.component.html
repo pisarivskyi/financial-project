@@ -1,0 +1,18 @@
+<ng-container *ngIf="(isLoading$ | async) === false; else loadingTemplate">
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let expanseCategory of expanseCategories$ | async">
+      <td>{{ expanseCategory.name }}</td>
+    </tr>
+    </tbody>
+  </table>
+</ng-container>
+
+<ng-template #loadingTemplate>
+  loading expanse categories...
+</ng-template>
