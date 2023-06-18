@@ -1,13 +1,3 @@
-<ng-container *ngIf="(isLoading$ | async) === false; else loadingTemplate">
-  <a [routerLink]="[RoutePathEnum.Dashboard, RoutePathEnum.Expanses]">expanses</a>
-  <br>
-  <a [routerLink]="[RoutePathEnum.Dashboard, RoutePathEnum.ExpanseCategories]">expanse categories</a>
-  <br>
-  <a [routerLink]="[RoutePathEnum.Dashboard, RoutePathEnum.Budgets]">budgets</a>
-  <br>
-  <router-outlet></router-outlet>
-</ng-container>
-
-<ng-template #loadingTemplate>
-  loading...
-</ng-template>
+<nz-spin class="loading-container" [nzSpinning]="isLoading$ | async">
+  <router-outlet *ngIf="(isLoading$ | async) === false"></router-outlet>
+</nz-spin>

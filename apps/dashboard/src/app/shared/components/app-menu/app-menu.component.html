@@ -1,0 +1,13 @@
+<h1>Budget</h1>
+
+<ul nz-menu nzMode="inline">
+  <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Expanses]">expanses</a>
+  </li>
+  <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.ExpanseCategories]">expanse categories</a>
+  </li>
+  <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Budgets]">budgets</a>
+  </li>
+</ul>

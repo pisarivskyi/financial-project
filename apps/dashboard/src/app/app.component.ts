@@ -3,12 +3,15 @@ import { Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, catchError, finalize, of, switchMap, throwError } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+
 import { AuthenticationService } from './core/authentication/services/authentication.service';
 import { RoutePathEnum } from './core/enums/route-path.enum';
+import { AppMenuComponent } from './shared/components/app-menu/app-menu.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AppMenuComponent, NzSpinModule],
   selector: 'fpd-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
@@ -17,8 +20,6 @@ import { RoutePathEnum } from './core/enums/route-path.enum';
 export class AppComponent implements OnInit {
   isLoading$ = new BehaviorSubject<boolean>(true);
 
-  RoutePathEnum = RoutePathEnum;
-
   constructor(private router: Router, private authService: AuthenticationService) {}
 
   ngOnInit(): void {
@@ -26,7 +27,7 @@ export class AppComponent implements OnInit {
   }
 
   initSession(): void {
-    this.authService.getSession()
+    this.authService.getSession$()
       .pipe(
         switchMap((session) => {
           if (!session) {
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit {
 
             return of(null);
           } else {
-            return this.authService.refreshSession(session);
+            return this.authService.refreshSession$(session);
           }
         }),
         catchError((error) => {

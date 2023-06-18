@@ -38,29 +38,29 @@ export interface Database {
         Row: {
           amount: number
           category: string
-          created_at: string | null
+          created_at: string
           created_by: string
-          currency: string
+          currency_code: number
           id: string
-          name: string | null
+          name: string
         }
         Insert: {
           amount: number
           category: string
-          created_at?: string | null
+          created_at?: string
           created_by: string
-          currency?: string
+          currency_code: number
           id?: string
-          name?: string | null
+          name?: string
         }
         Update: {
           amount?: number
           category?: string
-          created_at?: string | null
+          created_at?: string
           created_by?: string
-          currency?: string
+          currency_code?: number
           id?: string
-          name?: string | null
+          name?: string
         }
         Relationships: [
           {
@@ -111,30 +111,33 @@ export interface Database {
       expanses: {
         Row: {
           amount: number
-          category: string | null
-          created_at: string | null
-          created_by: string | null
-          currency: string
-          id: number
+          category: string
+          created_at: string
+          created_by: string
+          currency_code: number
+          id: string
           name: string
+          updated_at: string
         }
         Insert: {
           amount: number
-          category?: string | null
-          created_at?: string | null
-          created_by?: string | null
-          currency?: string
-          id?: number
+          category: string
+          created_at?: string
+          created_by: string
+          currency_code: number
+          id?: string
           name: string
+          updated_at?: string
         }
         Update: {
           amount?: number
-          category?: string | null
-          created_at?: string | null
-          created_by?: string | null
-          currency?: string
-          id?: number
+          category?: string
+          created_at?: string
+          created_by?: string
+          currency_code?: number
+          id?: string
           name?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -179,6 +182,37 @@ export interface Database {
         Relationships: [
           {
             foreignKeyName: "incomes_created_by_fkey"
+            columns: ["created_by"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      settings: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          id: string
+          name: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          id?: string
+          name: string
+          value: Json
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          name?: string
+          value?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "settings_created_by_fkey"
             columns: ["created_by"]
             referencedRelation: "users"
             referencedColumns: ["id"]

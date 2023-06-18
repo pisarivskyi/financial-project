@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ExpanseCategoriesService } from './services/expanse-categories.service';
+import { ExpanseCategoriesFacadeService } from './services/expanse-categories-facade.service';
 
 @Component({
   selector: 'fpd-expanse-categories-page',
@@ -16,7 +16,7 @@ export class ExpanseCategoriesPageComponent implements OnInit {
 
   isLoading$ = this.expanseCategoriesService.isLoading$;
 
-  constructor(private expanseCategoriesService: ExpanseCategoriesService) {
+  constructor(private expanseCategoriesService: ExpanseCategoriesFacadeService) {
   }
 
   ngOnInit(): void {

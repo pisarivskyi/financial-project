@@ -1,10 +1,18 @@
 import { BaseModel } from '../../../core/supabase/models/base.model';
-import { ApiGetExpanseRowData } from '../../../core/supabase/types/table.types';
+import {
+  ApiGetExpanseRowData,
+  ApiInsertExpanseRowData, ApiUpdateExpanseRowData,
+} from '../../../core/supabase/types/table.types';
+import { CurrencyEnum } from '../../../shared/enums/currency.enum';
+import { UUID } from '../../../core/supabase/types/uuid.type';
+import { ExpanseCategory } from '../../expanse-categories/models/expanse-category.model';
 
 export class ExpanseModel extends BaseModel {
   name!: string;
   amount!: number;
-  currency!: string;
+  category!: ExpanseCategory;
+  createdBy!: UUID;
+  currencyCode!: CurrencyEnum;
 
   constructor(data: ApiGetExpanseRowData) {
     super();
@@ -17,6 +25,27 @@ export class ExpanseModel extends BaseModel {
   override toModel(data: ApiGetExpanseRowData): void {
     this.name = data.name;
     this.amount = data.amount;
-    this.currency = data.currency;
+    this.currencyCode = data.currency_code;
+    this.category = new ExpanseCategory(data.category);
+    this.createdBy = data.created_by;
+  }
+
+  static toInsertData(model: ExpanseModel): ApiInsertExpanseRowData {
+    return {
+      name: model.name,
+      currency_code: model.currencyCode,
+      amount: model.amount,
+      category: model.category.id,
+      created_by: model.createdBy,
+    };
+  }
+
+  static toUpdateData(model: ExpanseModel): ApiUpdateExpanseRowData {
+    return {
+      name: model.name,
+      currency_code: model.currencyCode,
+      amount: model.amount,
+      category: model.category.id,
+    };
   }
 }

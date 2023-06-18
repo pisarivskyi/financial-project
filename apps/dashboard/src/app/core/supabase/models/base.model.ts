@@ -1,5 +1,7 @@
+import { UUID } from '../types/uuid.type';
+
 export class BaseModel {
-  id!: string;
+  id!: UUID;
   createdAt!: Date;
   updatedAt!: Date;
 

@@ -1,22 +1,38 @@
-<ng-container *ngIf="(isLoading$ | async) === false; else loadingTemplate">
-  <table>
-    <thead>
+<button nz-button (click)="onAddNewExpanse()">Add new expanse</button>
+
+<nz-table #table [nzLoading]="isLoading$ | async" [nzData]="(expanses$ | async) ?? []">
+  <thead>
     <tr>
       <th>Name</th>
+      <th>Category</th>
       <th>Amount</th>
       <th>Currency</th>
+      <th>Date</th>
+      <th>Updated</th>
+      <th>Actions</th>
     </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let expanse of expanses$ | async">
+  </thead>
+  <tbody>
+    <tr *ngFor="let expanse of table.data">
       <td>{{ expanse.name }}</td>
+      <td>{{ expanse.category.name }}</td>
       <td>{{ expanse.amount }}</td>
-      <td>{{ expanse.currency }}</td>
-    </tr>
-    </tbody>
-  </table>
-</ng-container>
+      <td>{{ CurrencyEnum[expanse.currencyCode] }}</td>
+      <td>{{ expanse.createdAt | date }}</td>
+      <td>{{ expanse.updatedAt | date:'full' }}</td>
+      <td>
+        <button
+          nz-button
+          (click)="onEditExpanse(expanse)">edit</button>
 
-<ng-template #loadingTemplate>
-  loading expanses...
-</ng-template>
+        <button
+          nz-button
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure?"
+          nzOkText="ok"
+          nzCancelText="cancel"
+          (nzOnConfirm)="onDeleteExpanse(expanse)">delete</button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

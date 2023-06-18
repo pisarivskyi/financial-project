@@ -13,11 +13,11 @@ export class AuthenticationService {
 
   constructor(private supabaseService: SupabaseService) { }
 
-  getCurrentUser(): Observable<UserModel | null> {
+  getCurrentUser$(): Observable<UserModel | null> {
     return this.currentUser$.asObservable();
   }
 
-  getSession(): Observable<Session | null> {
+  getSession$(): Observable<Session | null> {
     return from(
       this.supabaseService.getClient().auth.getSession()
     )
@@ -31,7 +31,7 @@ export class AuthenticationService {
       );
   }
 
-  refreshSession(session: Session): Observable<Session | null> {
+  refreshSession$(session: Session): Observable<Session | null> {
     return from(
       this.supabaseService.getClient().auth.refreshSession()
     )
@@ -45,7 +45,7 @@ export class AuthenticationService {
       );
   }
 
-  signIn(credentials: { email: string; password: string; }): Observable<any> {
+  signIn$(credentials: { email: string; password: string; }): Observable<any> {
     return from(
       this.supabaseService.getClient().auth.signInWithPassword(credentials)
     )
@@ -59,7 +59,7 @@ export class AuthenticationService {
       );
   }
 
-  signOut(): Observable<any> {
+  signOut$(): Observable<any> {
     return from(
       this.supabaseService.getClient().auth.signOut()
     );

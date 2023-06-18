@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, finalize, tap } from 'rxjs';
 
-import { ApiExpanseCategoriesService } from '../../../api/expanse-categories/services/api-expanse-categories.service';
 import { ExpanseCategory } from '../../../api/expanse-categories/models/expanse-category.model';
+import { ExpanseCategoriesService } from '../../services/expanse-categories.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ExpanseCategoriesService {
+export class ExpanseCategoriesFacadeService {
   private isLoadingSubject$ = new BehaviorSubject<boolean>(false);
 
   private expanseCategoriesSubject$ = new BehaviorSubject<ExpanseCategory[]>([]);
@@ -16,12 +16,12 @@ export class ExpanseCategoriesService {
 
   expanseCategories$ = this.expanseCategoriesSubject$.asObservable();
 
-  constructor(private apiExpanseCategoriesService: ApiExpanseCategoriesService) { }
+  constructor(private expanseCategoriesService: ExpanseCategoriesService) { }
 
   getExpanseCategories(): void {
     this.isLoadingSubject$.next(true);
 
-    this.apiExpanseCategoriesService.fetchExpanseCategories()
+    this.expanseCategoriesService.getExpanseCategories()
       .pipe(
         tap(({ data }) => this.expanseCategoriesSubject$.next(data ?? [])),
         finalize(() => this.isLoadingSubject$.next(false))
