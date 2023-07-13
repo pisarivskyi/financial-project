@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, from, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, finalize, from, map, Observable, tap } from 'rxjs';
 import { Session } from '@supabase/supabase-js';
 
 import { SupabaseService } from '../../supabase/services/supabase.service';
@@ -10,15 +10,21 @@ import { RoutePathEnum } from '../../enums/route-path.enum';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private currentUser$ = new BehaviorSubject<UserModel | null>(null);
+  private isLoadingSubject$ = new BehaviorSubject<boolean>(true);
+
+  private currentUser$ = new BehaviorSubject<UserModel | undefined | null>(undefined);
+
+  isLoading$ = this.isLoadingSubject$.asObservable();
 
   constructor(private supabaseService: SupabaseService) { }
 
-  getCurrentUser$(): Observable<UserModel | null> {
+  getCurrentUser$(): Observable<UserModel | undefined | null> {
     return this.currentUser$.asObservable();
   }
 
   getSession$(): Observable<Session | null> {
+    this.isLoadingSubject$.next(true);
+
     return from(
       this.supabaseService.getClient().auth.getSession()
     )
@@ -26,9 +32,12 @@ export class AuthenticationService {
         tap(({ data }) => {
           if (data?.session?.user) {
             this.currentUser$.next(new UserModel(data?.session?.user))
+          } else {
+            this.currentUser$.next(null)
           }
         }),
         map(({ data }) => data.session),
+        finalize(() => this.isLoadingSubject$.next(false))
       );
   }
 
