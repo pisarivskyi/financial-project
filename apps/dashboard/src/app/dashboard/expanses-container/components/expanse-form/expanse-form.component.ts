@@ -17,7 +17,7 @@ import { AuthenticationService } from '../../../../core/authentication/services/
 import { CURRENCY_OPTIONS } from '../../../../shared/constants/currency-options.const';
 import { CurrencyEnum } from '../../../../shared/enums/currency.enum';
 import { CreateFormGroupFromData } from '../../../../shared/types/create-form-group-from-data.type';
-import { ExpanseCategoriesFacadeService } from '../../../expanse-categories-page/services/expanse-categories-facade.service';
+import { ExpanseCategoriesFacadeService } from '../../../expanse-categories-container/services/expanse-categories-facade.service';
 import { ExpansesFacadeService } from '../../services/expanses-facade.service';
 
 export interface ExpanseFormData {

@@ -4,14 +4,14 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ExpanseCategoriesFacadeService } from './services/expanse-categories-facade.service';
 
 @Component({
-  selector: 'fpd-expanse-categories-page',
+  selector: 'fpd-expanse-categories-container',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './expanse-categories-page.component.html',
-  styleUrls: ['./expanse-categories-page.component.scss'],
+  templateUrl: './expanse-categories-container.component.html',
+  styleUrls: ['./expanse-categories-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExpanseCategoriesPageComponent implements OnInit {
+export class ExpanseCategoriesContainerComponent implements OnInit {
   expanseCategories$ = this.expanseCategoriesService.expanseCategories$;
 
   isLoading$ = this.expanseCategoriesService.isLoading$;

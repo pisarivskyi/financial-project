@@ -17,14 +17,14 @@ import { ExpansesFacadeService } from './services/expanses-facade.service';
 
 @UntilDestroy()
 @Component({
-  selector: 'fpd-expanses-page',
+  selector: 'fpd-expanses-container',
   standalone: true,
   imports: [CommonModule, NzTableModule, NzModalModule, NzButtonModule, NzPopconfirmModule, NzMessageModule],
-  templateUrl: './expanses-page.component.html',
-  styleUrls: ['./expanses-page.component.scss'],
+  templateUrl: './expanses-container.component.html',
+  styleUrls: ['./expanses-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExpansesPageComponent implements OnInit {
+export class ExpansesContainerComponent implements OnInit {
   expanses$ = this.expansesFacadeService.expanses$;
 
   isLoading$ = this.expansesFacadeService.isLoading$;
