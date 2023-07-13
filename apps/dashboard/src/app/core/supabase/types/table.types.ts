@@ -16,6 +16,7 @@ export type ApiUpdateExpanseRowData = ExpansesTable['Update'];
 export type ExpanseCategoriesTable = PublicTables['expanse_categories'];
 export type ApiGetExpanseCategoryRowData = ExpanseCategoriesTable['Row'];
 export type ApiInsertExpanseCategoryRowData = ExpanseCategoriesTable['Insert'];
+export type ApiUpdateExpanseCategoryRowData = ExpanseCategoriesTable['Update'];
 
 // Budgets table
 export type BudgetsTable = PublicTables['budgets'];

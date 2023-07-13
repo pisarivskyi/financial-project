@@ -43,7 +43,6 @@ export class EditExpanseModalComponent {
       this.expanseService
         .updateExpanse(this.expanse.id, ExpanseModel.toUpdateData(this.expanseFormComponent.formGroup.value))
         .subscribe((d) => {
-          console.log(d);
           this.isLoading$.next(false);
 
           this.modalRef.destroy(true);
