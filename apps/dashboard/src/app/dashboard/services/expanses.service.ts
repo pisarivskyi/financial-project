@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
+import { Observable } from 'rxjs';
 
-import { ApiExpansesService } from '../../api/expanses/services/api-expanses.service';
 import { ExpanseModel } from '../../api/expanses/models/expanse.model';
+import { ApiExpansesService } from '../../api/expanses/services/api-expanses.service';
+import { PaginationInterface } from '../../core/supabase/interfaces/pagination.interface';
 import { ApiInsertExpanseRowData, ApiUpdateExpanseRowData } from '../../core/supabase/types/table.types';
 import { UUID } from '../../core/supabase/types/uuid.type';
-import { PaginationInterface } from '../../core/supabase/interfaces/pagination.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExpansesService {
-  constructor(private apiExpansesService: ApiExpansesService) { }
+  constructor(private apiExpansesService: ApiExpansesService) {}
 
   getExpanses(pagination?: PaginationInterface): Observable<PostgrestResponse<ExpanseModel>> {
     return this.apiExpansesService.fetchExpanses(pagination);

@@ -1,12 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -19,15 +13,7 @@ import { RoutePathEnum } from '../../core/enums/route-path.enum';
 @Component({
   selector: 'fpd-sign-in-container',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    RouterLink,
-    NzButtonModule,
-    NzFormModule,
-    NzInputModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, NzButtonModule, NzFormModule, NzInputModule],
   templateUrl: './sign-in-container.component.html',
   styleUrls: ['./sign-in-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

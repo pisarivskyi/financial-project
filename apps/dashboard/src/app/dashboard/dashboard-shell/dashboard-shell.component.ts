@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AppMenuComponent } from '../../shared/components/app-menu/app-menu.component';
+
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+
+import { AppMenuComponent } from '../../shared/components/app-menu/app-menu.component';
 
 @Component({
   selector: 'fpd-dashboard-shell',

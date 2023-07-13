@@ -1,27 +1,21 @@
-import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
-import { ExpanseFormComponent } from '../expanse-form/expanse-form.component';
-import { AuthenticationService } from '../../../../core/authentication/services/authentication.service';
-import { ExpansesFacadeService } from '../../services/expanses-facade.service';
 import { ExpanseModel } from '../../../../api/expanses/models/expanse.model';
+import { AuthenticationService } from '../../../../core/authentication/services/authentication.service';
 import { updateValueAndValidity } from '../../../../shared/utils/form-utils';
+import { ExpansesFacadeService } from '../../services/expanses-facade.service';
+import { ExpanseFormComponent } from '../expanse-form/expanse-form.component';
 
 @Component({
   selector: 'fpd-edit-expanse-modal',
   standalone: true,
-  imports: [
-    CommonModule,
-    ExpanseFormComponent,
-    NzButtonModule,
-    NzModalModule,
-    NzSpinModule,
-  ],
+  imports: [CommonModule, ExpanseFormComponent, NzButtonModule, NzModalModule, NzSpinModule],
   templateUrl: './edit-expanse-modal.component.html',
   styleUrls: ['./edit-expanse-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,10 +40,8 @@ export class EditExpanseModalComponent {
     if (this.expanseFormComponent.formGroup.valid) {
       this.isLoading$.next(true);
 
-      this.expanseService.updateExpanse(
-        this.expanse.id,
-        ExpanseModel.toUpdateData(this.expanseFormComponent.formGroup.value)
-      )
+      this.expanseService
+        .updateExpanse(this.expanse.id, ExpanseModel.toUpdateData(this.expanseFormComponent.formGroup.value))
         .subscribe((d) => {
           console.log(d);
           this.isLoading$.next(false);

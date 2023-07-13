@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, finalize, Observable, tap } from 'rxjs';
 import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
+import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
 
 import { ExpanseModel } from '../../../api/expanses/models/expanse.model';
-import { ApiInsertExpanseRowData, ApiUpdateExpanseRowData } from '../../../core/supabase/types/table.types';
-import { ExpansesService } from '../../services/expanses.service';
-import { UUID } from '../../../core/supabase/types/uuid.type';
 import { PaginationInterface } from '../../../core/supabase/interfaces/pagination.interface';
 import { PaginationModel } from '../../../core/supabase/models/pagination.model';
+import { ApiInsertExpanseRowData, ApiUpdateExpanseRowData } from '../../../core/supabase/types/table.types';
+import { UUID } from '../../../core/supabase/types/uuid.type';
+import { ExpansesService } from '../../services/expanses.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExpansesFacadeService {
   private isLoadingSubject$ = new BehaviorSubject<boolean>(false);
@@ -31,12 +31,13 @@ export class ExpansesFacadeService {
 
   pagination$ = this.paginationSubject$.asObservable();
 
-  constructor(private expansesService: ExpansesService) { }
+  constructor(private expansesService: ExpansesService) {}
 
   getExpanses(): void {
     this.isLoadingSubject$.next(true);
 
-    this.expansesService.getExpanses(this.paginationSubject$.value)
+    this.expansesService
+      .getExpanses(this.paginationSubject$.value)
       .pipe(
         tap(({ data, count }) => {
           this.expansesSubject$.next(data ?? []);

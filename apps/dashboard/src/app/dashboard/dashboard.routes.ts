@@ -15,12 +15,15 @@ export const dashboardRoutes: Route[] = [
       },
       {
         path: RoutePathEnum.Expanses,
-        loadComponent: () => import('./expanses-page/expanses-page.component').then(mod => mod.ExpansesPageComponent),
+        loadComponent: () => import('./expanses-page/expanses-page.component').then((mod) => mod.ExpansesPageComponent),
       },
       {
         path: RoutePathEnum.ExpanseCategories,
-        loadComponent: () => import('./expanse-categories-page/expanse-categories-page.component').then(mod => mod.ExpanseCategoriesPageComponent),
-      }
+        loadComponent: () =>
+          import('./expanse-categories-page/expanse-categories-page.component').then(
+            (mod) => mod.ExpanseCategoriesPageComponent
+          ),
+      },
     ],
   },
 ];

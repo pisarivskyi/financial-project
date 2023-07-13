@@ -1,32 +1,25 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzTableModule } from 'ng-zorro-antd/table';
 
-import { ExpansesFacadeService } from './services/expanses-facade.service';
-import { AddExpanseModalComponent } from './components/add-expanse-modal/add-expanse-modal.component';
-import { CurrencyEnum } from '../../shared/enums/currency.enum';
 import { ExpanseModel } from '../../api/expanses/models/expanse.model';
+import { CurrencyEnum } from '../../shared/enums/currency.enum';
+import { AddExpanseModalComponent } from './components/add-expanse-modal/add-expanse-modal.component';
 import { EditExpanseModalComponent } from './components/edit-expanse-modal/edit-expanse-modal.component';
+import { ExpansesFacadeService } from './services/expanses-facade.service';
 
 @UntilDestroy()
 @Component({
   selector: 'fpd-expanses-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzTableModule,
-    NzModalModule,
-    NzButtonModule,
-    NzPopconfirmModule,
-    NzMessageModule,
-  ],
+  imports: [CommonModule, NzTableModule, NzModalModule, NzButtonModule, NzPopconfirmModule, NzMessageModule],
   templateUrl: './expanses-page.component.html',
   styleUrls: ['./expanses-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,29 +42,25 @@ export class ExpansesPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams
-      .pipe(untilDestroyed(this))
-      .subscribe(({ page, size }) => {
-        page = Number(page ?? 1);
-        size = Number(size ?? 20);
+    this.activatedRoute.queryParams.pipe(untilDestroyed(this)).subscribe(({ page, size }) => {
+      page = Number(page ?? 1);
+      size = Number(size ?? 20);
 
-        this.expansesFacadeService.updatePagination({
-          pageIndex: page,
-          pageSize: size,
-        });
-
-        this.expansesFacadeService.getExpanses();
+      this.expansesFacadeService.updatePagination({
+        pageIndex: page,
+        pageSize: size,
       });
 
-    this.pagination$
-      .pipe(untilDestroyed(this))
-      .subscribe(v => {
-        this.router.navigate(['./'], {
-          queryParams: { page: v.pageIndex, size: v.pageSize },
-          relativeTo: this.activatedRoute,
-          replaceUrl: false,
-        });
+      this.expansesFacadeService.getExpanses();
+    });
+
+    this.pagination$.pipe(untilDestroyed(this)).subscribe((v) => {
+      this.router.navigate(['./'], {
+        queryParams: { page: v.pageIndex, size: v.pageSize },
+        relativeTo: this.activatedRoute,
+        replaceUrl: false,
       });
+    });
   }
 
   onAddNewExpanse(): void {

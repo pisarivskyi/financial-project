@@ -4,7 +4,7 @@
       <nz-form-label>Name</nz-form-label>
 
       <nz-form-control>
-        <input nz-input formControlName="name" type="text">
+        <input nz-input formControlName="name" type="text" />
       </nz-form-control>
     </nz-form-item>
 
@@ -20,12 +20,7 @@
       <nz-form-label>Currency</nz-form-label>
 
       <nz-form-control>
-        <nz-select
-          formControlName="currencyCode"
-          nzPlaceHolder="Choose"
-          [nzOptions]="currencyOptions"
-        >
-        </nz-select>
+        <nz-select formControlName="currencyCode" nzPlaceHolder="Choose" [nzOptions]="currencyOptions"> </nz-select>
       </nz-form-control>
     </nz-form-item>
 

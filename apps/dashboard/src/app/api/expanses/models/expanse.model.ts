@@ -1,10 +1,11 @@
 import { BaseModel } from '../../../core/supabase/models/base.model';
 import {
   ApiGetExpanseRowData,
-  ApiInsertExpanseRowData, ApiUpdateExpanseRowData,
+  ApiInsertExpanseRowData,
+  ApiUpdateExpanseRowData,
 } from '../../../core/supabase/types/table.types';
-import { CurrencyEnum } from '../../../shared/enums/currency.enum';
 import { UUID } from '../../../core/supabase/types/uuid.type';
+import { CurrencyEnum } from '../../../shared/enums/currency.enum';
 import { ExpanseCategory } from '../../expanse-categories/models/expanse-category.model';
 
 export class ExpanseModel extends BaseModel {

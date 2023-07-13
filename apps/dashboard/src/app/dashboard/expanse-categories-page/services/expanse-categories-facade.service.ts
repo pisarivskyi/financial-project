@@ -5,7 +5,7 @@ import { ExpanseCategory } from '../../../api/expanse-categories/models/expanse-
 import { ExpanseCategoriesService } from '../../services/expanse-categories.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExpanseCategoriesFacadeService {
   private isLoadingSubject$ = new BehaviorSubject<boolean>(false);
@@ -16,12 +16,13 @@ export class ExpanseCategoriesFacadeService {
 
   expanseCategories$ = this.expanseCategoriesSubject$.asObservable();
 
-  constructor(private expanseCategoriesService: ExpanseCategoriesService) { }
+  constructor(private expanseCategoriesService: ExpanseCategoriesService) {}
 
   getExpanseCategories(): void {
     this.isLoadingSubject$.next(true);
 
-    this.expanseCategoriesService.getExpanseCategories()
+    this.expanseCategoriesService
+      .getExpanseCategories()
       .pipe(
         tap(({ data }) => this.expanseCategoriesSubject$.next(data ?? [])),
         finalize(() => this.isLoadingSubject$.next(false))
