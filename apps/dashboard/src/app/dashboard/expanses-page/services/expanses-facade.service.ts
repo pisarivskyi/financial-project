@@ -6,6 +6,8 @@ import { ExpanseModel } from '../../../api/expanses/models/expanse.model';
 import { ApiInsertExpanseRowData, ApiUpdateExpanseRowData } from '../../../core/supabase/types/table.types';
 import { ExpansesService } from '../../services/expanses.service';
 import { UUID } from '../../../core/supabase/types/uuid.type';
+import { PaginationInterface } from '../../../core/supabase/interfaces/pagination.interface';
+import { PaginationModel } from '../../../core/supabase/models/pagination.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,18 +17,36 @@ export class ExpansesFacadeService {
 
   private expansesSubject$ = new BehaviorSubject<ExpanseModel[]>([]);
 
+  private paginationSubject$ = new BehaviorSubject<PaginationModel>(
+    new PaginationModel({
+      pageIndex: 1,
+      pageSize: 20,
+      total: 0,
+    })
+  );
+
   isLoading$ = this.isLoadingSubject$.asObservable();
 
   expanses$ = this.expansesSubject$.asObservable();
+
+  pagination$ = this.paginationSubject$.asObservable();
 
   constructor(private expansesService: ExpansesService) { }
 
   getExpanses(): void {
     this.isLoadingSubject$.next(true);
 
-    this.expansesService.getExpanses()
+    this.expansesService.getExpanses(this.paginationSubject$.value)
       .pipe(
-        tap(({ data }) => this.expansesSubject$.next(data ?? [])),
+        tap(({ data, count }) => {
+          this.expansesSubject$.next(data ?? []);
+
+          this.paginationSubject$.next(
+            this.paginationSubject$.value.patch({
+              total: count ?? this.paginationSubject$.value.total,
+            })
+          );
+        }),
         finalize(() => this.isLoadingSubject$.next(false))
       )
       .subscribe();
@@ -42,5 +62,9 @@ export class ExpansesFacadeService {
 
   updateExpanse(id: UUID, expanse: ApiUpdateExpanseRowData): Observable<PostgrestSingleResponse<null>> {
     return this.expansesService.updateExpanse(id, expanse);
+  }
+
+  updatePagination(pagination: Partial<PaginationInterface>): void {
+    this.paginationSubject$.next(this.paginationSubject$.value.patch(pagination));
   }
 }

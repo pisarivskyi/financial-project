@@ -4,6 +4,7 @@ import { Session } from '@supabase/supabase-js';
 
 import { SupabaseService } from '../../supabase/services/supabase.service';
 import { UserModel } from '../models/user.model';
+import { RoutePathEnum } from '../../enums/route-path.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +63,15 @@ export class AuthenticationService {
   signOut$(): Observable<any> {
     return from(
       this.supabaseService.getClient().auth.signOut()
+    );
+  }
+
+  requestPasswordReset$(email: string): Observable<any> {
+    return from(
+      this.supabaseService.getClient().auth.resetPasswordForEmail(email, {
+        redirectTo: `http://localhost:4200/${RoutePathEnum.Dashboard}`
+        // redirectTo: `http://localhost:4200/${RoutePathEnum.Auth}/${RoutePathEnum.Password}/${RoutePathEnum.SetPassword}`
+      })
     );
   }
 }

@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
@@ -13,25 +15,63 @@ import { CurrencyEnum } from '../../shared/enums/currency.enum';
 import { ExpanseModel } from '../../api/expanses/models/expanse.model';
 import { EditExpanseModalComponent } from './components/edit-expanse-modal/edit-expanse-modal.component';
 
+@UntilDestroy()
 @Component({
   selector: 'fpd-expanses-page',
   standalone: true,
-  imports: [CommonModule, NzTableModule, NzModalModule, NzButtonModule, NzPopconfirmModule, NzMessageModule],
+  imports: [
+    CommonModule,
+    NzTableModule,
+    NzModalModule,
+    NzButtonModule,
+    NzPopconfirmModule,
+    NzMessageModule,
+  ],
   templateUrl: './expanses-page.component.html',
   styleUrls: ['./expanses-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpansesPageComponent implements OnInit {
-  expanses$ = this.expansesService.expanses$;
+  expanses$ = this.expansesFacadeService.expanses$;
 
-  isLoading$ = this.expansesService.isLoading$;
+  isLoading$ = this.expansesFacadeService.isLoading$;
+
+  pagination$ = this.expansesFacadeService.pagination$;
 
   CurrencyEnum = CurrencyEnum;
 
-  constructor(private expansesService: ExpansesFacadeService, private modalService: NzModalService, private messageService: NzMessageService) {}
+  constructor(
+    private expansesFacadeService: ExpansesFacadeService,
+    private modalService: NzModalService,
+    private messageService: NzMessageService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.expansesService.getExpanses();
+    this.activatedRoute.queryParams
+      .pipe(untilDestroyed(this))
+      .subscribe(({ page, size }) => {
+        page = Number(page ?? 1);
+        size = Number(size ?? 20);
+
+        this.expansesFacadeService.updatePagination({
+          pageIndex: page,
+          pageSize: size,
+        });
+
+        this.expansesFacadeService.getExpanses();
+      });
+
+    this.pagination$
+      .pipe(untilDestroyed(this))
+      .subscribe(v => {
+        this.router.navigate(['./'], {
+          queryParams: { page: v.pageIndex, size: v.pageSize },
+          relativeTo: this.activatedRoute,
+          replaceUrl: false,
+        });
+      });
   }
 
   onAddNewExpanse(): void {
@@ -43,7 +83,7 @@ export class ExpansesPageComponent implements OnInit {
 
     modalRef.afterClose.subscribe((created: boolean) => {
       if (created) {
-        this.expansesService.getExpanses();
+        this.expansesFacadeService.getExpanses();
 
         this.messageService.success('Expanse item was created');
       }
@@ -60,7 +100,7 @@ export class ExpansesPageComponent implements OnInit {
 
     modalRef.afterClose.subscribe((created: boolean) => {
       if (created) {
-        this.expansesService.getExpanses();
+        this.expansesFacadeService.getExpanses();
 
         this.messageService.success('Expanse item was updated');
       }
@@ -68,11 +108,19 @@ export class ExpansesPageComponent implements OnInit {
   }
 
   onDeleteExpanse(expanse: ExpanseModel): void {
-    this.expansesService.deleteExpanse(expanse.id)
-      .subscribe(() => {
-        this.expansesService.getExpanses();
+    this.expansesFacadeService.deleteExpanse(expanse.id).subscribe(() => {
+      this.expansesFacadeService.getExpanses();
 
-        this.messageService.success('Expanse item was deleted')
-      });
+      this.messageService.success('Expanse item was deleted');
+    });
+  }
+
+  onPageIndexChanged(pageIndex: number): void {
+    this.router.navigate(['./'], {
+      queryParams: { page: pageIndex },
+      queryParamsHandling: 'merge',
+      relativeTo: this.activatedRoute,
+      replaceUrl: false,
+    });
   }
 }

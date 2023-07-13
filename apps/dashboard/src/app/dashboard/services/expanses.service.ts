@@ -6,6 +6,7 @@ import { ApiExpansesService } from '../../api/expanses/services/api-expanses.ser
 import { ExpanseModel } from '../../api/expanses/models/expanse.model';
 import { ApiInsertExpanseRowData, ApiUpdateExpanseRowData } from '../../core/supabase/types/table.types';
 import { UUID } from '../../core/supabase/types/uuid.type';
+import { PaginationInterface } from '../../core/supabase/interfaces/pagination.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ import { UUID } from '../../core/supabase/types/uuid.type';
 export class ExpansesService {
   constructor(private apiExpansesService: ApiExpansesService) { }
 
-  getExpanses(): Observable<PostgrestResponse<ExpanseModel>> {
-    return this.apiExpansesService.fetchExpanses();
+  getExpanses(pagination?: PaginationInterface): Observable<PostgrestResponse<ExpanseModel>> {
+    return this.apiExpansesService.fetchExpanses(pagination);
   }
 
   saveExpanse(expanse: ApiInsertExpanseRowData): Observable<PostgrestResponse<ExpanseModel>> {

@@ -1,0 +1,19 @@
+<form [formGroup]="formGroup" nz-form [nzLayout]="'vertical'" (ngSubmit)="onSubmit()">
+  <nz-form-item>
+    <nz-form-label>Email</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="email" type="email">
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Password</nz-form-label>
+    <nz-form-control>
+      <input nz-input formControlName="password" type="password">
+    </nz-form-control>
+  </nz-form-item>
+
+  <button nz-button [nzType]="'primary'" type="submit">sign in</button>
+
+  <a [routerLink]="['/', RoutePathEnum.Auth, RoutePathEnum.Password, RoutePathEnum.ResetRequest]">Reset password</a>
+</form>

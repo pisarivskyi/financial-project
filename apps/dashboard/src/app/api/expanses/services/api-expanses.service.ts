@@ -11,6 +11,7 @@ import {
 } from '../../../core/supabase/types/table.types';
 import { ExpanseModel } from '../models/expanse.model';
 import { UUID } from '../../../core/supabase/types/uuid.type';
+import { PaginationInterface } from '../../../core/supabase/interfaces/pagination.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,20 @@ export class ApiExpansesService {
 
   constructor(private supabaseService: SupabaseService) {}
 
-  fetchExpanses(): Observable<PostgrestResponse<ExpanseModel>> {
+  fetchExpanses(pagination?: PaginationInterface): Observable<PostgrestResponse<ExpanseModel>> {
+    let builder = this.supabaseService.getClient()
+      .from(DatabaseTableEnum.Expanses)
+      .select('*, category(id, name)', { count: 'exact' });
+
+
+    if (pagination) {
+      const p = this.preparePagination(pagination);
+
+      builder = builder.range(p.from, p.to);
+    }
+
     return from(
-      this.supabaseService.getClient()
-        .from(DatabaseTableEnum.Expanses)
-        .select('*, category(id, name)')
+      builder
     )
       .pipe(
         map((response: PostgrestResponse<ApiGetExpanseRowData>) => this.transformFromFetchExpanses(response))
@@ -64,5 +74,15 @@ export class ApiExpansesService {
       )
 
     } as PostgrestResponse<ExpanseModel>;
+  }
+
+  private preparePagination(pagination: PaginationInterface): { from: number; to: number; } {
+    const from = (pagination.pageIndex - 1) * pagination.pageSize;
+    const to = from + (pagination.pageSize - 1);
+
+    return {
+      from,
+      to
+    }
   }
 }
