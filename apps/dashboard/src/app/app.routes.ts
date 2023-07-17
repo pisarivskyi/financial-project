@@ -6,6 +6,11 @@ import { RoutePathEnum } from './core/enums/route-path.enum';
 
 export const appRoutes: Route[] = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: RoutePathEnum.Dashboard,
+  },
+  {
     path: RoutePathEnum.Auth,
     loadChildren: () => import('./auth/auth.routes').then((mod) => mod.authRoutes),
     canActivate: [unauthorizedOnlyGuard],
