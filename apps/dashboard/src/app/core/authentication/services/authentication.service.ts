@@ -67,8 +67,7 @@ export class AuthenticationService {
   requestPasswordReset$(email: string): Observable<any> {
     return from(
       this.supabaseService.getClient().auth.resetPasswordForEmail(email, {
-        redirectTo: `http://localhost:4200/${RoutePathEnum.Dashboard}`,
-        // redirectTo: `http://localhost:4200/${RoutePathEnum.Auth}/${RoutePathEnum.Password}/${RoutePathEnum.SetPassword}`
+        redirectTo: `${location.origin}/${RoutePathEnum.Dashboard}`,
       })
     );
   }
