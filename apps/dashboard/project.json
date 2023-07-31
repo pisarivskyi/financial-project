@@ -15,6 +15,7 @@
         "main": "apps/dashboard/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/dashboard/tsconfig.app.json",
+        "allowedCommonJsDependencies": ["cross-fetch", "websocket"],
         "assets": [
           "apps/dashboard/src/favicon.ico",
           "apps/dashboard/src/assets"
