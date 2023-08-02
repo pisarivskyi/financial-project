@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { instanceToInstance } from 'class-transformer';
 import { map } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -105,4 +106,24 @@ export class RecordFormComponent implements OnInit {
   }
 
   compareWithFn = (o1: Category, o2: Category): boolean => (o1 && o2 ? o1.id === o2.id : o1 === o2);
+
+  getModel(): RecordModel {
+    const record = new RecordModel();
+    record.name = this.formGroup.value.name;
+    record.amount = this.formGroup.value.amount;
+    record.currencyCode = this.formGroup.value.currencyCode;
+    record.category = this.formGroup.value.category;
+
+    return record;
+  }
+
+  getUpdatedModel(): RecordModel {
+    const record = instanceToInstance(this.record, { ignoreDecorators: true })!;
+    record.name = this.formGroup.value.name;
+    record.amount = this.formGroup.value.amount;
+    record.currencyCode = this.formGroup.value.currencyCode;
+    record.category = this.formGroup.value.category;
+
+    return record;
+  }
 }

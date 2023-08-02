@@ -6,7 +6,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
-import { Category } from '../../../../api/categories/models/category.model';
 import { AuthenticationService } from '../../../../core/authentication/services/authentication.service';
 import { updateValueAndValidity } from '../../../../shared/utils/form-utils';
 import { CategoriesFacadeService } from '../../services/categories-facade.service';
@@ -42,12 +41,10 @@ export class AddCategoryModalComponent {
           take(1),
           switchMap((currentUser) => {
             if (currentUser) {
-              return this.categoriesFacadeService.saveCategory$(
-                Category.toInsertData({
-                  createdBy: currentUser.id,
-                  ...this.categoryFormComponent.formGroup.value,
-                })
-              );
+              return this.categoriesFacadeService.saveCategory$({
+                ...this.categoryFormComponent.getModel().toInsertData(),
+                created_by: currentUser.id,
+              });
             }
 
             return of(null);

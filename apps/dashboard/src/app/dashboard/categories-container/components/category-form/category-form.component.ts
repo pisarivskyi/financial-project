@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { instanceToInstance } from 'class-transformer';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -55,5 +56,19 @@ export class CategoryFormComponent implements OnInit {
         name: this.category.name,
       });
     }
+  }
+
+  getModel(): Category {
+    const category = new Category();
+    category.name = this.formGroup.value.name;
+
+    return category;
+  }
+
+  getUpdatedModel(): Category {
+    const category = instanceToInstance(this.category, { ignoreDecorators: true })!;
+    category.name = this.formGroup.value.name;
+
+    return category;
   }
 }

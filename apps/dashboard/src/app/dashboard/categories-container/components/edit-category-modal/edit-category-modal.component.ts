@@ -41,10 +41,7 @@ export class EditCategoryModalComponent {
       this.isLoading$.next(true);
 
       this.categoriesFacadeService
-        .updateCategory$(
-          this.category.id,
-          Category.toUpdateData(this.categoryFormComponent.formGroup.value)
-        )
+        .updateCategory$(this.category.id, this.categoryFormComponent.getUpdatedModel().toUpdateData())
         .subscribe(() => {
           this.isLoading$.next(false);
 

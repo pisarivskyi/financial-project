@@ -6,7 +6,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
-import { RecordModel } from '../../../../api/records/models/record.model';
 import { AuthenticationService } from '../../../../core/authentication/services/authentication.service';
 import { updateValueAndValidity } from '../../../../shared/utils/form-utils';
 import { RecordsFacadeService } from '../../services/records-facade.service';
@@ -42,12 +41,10 @@ export class AddRecordModalComponent {
           take(1),
           switchMap((currentUser) => {
             if (currentUser) {
-              return this.recordsFacadeService.saveRecord$(
-                RecordModel.toInsertData({
-                  createdBy: currentUser.id,
-                  ...this.recordFormComponent.formGroup.value,
-                })
-              );
+              return this.recordsFacadeService.saveRecord$({
+                ...this.recordFormComponent.getModel().toInsertData(),
+                created_by: currentUser.id,
+              });
             }
 
             return of(null);

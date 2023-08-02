@@ -1,13 +1,18 @@
 import { UUID } from '../types/uuid.type';
+import { Exclude, Expose, Type } from 'class-transformer';
 
 export class BaseModel {
+  @Expose()
+  @Exclude({ toPlainOnly: true })
   id!: UUID;
-  createdAt!: Date;
-  updatedAt!: Date;
 
-  toModel(data: Record<string, any>): void {
-    this.id = data['id'];
-    this.createdAt = new Date(data['created_at']);
-    this.updatedAt = new Date(data['updated_at']);
-  }
+  @Expose({ name: 'created_at', toClassOnly: true })
+  @Exclude({ toPlainOnly: true })
+  @Type(() => Date)
+  createdAt!: Date;
+
+  @Expose({ name: 'updated_at', toClassOnly: true })
+  @Exclude({ toPlainOnly: true })
+  @Type(() => Date)
+  updatedAt!: Date;
 }

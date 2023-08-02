@@ -1,54 +1,50 @@
+import { Expose, Type, instanceToPlain } from 'class-transformer';
+
 import { BaseModel } from '../../../core/supabase/models/base.model';
-import {
-  ApiGetRecordRowData,
-  ApiInsertRecordRowData,
-  ApiUpdateRecordRowData,
-} from '../../../core/supabase/types/table.types';
+import { ApiInsertRecordRowData, ApiUpdateRecordRowData } from '../../../core/supabase/types/table.types';
 import { UUID } from '../../../core/supabase/types/uuid.type';
 import { CurrencyEnum } from '../../../shared/enums/currency.enum';
 import { Category } from '../../categories/models/category.model';
 
 export class RecordModel extends BaseModel {
+  @Expose()
   name!: string;
+
+  @Expose()
   amount!: number;
+
+  @Expose()
+  @Type(() => Category)
   category!: Category;
+
+  @Expose({ name: 'created_by' })
   createdBy!: UUID;
+
+  @Expose({ name: 'currency_code' })
   currencyCode!: CurrencyEnum;
 
-  constructor(data: ApiGetRecordRowData) {
-    super();
+  toInsertData(): ApiInsertRecordRowData {
+    const plain = instanceToPlain(this);
 
-    super.toModel(data);
-
-    this.toModel(data);
-  }
-
-  override toModel(data: ApiGetRecordRowData): void {
-    this.name = data.name;
-    this.amount = data.amount;
-    this.currencyCode = data.currency_code;
-    this.category = new Category(data.category);
-    this.createdBy = data.created_by;
-  }
-
-  static toInsertData(model: RecordModel): ApiInsertRecordRowData {
     return {
       account: '', // TODO: implement field
       type: '', // TODO: implement field
-      name: model.name,
-      currency_code: model.currencyCode,
-      amount: model.amount,
-      category: model.category.id,
-      created_by: model.createdBy
+      name: plain['name'],
+      currency_code: plain['currency_code'],
+      amount: plain['amount'],
+      category: plain['category'].id,
+      created_by: plain['created_by'],
     };
   }
 
-  static toUpdateData(model: RecordModel): ApiUpdateRecordRowData {
+  toUpdateData(): ApiUpdateRecordRowData {
+    const plain = instanceToPlain(this);
+
     return {
-      name: model.name,
-      currency_code: model.currencyCode,
-      amount: model.amount,
-      category: model.category.id,
+      name: plain['name'],
+      currency_code: plain['currency_code'],
+      amount: plain['amount'],
+      category: plain['category'].id,
     };
   }
 }

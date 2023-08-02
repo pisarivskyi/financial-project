@@ -41,7 +41,7 @@ export class EditRecordModalComponent {
       this.isLoading$.next(true);
 
       this.recordsFacadeService
-        .updateRecord$(this.record.id, RecordModel.toUpdateData(this.recordFormComponent.formGroup.value))
+        .updateRecord$(this.record.id, this.recordFormComponent.getUpdatedModel().toUpdateData())
         .subscribe((d) => {
           this.isLoading$.next(false);
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
+import { plainToInstance } from 'class-transformer';
 import { Observable, from, map } from 'rxjs';
 
 import { DatabaseTableEnum } from '../../../core/supabase/enums/database-table.enum';
@@ -50,14 +51,10 @@ export class ApiRecordsService {
     return from(this.supabaseService.getClient().from(DatabaseTableEnum.Records).delete().eq('id', id));
   }
 
-  private transformFromFetchRecords(
-    response: PostgrestResponse<ApiGetRecordRowData>
-  ): PostgrestResponse<RecordModel> {
+  private transformFromFetchRecords(response: PostgrestResponse<ApiGetRecordRowData>): PostgrestResponse<RecordModel> {
     return {
       ...response,
-      ...(response.data?.length
-        ? { data: response.data.map((item) => new RecordModel(item)) }
-        : { data: response.data }),
+      ...(response.data?.length ? { data: plainToInstance(RecordModel, response.data) } : { data: response.data }),
     } as PostgrestResponse<RecordModel>;
   }
 

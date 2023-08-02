@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Session } from '@supabase/supabase-js';
+import { plainToInstance } from 'class-transformer';
 import { BehaviorSubject, Observable, finalize, from, map, tap } from 'rxjs';
 
 import { RoutePathEnum } from '../../enums/route-path.enum';
@@ -28,7 +29,7 @@ export class AuthenticationService {
     return from(this.supabaseService.getClient().auth.getSession()).pipe(
       tap(({ data }) => {
         if (data?.session?.user) {
-          this.currentUser$.next(new UserModel(data?.session?.user));
+          this.currentUser$.next(plainToInstance(UserModel, data?.session?.user));
         } else {
           this.currentUser$.next(null);
         }
@@ -42,7 +43,7 @@ export class AuthenticationService {
     return from(this.supabaseService.getClient().auth.refreshSession()).pipe(
       tap(({ data }) => {
         if (data?.session?.user) {
-          this.currentUser$.next(new UserModel(data?.session?.user));
+          this.currentUser$.next(plainToInstance(UserModel, data?.session?.user));
         }
       }),
       map(({ data }) => data.session)
@@ -53,7 +54,7 @@ export class AuthenticationService {
     return from(this.supabaseService.getClient().auth.signInWithPassword(credentials)).pipe(
       tap(({ data }) => {
         if (data?.user) {
-          this.currentUser$.next(new UserModel(data?.user));
+          this.currentUser$.next(plainToInstance(UserModel, data?.user));
         }
       }),
       map(({ data }) => data)

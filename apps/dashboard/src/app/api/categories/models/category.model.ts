@@ -1,38 +1,30 @@
+import { Expose, instanceToPlain } from 'class-transformer';
+
 import { BaseModel } from '../../../core/supabase/models/base.model';
-import {
-  ApiGetCategoryRowData,
-  ApiInsertCategoryRowData,
-  ApiUpdateCategoryRowData,
-} from '../../../core/supabase/types/table.types';
+import { ApiInsertCategoryRowData, ApiUpdateCategoryRowData } from '../../../core/supabase/types/table.types';
 import { UUID } from '../../../core/supabase/types/uuid.type';
 
 export class Category extends BaseModel {
+  @Expose()
   name!: string;
+
+  @Expose({ name: 'created_by' })
   createdBy!: UUID;
 
-  constructor(data: ApiGetCategoryRowData) {
-    super();
+  toInsertData(): ApiInsertCategoryRowData {
+    const plain = instanceToPlain(this);
 
-    super.toModel(data);
-
-    this.toModel(data);
-  }
-
-  override toModel(data: ApiGetCategoryRowData): void {
-    this.name = data.name;
-    this.createdBy = data.created_by;
-  }
-
-  static toInsertData(model: Category): ApiInsertCategoryRowData {
     return {
-      name: model.name,
-      created_by: model.createdBy,
+      name: plain['name'],
+      created_by: plain['created_by'],
     };
   }
 
-  static toUpdateData(model: Category): ApiUpdateCategoryRowData {
+  toUpdateData(): ApiUpdateCategoryRowData {
+    const plain = instanceToPlain(this);
+
     return {
-      name: model.name,
+      name: plain['name'],
     };
   }
 }
