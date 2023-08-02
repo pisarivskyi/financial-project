@@ -11,17 +11,17 @@ export const dashboardRoutes: Route[] = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: RoutePathEnum.Expanses,
+        redirectTo: RoutePathEnum.Records,
       },
       {
-        path: RoutePathEnum.Expanses,
-        loadComponent: () => import('./expanses-container/expanses-container.component').then((mod) => mod.ExpansesContainerComponent),
+        path: RoutePathEnum.Records,
+        loadComponent: () => import('./records-container/records-container.component').then((mod) => mod.RecordsContainerComponent),
       },
       {
-        path: RoutePathEnum.ExpanseCategories,
+        path: RoutePathEnum.Categories,
         loadComponent: () =>
-          import('./expanse-categories-container/expanse-categories-container.component').then(
-            (mod) => mod.ExpanseCategoriesContainerComponent
+          import('./categories-container/categories-container.component').then(
+            (mod) => mod.CategoriesContainerComponent
           ),
       },
     ],

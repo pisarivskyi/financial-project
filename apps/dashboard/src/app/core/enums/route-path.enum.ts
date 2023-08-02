@@ -6,8 +6,8 @@ export enum RoutePathEnum {
   SetPassword = 'set-password',
   Done = 'done',
   Dashboard = 'dashboard',
-  Expanses = 'expanses',
-  ExpanseCategories = 'expanse-categories',
+  Records = 'records',
+  Categories = 'categories',
   Budgets = 'budgets',
   Incomes = 'incomes',
 }

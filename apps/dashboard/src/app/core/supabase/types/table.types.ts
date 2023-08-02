@@ -4,24 +4,21 @@ export type Public = Database['public'];
 
 export type PublicTables = Public['Tables'];
 
-// Expanse table
-export type ExpansesTable = PublicTables['expanses'];
-export type ApiGetExpanseRowData = Omit<ExpansesTable['Row'], 'category'> & {
-  category: ApiGetExpanseCategoryRowData;
+// Records table
+export type RecordsTable = PublicTables['records'];
+export type ApiGetRecordRowData = Omit<RecordsTable['Row'], 'category'> & {
+  category: ApiGetCategoryRowData;
 };
-export type ApiInsertExpanseRowData = ExpansesTable['Insert'];
-export type ApiUpdateExpanseRowData = ExpansesTable['Update'];
+export type ApiInsertRecordRowData = RecordsTable['Insert'];
+export type ApiUpdateRecordRowData = RecordsTable['Update'];
 
-// Expanse categories table
-export type ExpanseCategoriesTable = PublicTables['expanse_categories'];
-export type ApiGetExpanseCategoryRowData = ExpanseCategoriesTable['Row'];
-export type ApiInsertExpanseCategoryRowData = ExpanseCategoriesTable['Insert'];
-export type ApiUpdateExpanseCategoryRowData = ExpanseCategoriesTable['Update'];
+// Categories table
+export type CategoriesTable = PublicTables['categories'];
+export type ApiGetCategoryRowData = CategoriesTable['Row'];
+export type ApiInsertCategoryRowData = CategoriesTable['Insert'];
+export type ApiUpdateCategoryRowData = CategoriesTable['Update'];
 
 // Budgets table
 export type BudgetsTable = PublicTables['budgets'];
 export type ApiGetBudgetRowData = BudgetsTable['Row'];
 
-// Income table
-export type IncomesTable = PublicTables['incomes'];
-export type ApiGetIncomeRowData = IncomesTable['Row'];
