@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { take } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
@@ -40,15 +41,19 @@ export class CategoriesContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.pipe(untilDestroyed(this)).subscribe(({ page, size }) => {
-      page = Number(page ?? 1);
-      size = Number(size ?? 20);
+      if (!page) {
+        this.changeRouteQueryParams({ page: 1, size: 20 }, true);
+      } else {
+        page = Number(page ?? 1);
+        size = Number(size ?? 20);
 
-      this.categoriesFacadeService.updatePagination({
-        pageIndex: page,
-        pageSize: size,
-      });
+        this.categoriesFacadeService.updatePagination({
+          pageIndex: page,
+          pageSize: size,
+        });
 
-      this.categoriesFacadeService.getCategories();
+        this.categoriesFacadeService.getCategories();
+      }
     });
 
     this.pagination$.pipe(untilDestroyed(this)).subscribe((pagination) => {
@@ -102,11 +107,20 @@ export class CategoriesContainerComponent implements OnInit {
   }
 
   onPageIndexChanged(pageIndex: number): void {
+    this.activatedRoute.queryParams.pipe(take(1)).subscribe((queryParams) => {
+      this.changeRouteQueryParams({
+        ...queryParams,
+        page: pageIndex,
+      });
+    });
+  }
+
+  private changeRouteQueryParams(queryParams: Params, replaceUrl = false): void {
     this.router.navigate(['./'], {
-      queryParams: { page: pageIndex },
+      queryParams,
       queryParamsHandling: 'merge',
       relativeTo: this.activatedRoute,
-      replaceUrl: false,
+      replaceUrl,
     });
   }
 }
