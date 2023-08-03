@@ -1,17 +1,21 @@
 import { Route } from '@angular/router';
 
 import { RoutePathEnum } from '../core/enums/route-path.enum';
-import { DashboardShellComponent } from './dashboard-shell/dashboard-shell.component';
+import { ShellComponent } from './shell/shell.component';
 
 export const dashboardRoutes: Route[] = [
   {
     path: '',
-    component: DashboardShellComponent,
+    component: ShellComponent,
     children: [
       {
         path: '',
         pathMatch: 'full',
         redirectTo: RoutePathEnum.Records,
+      },
+      {
+        path: RoutePathEnum.Accounts,
+        loadComponent: () => import('./accounts-container/accounts-container.component').then((mod) => mod.AccountsContainerComponent),
       },
       {
         path: RoutePathEnum.Records,

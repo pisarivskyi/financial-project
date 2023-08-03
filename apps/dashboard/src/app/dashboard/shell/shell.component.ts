@@ -10,8 +10,8 @@ import { AppMenuComponent } from '../../shared/components/app-menu/app-menu.comp
   selector: 'fpd-dashboard-shell',
   standalone: true,
   imports: [CommonModule, RouterOutlet, AppMenuComponent, NzSpinModule],
-  templateUrl: './dashboard-shell.component.html',
-  styleUrls: ['./dashboard-shell.component.scss'],
+  templateUrl: './shell.component.html',
+  styleUrls: ['./shell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardShellComponent {}
+export class ShellComponent {}

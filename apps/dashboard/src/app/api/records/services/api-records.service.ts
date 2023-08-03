@@ -32,23 +32,25 @@ export class ApiRecordsService {
       builder = builder.range(p.from, p.to);
     }
 
-    return from(builder).pipe(
+    return from(builder.throwOnError()).pipe(
       map((response: PostgrestResponse<ApiGetRecordRowData>) => this.transformFromFetchRecords(response))
     );
   }
 
   insertRecord$(recordData: ApiInsertRecordRowData): Observable<PostgrestResponse<RecordModel>> {
-    return from(this.supabaseService.getClient().from(DatabaseTableEnum.Records).insert(recordData).select()).pipe(
-      map((response: PostgrestResponse<ApiGetRecordRowData>) => this.transformFromFetchRecords(response))
-    );
+    return from(
+      this.supabaseService.getClient().from(DatabaseTableEnum.Records).insert(recordData).select().throwOnError()
+    ).pipe(map((response: PostgrestResponse<ApiGetRecordRowData>) => this.transformFromFetchRecords(response)));
   }
 
   updateRecord$(id: UUID, recordData: ApiUpdateRecordRowData): Observable<PostgrestSingleResponse<null>> {
-    return from(this.supabaseService.getClient().from(DatabaseTableEnum.Records).update(recordData).eq('id', id));
+    return from(
+      this.supabaseService.getClient().from(DatabaseTableEnum.Records).update(recordData).eq('id', id).throwOnError()
+    );
   }
 
   deleteRecord$(id: UUID): Observable<PostgrestSingleResponse<null>> {
-    return from(this.supabaseService.getClient().from(DatabaseTableEnum.Records).delete().eq('id', id));
+    return from(this.supabaseService.getClient().from(DatabaseTableEnum.Records).delete().eq('id', id).throwOnError());
   }
 
   private transformFromFetchRecords(response: PostgrestResponse<ApiGetRecordRowData>): PostgrestResponse<RecordModel> {

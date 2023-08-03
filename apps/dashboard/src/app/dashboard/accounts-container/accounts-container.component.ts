@@ -10,29 +10,29 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
-import { Category } from '../../api/categories/models/category.model';
-import { AddCategoryModalComponent } from './components/add-category-modal/add-category-modal.component';
-import { EditCategoryModalComponent } from './components/edit-category-modal/edit-category-modal.component';
-import { CategoriesFacadeService } from './services/categories-facade.service';
+import { Account } from '../../api/accounts/models/account.model';
+import { AddAccountModalComponent } from './components/add-account-modal/add-account-modal.component';
+import { EditAccountModalComponent } from './components/edit-account-modal/edit-account-modal.component';
+import { AccountsFacadeService } from './services/accounts-facade.service';
 
 @UntilDestroy()
 @Component({
-  selector: 'fpd-categories-container',
+  selector: 'fpd-accounts-container',
   standalone: true,
   imports: [CommonModule, NzButtonModule, NzPopconfirmModule, NzTableModule, NzModalModule, NzMessageModule],
-  templateUrl: './categories-container.component.html',
-  styleUrls: ['./categories-container.component.scss'],
+  templateUrl: './accounts-container.component.html',
+  styleUrls: ['./accounts-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CategoriesContainerComponent implements OnInit {
-  categories$ = this.categoriesFacadeService.categories$;
+export class AccountsContainerComponent implements OnInit {
+  accounts$ = this.accountsFacadeService.accounts$;
 
-  isLoading$ = this.categoriesFacadeService.isLoading$;
+  isLoading$ = this.accountsFacadeService.isLoading$;
 
-  pagination$ = this.categoriesFacadeService.pagination$;
+  pagination$ = this.accountsFacadeService.pagination$;
 
   constructor(
-    private categoriesFacadeService: CategoriesFacadeService,
+    private accountsFacadeService: AccountsFacadeService,
     private modalService: NzModalService,
     private messageService: NzMessageService,
     private activatedRoute: ActivatedRoute,
@@ -47,62 +47,54 @@ export class CategoriesContainerComponent implements OnInit {
         page = Number(page ?? 1);
         size = Number(size ?? 20);
 
-        this.categoriesFacadeService.updatePagination({
+        this.accountsFacadeService.updatePagination({
           pageIndex: page,
           pageSize: size,
         });
 
-        this.categoriesFacadeService.getCategories();
+        this.accountsFacadeService.getAccounts();
       }
-    });
-
-    this.pagination$.pipe(untilDestroyed(this)).subscribe((pagination) => {
-      this.router.navigate(['./'], {
-        queryParams: { page: pagination.pageIndex, size: pagination.pageSize },
-        relativeTo: this.activatedRoute,
-        replaceUrl: false,
-      });
     });
   }
 
-  onAddCategory(): void {
+  onAddAccount(): void {
     const modalRef = this.modalService.create({
-      nzTitle: 'Add new category',
-      nzContent: AddCategoryModalComponent,
+      nzTitle: 'Add account',
+      nzContent: AddAccountModalComponent,
       nzCentered: true,
     });
 
     modalRef.afterClose.subscribe((created: boolean) => {
       if (created) {
-        this.categoriesFacadeService.getCategories();
+        this.accountsFacadeService.getAccounts();
 
-        this.messageService.success('Category item was created');
+        this.messageService.success('Account was created');
       }
     });
   }
 
-  onEditCategory(category: Category): void {
+  onEditAccount(account: Account): void {
     const modalRef = this.modalService.create({
-      nzTitle: 'Edit category',
-      nzContent: EditCategoryModalComponent,
+      nzTitle: 'Edit account',
+      nzContent: EditAccountModalComponent,
       nzCentered: true,
-      nzData: category,
+      nzData: account,
     });
 
     modalRef.afterClose.subscribe((created: boolean) => {
       if (created) {
-        this.categoriesFacadeService.getCategories();
+        this.accountsFacadeService.getAccounts();
 
-        this.messageService.success('Category item was updated');
+        this.messageService.success('Account item was updated');
       }
     });
   }
 
-  onDeleteCategory(category: Category): void {
-    this.categoriesFacadeService.deleteCategory$(category.id).subscribe(() => {
-      this.categoriesFacadeService.getCategories();
+  onDeleteAccount(account: Account): void {
+    this.accountsFacadeService.deleteAccount$(account.id).subscribe(() => {
+      this.accountsFacadeService.getAccounts();
 
-      this.messageService.success('Category item was deleted');
+      this.messageService.success('Account item was deleted');
     });
   }
 

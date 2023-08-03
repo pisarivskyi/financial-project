@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -14,6 +14,7 @@ import { CurrencyEnum } from '../../shared/enums/currency.enum';
 import { AddRecordModalComponent } from './components/add-record-modal/add-record-modal.component';
 import { EditRecordModalComponent } from './components/edit-record-modal/edit-record-modal.component';
 import { RecordsFacadeService } from './services/records-facade.service';
+import { take } from 'rxjs';
 
 @UntilDestroy()
 @Component({
@@ -43,15 +44,19 @@ export class RecordsContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.pipe(untilDestroyed(this)).subscribe(({ page, size }) => {
-      page = Number(page ?? 1);
-      size = Number(size ?? 20);
+      if (!page) {
+        this.changeRouteQueryParams({ page: 1, size: 20 }, true);
+      } else {
+        page = Number(page ?? 1);
+        size = Number(size ?? 20);
 
-      this.recordsFacadeService.updatePagination({
-        pageIndex: page,
-        pageSize: size,
-      });
+        this.recordsFacadeService.updatePagination({
+          pageIndex: page,
+          pageSize: size,
+        });
 
-      this.recordsFacadeService.getRecords();
+        this.recordsFacadeService.getRecords();
+      }
     });
 
     this.pagination$.pipe(untilDestroyed(this)).subscribe((v) => {
@@ -105,11 +110,20 @@ export class RecordsContainerComponent implements OnInit {
   }
 
   onPageIndexChanged(pageIndex: number): void {
+    this.activatedRoute.queryParams.pipe(take(1)).subscribe((queryParams) => {
+      this.changeRouteQueryParams({
+        ...queryParams,
+        page: pageIndex,
+      });
+    });
+  }
+
+  private changeRouteQueryParams(queryParams: Params, replaceUrl = false): void {
     this.router.navigate(['./'], {
-      queryParams: { page: pageIndex },
+      queryParams,
       queryParamsHandling: 'merge',
       relativeTo: this.activatedRoute,
-      replaceUrl: false,
+      replaceUrl,
     });
   }
 }

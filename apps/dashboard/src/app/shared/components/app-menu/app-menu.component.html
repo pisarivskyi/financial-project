@@ -2,6 +2,9 @@
 
 <ul nz-menu nzMode="inline">
   <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Accounts]">accounts</a>
+  </li>
+  <li nz-menu-item nzMatchRouter>
     <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Records]">records</a>
   </li>
   <li nz-menu-item nzMatchRouter>

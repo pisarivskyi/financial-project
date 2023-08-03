@@ -9,5 +9,5 @@ export enum RoutePathEnum {
   Records = 'records',
   Categories = 'categories',
   Budgets = 'budgets',
-  Incomes = 'incomes',
+  Accounts = 'accounts',
 }

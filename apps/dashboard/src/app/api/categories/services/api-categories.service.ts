@@ -29,21 +29,30 @@ export class ApiCategoriesService {
       builder = builder.range(p.from, p.to);
     }
 
-    return from(builder).pipe(map((response) => this.transformFromCategories(response)));
+    return from(builder.throwOnError()).pipe(map((response) => this.transformFromCategories(response)));
   }
 
   insertCategory$(categoryData: ApiInsertCategoryRowData): Observable<PostgrestResponse<Category>> {
-    return from(this.supabaseService.getClient().from(DatabaseTableEnum.Categories).insert(categoryData).select()).pipe(
-      map((response: PostgrestResponse<ApiGetCategoryRowData>) => this.transformFromCategories(response))
-    );
+    return from(
+      this.supabaseService.getClient().from(DatabaseTableEnum.Categories).insert(categoryData).select().throwOnError()
+    ).pipe(map((response: PostgrestResponse<ApiGetCategoryRowData>) => this.transformFromCategories(response)));
   }
 
   updateCategory$(id: UUID, categoryData: ApiUpdateCategoryRowData): Observable<PostgrestSingleResponse<null>> {
-    return from(this.supabaseService.getClient().from(DatabaseTableEnum.Categories).update(categoryData).eq('id', id));
+    return from(
+      this.supabaseService
+        .getClient()
+        .from(DatabaseTableEnum.Categories)
+        .update(categoryData)
+        .eq('id', id)
+        .throwOnError()
+    );
   }
 
   deleteCategory$(id: UUID): Observable<PostgrestSingleResponse<null>> {
-    return from(this.supabaseService.getClient().from(DatabaseTableEnum.Categories).delete().eq('id', id));
+    return from(
+      this.supabaseService.getClient().from(DatabaseTableEnum.Categories).delete().eq('id', id).throwOnError()
+    );
   }
 
   private transformFromCategories(response: PostgrestResponse<ApiGetCategoryRowData>): PostgrestResponse<Category> {
