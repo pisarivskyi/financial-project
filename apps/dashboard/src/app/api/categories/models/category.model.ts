@@ -12,19 +12,19 @@ export class Category extends BaseModel {
   createdBy!: UUID;
 
   toInsertData(): ApiInsertCategoryRowData {
-    const plain = instanceToPlain(this);
+    const { name, created_by }: Record<keyof ApiInsertCategoryRowData, any> = instanceToPlain(this);
 
     return {
-      name: plain['name'],
-      created_by: plain['created_by'],
+      name,
+      created_by,
     };
   }
 
   toUpdateData(): ApiUpdateCategoryRowData {
-    const plain = instanceToPlain(this);
+    const { name }: Record<keyof ApiInsertCategoryRowData, any> = instanceToPlain(this);
 
     return {
-      name: plain['name'],
+      name,
     };
   }
 }

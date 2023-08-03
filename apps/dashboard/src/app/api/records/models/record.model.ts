@@ -24,27 +24,36 @@ export class RecordModel extends BaseModel {
   currencyCode!: CurrencyEnum;
 
   toInsertData(): ApiInsertRecordRowData {
-    const plain = instanceToPlain(this);
+    const {
+      account,
+      type,
+      name,
+      currency_code,
+      amount,
+      category,
+      created_by,
+    }: Record<keyof ApiInsertRecordRowData, any> = instanceToPlain(this);
 
     return {
-      account: '', // TODO: implement field
-      type: '', // TODO: implement field
-      name: plain['name'],
-      currency_code: plain['currency_code'],
-      amount: plain['amount'],
-      category: plain['category'].id,
-      created_by: plain['created_by'],
+      account, // TODO: implement field
+      type, // TODO: implement field
+      name,
+      currency_code,
+      amount,
+      category: category.id,
+      created_by: created_by,
     };
   }
 
   toUpdateData(): ApiUpdateRecordRowData {
-    const plain = instanceToPlain(this);
+    const { account, type, name, currency_code, amount, category }: Record<keyof ApiUpdateRecordRowData, any> =
+      instanceToPlain(this);
 
     return {
-      name: plain['name'],
-      currency_code: plain['currency_code'],
-      amount: plain['amount'],
-      category: plain['category'].id,
+      name,
+      currency_code,
+      amount,
+      category: category.id,
     };
   }
 }
