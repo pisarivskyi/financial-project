@@ -16,14 +16,8 @@
         "polyfills": ["zone.js"],
         "tsConfig": "apps/dashboard/tsconfig.app.json",
         "allowedCommonJsDependencies": ["cross-fetch", "websocket"],
-        "assets": [
-          "apps/dashboard/src/favicon.ico",
-          "apps/dashboard/src/assets"
-        ],
-        "styles": [
-          "node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
-          "apps/dashboard/src/styles.scss"
-        ],
+        "assets": ["apps/dashboard/src/favicon.ico", "apps/dashboard/src/assets"],
+        "styles": ["node_modules/ng-zorro-antd/ng-zorro-antd.min.css", "apps/dashboard/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -63,7 +57,10 @@
           "browserTarget": "dashboard:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "proxyConfig": "apps/dashboard/proxy.conf.json"
+      }
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -75,10 +72,7 @@
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "apps/dashboard/**/*.ts",
-          "apps/dashboard/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/dashboard/**/*.ts", "apps/dashboard/**/*.html"]
       }
     },
     "test": {
