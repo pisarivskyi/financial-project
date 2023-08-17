@@ -14,6 +14,7 @@ import { Account } from '../../api/accounts/models/account.model';
 import { AddAccountModalComponent } from './components/add-account-modal/add-account-modal.component';
 import { EditAccountModalComponent } from './components/edit-account-modal/edit-account-modal.component';
 import { AccountsFacadeService } from './services/accounts-facade.service';
+import { CurrencyEnum } from '../../shared/enums/currency.enum';
 
 @UntilDestroy()
 @Component({
@@ -30,6 +31,8 @@ export class AccountsContainerComponent implements OnInit {
   isLoading$ = this.accountsFacadeService.isLoading$;
 
   pagination$ = this.accountsFacadeService.pagination$;
+
+  CurrencyEnum = CurrencyEnum;
 
   constructor(
     private accountsFacadeService: AccountsFacadeService,

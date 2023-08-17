@@ -41,6 +41,7 @@ export interface Database {
           color: string | null
           created_at: string
           created_by: string
+          currency_code: number
           id: string
           metadata: Json | null
           name: string
@@ -54,6 +55,7 @@ export interface Database {
           color?: string | null
           created_at?: string
           created_by: string
+          currency_code: number
           id?: string
           metadata?: Json | null
           name: string
@@ -67,6 +69,7 @@ export interface Database {
           color?: string | null
           created_at?: string
           created_by?: string
+          currency_code?: number
           id?: string
           metadata?: Json | null
           name?: string

@@ -13,6 +13,8 @@
   <thead>
   <tr>
     <th>Name</th>
+    <th>Balance</th>
+    <th>Currency</th>
     <th>Date</th>
     <th>Updated</th>
     <th>Actions</th>
@@ -21,6 +23,8 @@
   <tbody>
   <tr *ngFor="let account of table.data">
     <td>{{ account.name }}</td>
+    <td>{{ account.balance }}</td>
+    <td>{{ CurrencyEnum[account.currencyCode] }}</td>
     <td>{{ account.createdAt | date }}</td>
     <td>{{ account.updatedAt | date : 'full' }}</td>
     <td>

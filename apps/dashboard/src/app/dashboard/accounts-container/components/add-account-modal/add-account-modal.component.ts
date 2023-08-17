@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
-import { BehaviorSubject, catchError, of, switchMap, take, throwError } from 'rxjs';
+import { BehaviorSubject, of, switchMap, take } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
@@ -49,14 +49,8 @@ export class AddAccountModalComponent {
 
             return of(null);
           }),
-          catchError((error) => {
-            console.log(error);
-
-            return throwError(error);
-          })
         )
         .subscribe((r) => {
-          console.log(r);
           this.isLoading$.next(false);
 
           this.modalRef.destroy(true);

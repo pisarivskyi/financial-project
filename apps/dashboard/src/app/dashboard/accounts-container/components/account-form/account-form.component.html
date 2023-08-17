@@ -6,4 +6,36 @@
       <input nz-input formControlName="name" type="text" />
     </nz-form-control>
   </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Balance</nz-form-label>
+
+    <nz-form-control>
+      <input nz-input formControlName="balance" type="number" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Account type</nz-form-label>
+
+    <nz-form-control>
+      <nz-select formControlName="type" nzPlaceHolder="Choose account type" [nzOptions]="ACCOUNT_TYPE_OPTIONS"> </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Currency</nz-form-label>
+
+    <nz-form-control>
+      <nz-select formControlName="currencyCode" nzPlaceHolder="Choose currency" [nzOptions]="CURRENCY_OPTIONS"> </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Provider</nz-form-label>
+
+    <nz-form-control>
+      <nz-select formControlName="provider" nzPlaceHolder="Choose provider" [nzOptions]="PROVIDER_OPTIONS"> </nz-select>
+    </nz-form-control>
+  </nz-form-item>
 </form>
