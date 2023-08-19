@@ -1,9 +1,9 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import * as argon2 from 'argon2';
 import { plainToInstance } from 'class-transformer';
 
+import { compareArgon2Hash } from '../shared/utils/hash-helpers';
 import { UserEntity } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { LogInDto } from './dto/log-in.dto';
@@ -39,7 +39,7 @@ export class AuthenticationService {
         throw new BadRequestException('Passwords do not match');
       }
     } else {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+      throw new BadRequestException('Not found');
     }
   }
 
@@ -64,6 +64,6 @@ export class AuthenticationService {
   }
 
   private validatePassword(hash: string, plain: string): Promise<boolean> {
-    return argon2.verify(hash, plain);
+    return compareArgon2Hash(hash, plain);
   }
 }

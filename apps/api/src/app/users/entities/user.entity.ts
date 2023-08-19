@@ -1,10 +1,11 @@
-import * as argon2d from 'argon2';
+import { Exclude } from 'class-transformer';
 import { BeforeInsert, Column, Entity } from 'typeorm';
 
+import { TableNameEnum } from '../../core/enums/table-name.enum';
 import { BaseEntity } from '../../core/models/base-entity.abstract';
-import { Exclude } from 'class-transformer';
+import { getArgon2Hash } from '../../shared/utils/hash-helpers';
 
-@Entity()
+@Entity(TableNameEnum.Users)
 export class UserEntity extends BaseEntity {
   @Column({ unique: true })
   email: string;
@@ -15,6 +16,6 @@ export class UserEntity extends BaseEntity {
 
   @BeforeInsert()
   async hashPassword(): Promise<void> {
-    this.password = await argon2d.hash(this.password);
+    this.password = await getArgon2Hash(this.password);
   }
 }
