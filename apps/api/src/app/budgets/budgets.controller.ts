@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+
+import { ApiPathEnum } from '@financial-project/common';
+
 import { BudgetsService } from './budgets.service';
 import { CreateBudgetDto } from './dto/create-budget.dto';
 import { UpdateBudgetDto } from './dto/update-budget.dto';
 
-@Controller('budgets')
+@Controller(ApiPathEnum.Budgets)
 export class BudgetsController {
   constructor(private readonly budgetsService: BudgetsService) {}
 

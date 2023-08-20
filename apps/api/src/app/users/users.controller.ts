@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Patch, UseGuards } from '@nestjs/common';
 
+import { ApiPathEnum } from '@financial-project/common';
+
+import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
-import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 
-@Controller('users')
+@Controller(ApiPathEnum.Users)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

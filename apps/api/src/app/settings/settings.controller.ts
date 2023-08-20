@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SettingsService } from './settings.service';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+
+import { ApiPathEnum } from '@financial-project/common';
+
 import { CreateSettingDto } from './dto/create-setting.dto';
 import { UpdateSettingDto } from './dto/update-setting.dto';
+import { SettingsService } from './settings.service';
 
-@Controller('settings')
+@Controller(ApiPathEnum.Settings)
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
 
