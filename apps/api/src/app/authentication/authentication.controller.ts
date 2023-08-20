@@ -9,7 +9,7 @@ import { UserEntity } from '../users/entities/user.entity';
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
 
-  @Post('log-in')
+  @Post('sign-in')
   logIn(@Body() lobInData: LogInDto): Promise<any> {
     return this.authenticationService.logIn(lobInData);
   }
