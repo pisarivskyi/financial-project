@@ -9,6 +9,7 @@ import { UsersService } from '../users/users.service';
 import { LogInDto } from './dto/log-in.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtPayloadInterface } from './interfaces/jwt-payload.interface';
+import { JwtTokensModel } from './models/jwt-tokens.model';
 
 @Injectable()
 export class AuthenticationService {
@@ -18,7 +19,7 @@ export class AuthenticationService {
     private configService: ConfigService
   ) {}
 
-  async logIn(loginData: LogInDto): Promise<{ accessToken: string }> {
+  async logIn(loginData: LogInDto): Promise<JwtTokensModel> {
     const user = await this.usersService.findByEmail(loginData.email);
 
     if (user) {
@@ -32,9 +33,9 @@ export class AuthenticationService {
 
         const accessToken = await this.generateToken(data);
 
-        return {
+        return new JwtTokensModel({
           accessToken,
-        };
+        });
       } else {
         throw new BadRequestException('Passwords do not match');
       }

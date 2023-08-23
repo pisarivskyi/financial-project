@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { BeforeInsert, Column, Entity } from 'typeorm';
 
@@ -8,6 +9,7 @@ import { getArgon2Hash } from '../../shared/utils/hash-helpers';
 @Entity(TableNameEnum.Users)
 export class UserEntity extends BaseEntity {
   @Column({ unique: true })
+  @ApiProperty()
   email: string;
 
   @Exclude({ toPlainOnly: true })

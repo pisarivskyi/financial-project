@@ -1,4 +1,4 @@
-import { OmitType } from '@nestjs/mapped-types';
+import { OmitType } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
 import { CategoryEntity } from '../entities/category.entity';
