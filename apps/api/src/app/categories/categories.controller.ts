@@ -1,37 +1,50 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 
 import { ApiPathEnum } from '@financial-project/common';
 
+import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
+import { CurrentUser } from '../core/decorators/current-user.decorator';
+import { UserEntity } from '../users/entities/user.entity';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CategoryEntity } from './entities/category.entity';
 
 @Controller(ApiPathEnum.Categories)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoriesService.create(createCategoryDto);
+  @UseGuards(JwtAuthGuard)
+  create(@Body() createCategoryDto: CreateCategoryDto, @CurrentUser() user: UserEntity): Promise<CategoryEntity> {
+    return this.categoriesService.create(createCategoryDto, user);
   }
 
   @Get()
-  findAll() {
-    return this.categoriesService.findAll();
+  @UseGuards(JwtAuthGuard)
+  findAll(@CurrentUser() user: UserEntity) {
+    return this.categoriesService.findAll(user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  findOne(@Param('id') id: string, @CurrentUser() user: UserEntity): Promise<CategoryEntity> {
+    return this.categoriesService.findOne(id, user);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoriesService.update(+id, updateCategoryDto);
+  @UseGuards(JwtAuthGuard)
+  update(
+    @Param('id') id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+    @CurrentUser() user: UserEntity
+  ): Promise<CategoryEntity> {
+    return this.categoriesService.update(id, updateCategoryDto, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoriesService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  remove(@Param('id') id: string, @CurrentUser() user: UserEntity) {
+    return this.categoriesService.remove(id, user);
   }
 }

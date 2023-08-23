@@ -3,7 +3,7 @@ export interface CategoryInterface {
   createdBy: string
   color: string;
   icon: string;
-  parentCategory: string;
-  mccRangeStart: string;
-  mccRangeEnd: string;
+  parentCategory?: CategoryInterface;
+  mccRangeStart?: number;
+  mccRangeEnd?: number;
 }

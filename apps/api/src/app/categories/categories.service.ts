@@ -1,26 +1,106 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { plainToClassFromExist, plainToInstance } from 'class-transformer';
+import { Repository } from 'typeorm';
+
+import { UserEntity } from '../users/entities/user.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CategoryEntity } from './entities/category.entity';
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(@InjectRepository(CategoryEntity) private categoriesRepository: Repository<CategoryEntity>) {}
+
+  async create(createCategoryDto: CreateCategoryDto, user: UserEntity): Promise<CategoryEntity> {
+    const category = plainToInstance(CategoryEntity, createCategoryDto);
+    category.createdBy = user.id;
+
+    let parentCategory: CategoryEntity;
+
+    if (createCategoryDto.parentCategory) {
+      try {
+        parentCategory = await this.categoriesRepository.findOneBy({ id: createCategoryDto.parentCategory });
+      } catch {
+        throw new BadRequestException('No such parent category');
+      }
+
+      if (parentCategory) {
+        category.parentCategory = parentCategory;
+      }
+    }
+
+    return this.categoriesRepository.save(category);
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  findAll(user: UserEntity): Promise<CategoryEntity[]> {
+    return this.categoriesRepository.find({
+      where: {
+        createdBy: user.id,
+      },
+      relations: { parentCategory: true },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string, user: UserEntity): Promise<CategoryEntity> {
+    try {
+      const category = await this.categoriesRepository.findOne({
+        where: {
+          id,
+          createdBy: user.id,
+        },
+        relations: { parentCategory: true },
+      });
+
+      if (!category) {
+        throw new Error();
+      }
+
+      return category;
+    } catch {
+      throw new NotFoundException();
+    }
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, updateCategoryDto: UpdateCategoryDto, user: UserEntity): Promise<CategoryEntity> {
+    const targetCategory = await this.categoriesRepository.findOne({
+      where: {
+        id,
+        createdBy: user.id,
+      },
+    });
+
+    if (!targetCategory) {
+      throw new NotFoundException();
+    }
+
+    if (updateCategoryDto.parentCategory) {
+      const parentCategory = await this.categoriesRepository.findOne({
+        where: {
+          id: updateCategoryDto.parentCategory,
+          createdBy: user.id,
+        },
+      });
+
+      if (!parentCategory) {
+        throw new NotFoundException('Parent category does not exist');
+      }
+    }
+
+    const updatedCategory = plainToClassFromExist(targetCategory, updateCategoryDto);
+
+    await this.categoriesRepository.update(id, updatedCategory);
+
+    return this.findOne(id, user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string, user: UserEntity): Promise<any> {
+    const targetCategory = await this.categoriesRepository.findOne({ where: { id } });
+
+    if (!targetCategory) {
+      throw new NotFoundException();
+    }
+
+    return this.categoriesRepository.remove(targetCategory);
   }
 }
