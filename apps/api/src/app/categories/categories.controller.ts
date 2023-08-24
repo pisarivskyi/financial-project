@@ -47,7 +47,7 @@ export class CategoriesController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: string, @CurrentUser() user: UserEntity) {
+  remove(@Param('id') id: string, @CurrentUser() user: UserEntity): Promise<CategoryEntity> {
     return this.categoriesService.remove(id, user);
   }
 }
