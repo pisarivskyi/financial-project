@@ -14,7 +14,7 @@ export class CategoriesService {
 
   async create(createCategoryDto: CreateCategoryDto, user: UserEntity): Promise<CategoryEntity> {
     const category = plainToInstance(CategoryEntity, createCategoryDto);
-    category.createdBy = user.id;
+    category.createdBy = user;
 
     let parentCategory: CategoryEntity;
 
@@ -36,9 +36,11 @@ export class CategoriesService {
   findAll(user: UserEntity): Promise<CategoryEntity[]> {
     return this.categoriesRepository.find({
       where: {
-        createdBy: user.id,
+        createdBy: {
+          id: user.id,
+        },
       },
-      relations: { parentCategory: true },
+      relations: { parentCategory: true, createdBy: true },
     });
   }
 
@@ -47,7 +49,9 @@ export class CategoriesService {
       const category = await this.categoriesRepository.findOne({
         where: {
           id,
-          createdBy: user.id,
+          createdBy: {
+            id: user.id,
+          },
         },
         relations: { parentCategory: true },
       });
@@ -66,7 +70,9 @@ export class CategoriesService {
     const targetCategory = await this.categoriesRepository.findOne({
       where: {
         id,
-        createdBy: user.id,
+        createdBy: {
+          id: user.id,
+        },
       },
     });
 
@@ -78,7 +84,9 @@ export class CategoriesService {
       const parentCategory = await this.categoriesRepository.findOne({
         where: {
           id: updateCategoryDto.parentCategory,
-          createdBy: user.id,
+          createdBy: {
+            id: user.id,
+          },
         },
       });
 
@@ -94,8 +102,15 @@ export class CategoriesService {
     return this.findOne(id, user);
   }
 
-  async remove(id: string, user: UserEntity): Promise<any> {
-    const targetCategory = await this.categoriesRepository.findOne({ where: { id } });
+  async remove(id: string, user: UserEntity): Promise<CategoryEntity> {
+    const targetCategory = await this.categoriesRepository.findOne({
+      where: {
+        id,
+        createdBy: {
+          id: user.id,
+        },
+      },
+    });
 
     if (!targetCategory) {
       throw new NotFoundException();
