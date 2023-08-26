@@ -1,26 +1,93 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { plainToClassFromExist, plainToInstance } from 'class-transformer';
+import { Repository } from 'typeorm';
+
+import { UserEntity } from '../users/entities/user.entity';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { AccountEntity } from './entities/account.entity';
 
 @Injectable()
 export class AccountsService {
-  create(createAccountDto: CreateAccountDto) {
-    return 'This action adds a new account';
+  constructor(@InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>) {}
+
+  create(createAccountDto: CreateAccountDto, user: UserEntity): Promise<AccountEntity> {
+    const account = plainToInstance(AccountEntity, createAccountDto);
+    account.createdBy = user;
+
+    return this.accountsRepository.save(account);
   }
 
-  findAll() {
-    return `This action returns all accounts`;
+  findAll(user: UserEntity): Promise<AccountEntity[]> {
+    return this.accountsRepository.find({
+      where: {
+        createdBy: {
+          id: user.id,
+        },
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} account`;
+  async findOne(id: string, user: UserEntity): Promise<AccountEntity> {
+    try {
+      const account = await this.accountsRepository.findOne({
+        where: {
+          id,
+          createdBy: {
+            id: user.id,
+          },
+        },
+        relations: {
+          createdBy: true,
+        },
+      });
+
+      if (!account) {
+        throw new Error();
+      }
+
+      return account;
+    } catch {
+      throw new NotFoundException();
+    }
   }
 
-  update(id: number, updateAccountDto: UpdateAccountDto) {
-    return `This action updates a #${id} account`;
+  async update(id: string, updateAccountDto: UpdateAccountDto, user: UserEntity): Promise<AccountEntity> {
+    const targetAccount = await this.accountsRepository.findOne({
+      where: {
+        id,
+        createdBy: {
+          id: user.id,
+        },
+      },
+    });
+
+    if (!targetAccount) {
+      throw new NotFoundException();
+    }
+
+    const updatedAccount = plainToClassFromExist(targetAccount, updateAccountDto);
+
+    await this.accountsRepository.update(id, updatedAccount);
+
+    return this.findOne(id, user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} account`;
+  async remove(id: string, user: UserEntity): Promise<AccountEntity> {
+    const targetAccount = await this.accountsRepository.findOne({
+      where: {
+        id,
+        createdBy: {
+          id: user.id,
+        },
+      },
+    });
+
+    if (!targetAccount) {
+      throw new NotFoundException();
+    }
+
+    return this.accountsRepository.remove(targetAccount);
   }
 }
