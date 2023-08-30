@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { UserEntity } from '../users/entities/user.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -41,6 +41,18 @@ export class CategoriesService {
         },
       },
       relations: { parentCategory: true, createdBy: true },
+    });
+  }
+
+  findByIds(ids: string[], user: UserEntity): Promise<CategoryEntity[]> {
+    return this.categoriesRepository.find({
+      where: {
+        id: In(ids),
+        createdBy: {
+          id: user.id,
+        },
+      },
+      relations: { parentCategory: true },
     });
   }
 
