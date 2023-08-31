@@ -1,4 +1,4 @@
-export enum ProviderEnum {
+export enum ProviderTypeEnum {
   Monobank = 'monobank',
   Manual = 'manual',
 }

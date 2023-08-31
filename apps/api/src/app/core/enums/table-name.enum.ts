@@ -5,4 +5,5 @@ export enum TableNameEnum {
   Records = 'records',
   Settings = 'settings',
   Users = 'users',
+  Providers = 'providers',
 }
