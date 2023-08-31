@@ -1,6 +1,6 @@
 export * from './api-path.enum';
 export * from './account-type.enum';
-export * from './provider.enum';
+export * from './providerTypeEnum';
 export * from './currency.enum';
 export * from './period.enum';
 export * from './record-creation-type.enum';
