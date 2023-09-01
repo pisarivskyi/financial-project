@@ -1,15 +1,17 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Job } from 'bull';
 
 import { ApiPathEnum } from '@financial-project/common';
 
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { UserEntity } from '../users/entities/user.entity';
-import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { AccountEntity } from './entities/account.entity';
+import { AccountJobPayloadInterface } from './interfaces/account-job-payload.interface';
+import { AccountsService } from './services/accounts.service';
 
 @Controller(ApiPathEnum.Accounts)
 @ApiTags('accounts')
@@ -49,5 +51,17 @@ export class AccountsController {
   @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string, @CurrentUser() user: UserEntity): Promise<AccountEntity> {
     return this.accountsService.remove(id, user);
+  }
+
+  @Get(':id/sync-records')
+  @UseGuards(JwtAuthGuard)
+  syncRecords(@Param('id') id: string, @CurrentUser() user: UserEntity): Promise<Job<AccountJobPayloadInterface>> {
+    return this.accountsService.syncRecords(id, user);
+  }
+
+  @Get('jobs/:id')
+  @UseGuards(JwtAuthGuard)
+  getJobById(@Param('id') id: string): Promise<Job<AccountJobPayloadInterface>> {
+    return this.accountsService.getJobById(id);
   }
 }

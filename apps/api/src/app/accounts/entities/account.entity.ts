@@ -86,4 +86,8 @@ export class AccountEntity extends BaseEntity implements AccountInterface {
   @JoinColumn()
   @ApiProperty()
   createdBy: UserEntity;
+
+  @Column({ nullable: true })
+  @ApiPropertyOptional()
+  lastSyncDate?: Date;
 }

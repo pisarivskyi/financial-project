@@ -6,4 +6,3 @@ export * from './record.interface';
 export * from './settings.interface';
 export * from './provider.interface';
 export * from './monobank-provider-data.interface';
-export * from './api-monobank.interface';
