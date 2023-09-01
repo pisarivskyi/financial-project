@@ -6,8 +6,8 @@ import { Repository } from 'typeorm';
 
 import { AccountType, ApiMonobankProviderService, ProviderTypeEnum } from '@financial-project/common';
 
-import { AccountsService } from '../../accounts/accounts.service';
 import { AccountEntity } from '../../accounts/entities/account.entity';
+import { AccountsService } from '../../accounts/services/accounts.service';
 import { UserEntity } from '../../users/entities/user.entity';
 import { CreateProviderDto } from '../dto/create-provider.dto';
 import { ProviderAccountsDto } from '../dto/provider-accounts.dto';

@@ -13,4 +13,5 @@ export interface AccountInterface {
   metadata?: object;
   provider?: ProviderInterface;
   providerType: ProviderTypeEnum;
+  lastSyncDate?: Date;
 }
