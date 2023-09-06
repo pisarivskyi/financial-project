@@ -27,7 +27,7 @@ export class BudgetEntity extends BaseEntity implements BudgetInterface {
   @ApiProperty()
   amount: number;
 
-  @Column({ type: 'enum', enum: CurrencyEnum })
+  @Column({ type: 'enum', enum: CurrencyEnum, enumName: 'currency_enum' })
   @Expose()
   @IsNotEmpty()
   @ApiProperty({ enum: CurrencyEnum, enumName: 'CurrencyEnum' })
@@ -46,7 +46,7 @@ export class BudgetEntity extends BaseEntity implements BudgetInterface {
   @ApiPropertyOptional()
   color?: string;
 
-  @Column({ type: 'enum', enum: PeriodEnum })
+  @Column({ type: 'enum', enum: PeriodEnum, enumName: 'period_enum' })
   @Expose()
   @IsNotEmpty()
   @ApiProperty({ enum: PeriodEnum, enumName: 'PeriodEnum' })

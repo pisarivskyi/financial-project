@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-import { AccountInterface, AccountType, CurrencyEnum, ProviderTypeEnum } from '@financial-project/common';
+import { AccountInterface, AccountTypeEnum, CurrencyEnum, ProviderTypeEnum } from '@financial-project/common';
 
 import { TableNameEnum } from '../../core/enums/table-name.enum';
 import { BaseEntity } from '../../core/models/base-entity.abstract';
@@ -25,11 +25,12 @@ export class AccountEntity extends BaseEntity implements AccountInterface {
 
   @Column({
     type: 'enum',
-    enum: AccountType,
+    enum: AccountTypeEnum,
+    enumName: 'account_type_enum'
   })
   @IsNotEmpty()
-  @ApiProperty({ enum: AccountType, enumName: 'AccountType' })
-  type: AccountType;
+  @ApiProperty({ enum: AccountTypeEnum, enumName: 'AccountType' })
+  type: AccountTypeEnum;
 
   @Column()
   @IsNotEmpty()
@@ -52,6 +53,7 @@ export class AccountEntity extends BaseEntity implements AccountInterface {
   @Column({
     type: 'enum',
     enum: CurrencyEnum,
+    enumName: 'currency_enum',
   })
   @IsNotEmpty()
   @ApiProperty({ enum: CurrencyEnum, enumName: 'CurrencyEnum' })
@@ -71,6 +73,7 @@ export class AccountEntity extends BaseEntity implements AccountInterface {
   @Column({
     type: 'enum',
     enum: ProviderTypeEnum,
+    enumName: 'provider_type_enum'
   })
   @IsNotEmpty()
   @ApiProperty({ enum: ProviderTypeEnum, enumName: 'ProviderTypeEnum' })
