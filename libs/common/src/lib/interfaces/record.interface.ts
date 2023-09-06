@@ -5,6 +5,7 @@ import { UserInterface } from './user.interface';
 
 export interface RecordInterface {
   bankRecordId?: string;
+  bankCreatedAt?: Date;
   name: string;
   comment: string;
   amount: number;

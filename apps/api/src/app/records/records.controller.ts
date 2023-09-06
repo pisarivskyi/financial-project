@@ -1,35 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { RecordsService } from './records.service';
-import { CreateRecordDto } from './dto/create-record.dto';
-import { UpdateRecordDto } from './dto/update-record.dto';
+import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+
 import { ApiPathEnum } from '@financial-project/common';
+
+import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
+import { CurrentUser } from '../core/decorators/current-user.decorator';
+import { UserEntity } from '../users/entities/user.entity';
+import { UpdateRecordDto } from './dto/update-record.dto';
+import { RecordEntity } from './entities/record.entity';
+import { RecordsService } from './records.service';
 
 @Controller(ApiPathEnum.Records)
 export class RecordsController {
   constructor(private readonly recordsService: RecordsService) {}
 
-  @Post()
-  create(@Body() createRecordDto: CreateRecordDto) {
-    return this.recordsService.create(createRecordDto);
-  }
-
   @Get()
-  findAll() {
-    return this.recordsService.findAll();
+  @UseGuards(JwtAuthGuard)
+  findAll(@CurrentUser() user: UserEntity): Promise<RecordEntity[]> {
+    return this.recordsService.findAll(user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.recordsService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  findOne(@Param('id') id: string, @CurrentUser() user: UserEntity) {
+    return this.recordsService.findOne(id, user);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRecordDto: UpdateRecordDto) {
-    return this.recordsService.update(+id, updateRecordDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.recordsService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  update(@Param('id') id: string, @Body() updateRecordDto: UpdateRecordDto, @CurrentUser() user: UserEntity): Promise<RecordEntity> {
+    return this.recordsService.update(id, updateRecordDto, user);
   }
 }

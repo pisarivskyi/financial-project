@@ -42,6 +42,9 @@ export class RecordEntity extends BaseEntity implements RecordInterface {
   @Column()
   mcc: number;
 
+  @Column({ nullable: true })
+  bankCreatedAt: Date;
+
   @Column({ type: 'json', nullable: true })
   @Exclude({ toPlainOnly: true })
   metadata?: object;

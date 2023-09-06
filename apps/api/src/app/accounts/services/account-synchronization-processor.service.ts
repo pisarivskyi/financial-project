@@ -6,7 +6,12 @@ import { DateTime } from 'luxon';
 import { firstValueFrom, map } from 'rxjs';
 import { In, Repository } from 'typeorm';
 
-import { ApiMonobankProviderService, RecordCreationTypeEnum, RecordTypeEnum } from '@financial-project/common';
+import {
+  ApiMonobank,
+  ApiMonobankProviderService,
+  RecordCreationTypeEnum,
+  RecordTypeEnum,
+} from '@financial-project/common';
 
 import { CategoriesService } from '../../categories/categories.service';
 import { RecordEntity } from '../../records/entities/record.entity';
@@ -62,24 +67,7 @@ export class AccountSynchronizationProcessorService {
       );
 
       const records = statements.map((statement) => {
-        const record = new RecordEntity();
-
-        record.bankRecordId = statement.id;
-        record.name = statement.description;
-        record.comment = statement.comment;
-        record.amount = Math.abs(statement.amount);
-        record.type = Math.sign(record.amount) === 1 ? RecordTypeEnum.Income : RecordTypeEnum.Outcome;
-        record.account = account;
-        record.balance = statement.balance;
-        // record.category?: CategoryInterface;
-        record.creationType = RecordCreationTypeEnum.Synced;
-        record.currencyCode = statement.currencyCode;
-        record.description = statement.description;
-        record.mcc = statement.mcc;
-        record.metadata = statement;
-        record.createdBy = account.createdBy;
-
-        return record;
+        return this.toRecordEntity(statement, account);
       });
 
       const recordBankIds = records.map((record) => record.bankRecordId);
@@ -109,5 +97,27 @@ export class AccountSynchronizationProcessorService {
 
       throw error;
     }
+  }
+
+  private toRecordEntity(statement: ApiMonobank.Statement.StatementInterface, account: AccountEntity): RecordEntity {
+    const record = new RecordEntity();
+
+    record.bankRecordId = statement.id;
+    record.bankCreatedAt = DateTime.fromSeconds(statement.time).toJSDate();
+    record.name = statement.description;
+    record.comment = statement.comment;
+    record.amount = Math.abs(statement.amount);
+    record.type = Math.sign(statement.amount) === 1 ? RecordTypeEnum.Income : RecordTypeEnum.Outcome;
+    record.account = account;
+    record.balance = statement.balance;
+    // record.category?: CategoryInterface;
+    record.creationType = RecordCreationTypeEnum.Synced;
+    record.currencyCode = statement.currencyCode;
+    record.description = statement.description;
+    record.mcc = statement.mcc;
+    record.metadata = statement;
+    record.createdBy = account.createdBy;
+
+    return record;
   }
 }
