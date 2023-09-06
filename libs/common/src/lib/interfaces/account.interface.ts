@@ -1,10 +1,10 @@
-import { AccountType, CurrencyEnum, ProviderTypeEnum } from '../enums';
+import { AccountTypeEnum, CurrencyEnum, ProviderTypeEnum } from '../enums';
 import { ProviderInterface } from './provider.interface';
 
 export interface AccountInterface {
   bankAccountId?: string;
   name: string;
-  type: AccountType;
+  type: AccountTypeEnum;
   balance: number;
   maskedPan?: string;
   bankSpecificType?: string;

@@ -4,7 +4,7 @@ import { plainToClassFromExist } from 'class-transformer';
 import { firstValueFrom, map } from 'rxjs';
 import { Repository } from 'typeorm';
 
-import { AccountType, ApiMonobankProviderService, ProviderTypeEnum } from '@financial-project/common';
+import { AccountTypeEnum, ApiMonobankProviderService, ProviderTypeEnum } from '@financial-project/common';
 
 import { AccountEntity } from '../../accounts/entities/account.entity';
 import { AccountsService } from '../../accounts/services/accounts.service';
@@ -140,7 +140,7 @@ export class ProvidersService {
       const accountEntities = selectedAccounts.map((monobankAccount) => {
         const account = new AccountEntity();
         account.name = `${provider.providerType} ${monobankAccount.type}`;
-        account.type = monobankAccount.creditLimit ? AccountType.CreditCard : AccountType.DebitCard;
+        account.type = monobankAccount.creditLimit ? AccountTypeEnum.CreditCard : AccountTypeEnum.DebitCard;
         account.provider = provider;
         account.providerType = ProviderTypeEnum.Monobank;
         account.bankAccountId = monobankAccount.id;
