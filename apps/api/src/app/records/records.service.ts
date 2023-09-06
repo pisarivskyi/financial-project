@@ -1,26 +1,86 @@
-import { Injectable } from '@nestjs/common';
-import { CreateRecordDto } from './dto/create-record.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { CategoriesService } from '../categories/categories.service';
+import { CategoryEntity } from '../categories/entities/category.entity';
+import { UserEntity } from '../users/entities/user.entity';
 import { UpdateRecordDto } from './dto/update-record.dto';
+import { RecordEntity } from './entities/record.entity';
 
 @Injectable()
 export class RecordsService {
-  create(createRecordDto: CreateRecordDto) {
-    return 'This action adds a new record';
+  constructor(
+    @InjectRepository(RecordEntity) private recordsRepository: Repository<RecordEntity>,
+    private categoriesService: CategoriesService
+  ) {}
+
+  findAll(user: UserEntity): Promise<RecordEntity[]> {
+    return this.recordsRepository.find({
+      where: {
+        createdBy: {
+          id: user.id,
+        },
+      },
+      order: {
+        bankCreatedAt: 'DESC',
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all records`;
+  async findOne(id: string, user: UserEntity): Promise<RecordEntity> {
+    try {
+      const record = await this.recordsRepository.findOne({
+        where: {
+          id,
+          createdBy: {
+            id: user.id,
+          },
+        },
+        relations: {
+          account: true,
+          category: true,
+        },
+      });
+
+      if (!record) {
+        throw new Error();
+      }
+
+      return record;
+    } catch {
+      throw new NotFoundException();
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} record`;
-  }
+  async update(id: string, updateRecordDto: UpdateRecordDto, user: UserEntity): Promise<RecordEntity> {
+    const targetRecord = await this.recordsRepository.findOne({
+      where: {
+        id,
+        createdBy: {
+          id: user.id,
+        },
+      },
+    });
 
-  update(id: number, updateRecordDto: UpdateRecordDto) {
-    return `This action updates a #${id} record`;
-  }
+    if (!targetRecord) {
+      throw new NotFoundException();
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} record`;
+    if (updateRecordDto.categoryId) {
+      const category: CategoryEntity = await this.categoriesService.findOne(updateRecordDto.categoryId, user);
+
+      if (!category) {
+        throw new NotFoundException();
+      }
+
+      targetRecord.category = category;
+    }
+
+    targetRecord.comment = updateRecordDto.comment ?? targetRecord.comment;
+
+    await this.recordsRepository.save(targetRecord);
+
+    return this.findOne(id, user);
   }
 }
