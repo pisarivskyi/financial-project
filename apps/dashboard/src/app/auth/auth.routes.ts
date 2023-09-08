@@ -13,13 +13,6 @@ export const authRoutes: Route[] = [
         loadComponent: () =>
           import('./sign-in-container/sign-in-container.component').then((mod) => mod.SignInContainerComponent),
       },
-      {
-        path: `${RoutePathEnum.Password}/${RoutePathEnum.ResetRequest}`,
-        loadComponent: () =>
-          import('./password-reset-request-container/password-reset-request-container.component').then(
-            (mod) => mod.PasswordResetRequestContainerComponent
-          ),
-      },
     ],
   },
 ];
