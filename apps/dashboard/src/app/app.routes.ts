@@ -22,6 +22,6 @@ export const appRoutes: Route[] = [
   },
   {
     path: '**',
-    redirectTo: '/',
+    redirectTo: RoutePathEnum.Dashboard,
   },
 ];

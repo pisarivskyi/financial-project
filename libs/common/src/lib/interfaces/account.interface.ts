@@ -14,4 +14,5 @@ export interface AccountInterface {
   provider?: ProviderInterface;
   providerType: ProviderTypeEnum;
   lastSyncDate?: Date;
+  createdBy: string;
 }

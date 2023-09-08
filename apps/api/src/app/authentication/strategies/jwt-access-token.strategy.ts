@@ -1,23 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import { passportJwtSecret } from 'jwks-rsa';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { UserEntity } from '../../users/entities/user.entity';
-import { AuthenticationService } from '../authentication.service';
-import { JwtPayloadInterface } from '../interfaces/jwt-payload.interface';
+import { UserInterface } from '@financial-project/common';
 
 @Injectable()
 export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) {
-  constructor(private authenticationService: AuthenticationService, configService: ConfigService) {
+  constructor(configService: ConfigService) {
     super({
+      secretOrKeyProvider: passportJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: `${configService.get<string>('AUTH0_ISSUER_URL')}.well-known/jwks.json`,
+      }),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: configService.get<string>('JWT_SECRET'),
+      audience: configService.get<string>('AUTH0_AUDIENCE'),
+      issuer: `${configService.get<string>('AUTH0_ISSUER_URL')}`,
+      algorithms: ['RS256'],
     });
   }
 
-  validate(payload: JwtPayloadInterface): Promise<UserEntity> {
-    return this.authenticationService.validateUser(payload);
+  validate(payload: UserInterface): UserInterface {
+    return payload;
   }
 }

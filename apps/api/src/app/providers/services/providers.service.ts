@@ -4,11 +4,15 @@ import { plainToClassFromExist } from 'class-transformer';
 import { firstValueFrom, map } from 'rxjs';
 import { Repository } from 'typeorm';
 
-import { AccountTypeEnum, ApiMonobankProviderService, ProviderTypeEnum } from '@financial-project/common';
+import {
+  AccountTypeEnum,
+  ApiMonobankProviderService,
+  ProviderTypeEnum,
+  UserInterface,
+} from '@financial-project/common';
 
 import { AccountEntity } from '../../accounts/entities/account.entity';
 import { AccountsService } from '../../accounts/services/accounts.service';
-import { UserEntity } from '../../users/entities/user.entity';
 import { CreateProviderDto } from '../dto/create-provider.dto';
 import { ProviderAccountsDto } from '../dto/provider-accounts.dto';
 import { SaveAccountsDto } from '../dto/save-accounts.dto';
@@ -25,27 +29,20 @@ export class ProvidersService {
     @InjectRepository(ProviderEntity) private readonly providersRepository: Repository<ProviderEntity>
   ) {}
 
-  findAll(user: UserEntity): Promise<ProviderEntity[]> {
+  findAll(user: UserInterface): Promise<ProviderEntity[]> {
     return this.providersRepository.find({
       where: {
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
     });
   }
 
-  async findOne(id: string, user: UserEntity): Promise<ProviderEntity> {
+  async findOne(id: string, user: UserInterface): Promise<ProviderEntity> {
     try {
       const provider = await this.providersRepository.findOne({
         where: {
           id,
-          createdBy: {
-            id: user.id,
-          },
-        },
-        relations: {
-          createdBy: true,
+          createdBy: user.sub,
         },
       });
 
@@ -62,21 +59,19 @@ export class ProvidersService {
   create(
     createProviderDto: CreateProviderDto,
     providerType: ProviderTypeEnum,
-    user: UserEntity
+    user: UserInterface
   ): Promise<ProviderEntity> {
     const provider = this.providerFactoryService.create(providerType, createProviderDto.data);
-    provider.createdBy = user;
+    provider.createdBy = user.sub;
 
     return this.providersRepository.save(provider);
   }
 
-  async update(id: string, updateAccountDto: UpdateProviderDto, user: UserEntity): Promise<ProviderEntity> {
+  async update(id: string, updateAccountDto: UpdateProviderDto, user: UserInterface): Promise<ProviderEntity> {
     const targetProvider = await this.providersRepository.findOne({
       where: {
         id,
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
     });
 
@@ -91,13 +86,11 @@ export class ProvidersService {
     return this.findOne(id, user);
   }
 
-  async remove(id: string, user: UserEntity): Promise<ProviderEntity> {
+  async remove(id: string, user: UserInterface): Promise<ProviderEntity> {
     const targetProvider = await this.providersRepository.findOne({
       where: {
         id,
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
     });
 
@@ -108,7 +101,7 @@ export class ProvidersService {
     return this.providersRepository.remove(targetProvider);
   }
 
-  async saveAccounts(providerId: string, saveAccountsDto: SaveAccountsDto, user: UserEntity) {
+  async saveAccounts(providerId: string, saveAccountsDto: SaveAccountsDto, user: UserInterface) {
     try {
       const existingAccounts = await this.accountsService.findAllByBankIds(saveAccountsDto.accountIds, user);
 
@@ -119,9 +112,7 @@ export class ProvidersService {
       const provider = await this.providersRepository.findOne({
         where: {
           id: providerId,
-          createdBy: {
-            id: user.id,
-          },
+          createdBy: user.sub,
         },
       });
 
@@ -149,7 +140,7 @@ export class ProvidersService {
         account.maskedPan = monobankAccount.maskedPan[0];
         account.balance = monobankAccount.balance;
         account.metadata = monobankAccount;
-        account.createdBy = user;
+        account.createdBy = user.sub;
 
         return account;
       });
@@ -164,14 +155,12 @@ export class ProvidersService {
     }
   }
 
-  async getAccounts(providerId: string, user: UserEntity): Promise<ProviderAccountsDto> {
+  async getAccounts(providerId: string, user: UserInterface): Promise<ProviderAccountsDto> {
     const provider = await this.providersRepository.findOne({
       where: {
         id: providerId,
         providerType: ProviderTypeEnum.Monobank,
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
     });
 
@@ -181,7 +170,7 @@ export class ProvidersService {
 
     switch (provider.providerType) {
       case ProviderTypeEnum.Monobank: {
-        return this.getAccountsFromMonobank(provider, user);
+        return this.getAccountsFromMonobank(provider);
       }
 
       default: {
@@ -190,7 +179,7 @@ export class ProvidersService {
     }
   }
 
-  private async getAccountsFromMonobank(provider: ProviderEntity, user: UserEntity): Promise<ProviderAccountsDto> {
+  private async getAccountsFromMonobank(provider: ProviderEntity): Promise<ProviderAccountsDto> {
     try {
       const result = await firstValueFrom<ProviderAccountsDto>(
         this.apiMonobankProviderService.getClientInfo$(provider.data.token).pipe(

@@ -11,7 +11,6 @@ import { CategoriesModule } from './categories/categories.module';
 import { ProvidersModule } from './providers/providers.module';
 import { RecordsModule } from './records/records.module';
 import { SettingsModule } from './settings/settings.module';
-import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -43,7 +42,6 @@ import { UsersModule } from './users/users.module';
     }),
     ScheduleModule.forRoot(),
     AuthenticationModule,
-    UsersModule,
     AccountsModule,
     BudgetsModule,
     CategoriesModule,

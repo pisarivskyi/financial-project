@@ -1,14 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 import { BudgetInterface, CurrencyEnum, PeriodEnum } from '@financial-project/common';
 
 import { CategoryEntity } from '../../categories/entities/category.entity';
 import { TableNameEnum } from '../../core/enums/table-name.enum';
 import { BaseEntity } from '../../core/models/base-entity.abstract';
-import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity(TableNameEnum.Budgets)
 export class BudgetEntity extends BaseEntity implements BudgetInterface {
@@ -66,9 +65,7 @@ export class BudgetEntity extends BaseEntity implements BudgetInterface {
   @ApiPropertyOptional()
   toDate?: Date;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn()
-  @Expose()
+  @Column()
   @ApiProperty()
-  createdBy: UserEntity;
+  createdBy: string;
 }

@@ -20,7 +20,7 @@ export class AccountTaskSchedulerService {
     @InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>
   ) {}
 
-  @Cron('5 * * * * *')
+  @Cron('5 * * * * *', { disabled: true })
   async handleCron(): Promise<void> {
     const accounts = await this.accountsRepository.find({
       where: {

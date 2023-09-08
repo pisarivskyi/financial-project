@@ -4,10 +4,10 @@ import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
 import { CategoriesService } from '../categories/categories.service';
-import { UserEntity } from '../users/entities/user.entity';
 import { CreateBudgetDto } from './dto/create-budget.dto';
 import { UpdateBudgetDto } from './dto/update-budget.dto';
 import { BudgetEntity } from './entities/budget.entity';
+import { UserInterface } from '@financial-project/common';
 
 @Injectable()
 export class BudgetsService {
@@ -16,9 +16,9 @@ export class BudgetsService {
     private categoriesService: CategoriesService
   ) {}
 
-  async create(createBudgetDto: CreateBudgetDto, user: UserEntity): Promise<BudgetEntity> {
+  async create(createBudgetDto: CreateBudgetDto, user: UserInterface): Promise<BudgetEntity> {
     const budget = plainToInstance(BudgetEntity, createBudgetDto, { excludeExtraneousValues: true });
-    budget.createdBy = user;
+    budget.createdBy = user.sub;
 
     try {
       const categories = await this.categoriesService.findByIds(createBudgetDto.categoryIds, user);
@@ -35,25 +35,21 @@ export class BudgetsService {
     return this.budgetsRepository.save(budget);
   }
 
-  findAll(user: UserEntity): Promise<BudgetEntity[]> {
+  findAll(user: UserInterface): Promise<BudgetEntity[]> {
     return this.budgetsRepository.find({
       where: {
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
       relations: { categories: true },
     });
   }
 
-  async findOne(id: string, user: UserEntity): Promise<BudgetEntity> {
+  async findOne(id: string, user: UserInterface): Promise<BudgetEntity> {
     try {
       const targetBudget = await this.budgetsRepository.findOne({
         where: {
           id,
-          createdBy: {
-            id: user.id,
-          },
+          createdBy: user.sub,
         },
         relations: { categories: true },
       });
@@ -68,13 +64,11 @@ export class BudgetsService {
     }
   }
 
-  async update(id: string, updateBudgetDto: UpdateBudgetDto, user: UserEntity): Promise<BudgetEntity> {
+  async update(id: string, updateBudgetDto: UpdateBudgetDto, user: UserInterface): Promise<BudgetEntity> {
     const targetBudget = await this.budgetsRepository.findOne({
       where: {
         id,
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
     });
 
@@ -103,13 +97,11 @@ export class BudgetsService {
     return this.findOne(id, user);
   }
 
-  async remove(id: string, user: UserEntity): Promise<BudgetEntity> {
+  async remove(id: string, user: UserInterface): Promise<BudgetEntity> {
     const targetBudget = await this.budgetsRepository.findOne({
       where: {
         id,
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
     });
 

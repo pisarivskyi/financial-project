@@ -1,7 +1,6 @@
 import { CurrencyEnum, RecordCreationTypeEnum, RecordTypeEnum } from '../enums';
 import { AccountInterface } from './account.interface';
 import { CategoryInterface } from './category.interface';
-import { UserInterface } from './user.interface';
 
 export interface RecordInterface {
   bankRecordId?: string;
@@ -18,5 +17,5 @@ export interface RecordInterface {
   description: string;
   mcc?: number;
   metadata?: object;
-  createdBy: UserInterface;
+  createdBy: string;
 }

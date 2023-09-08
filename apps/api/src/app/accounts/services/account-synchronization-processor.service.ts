@@ -41,7 +41,6 @@ export class AccountSynchronizationProcessorService {
           id: job.data.accountId,
         },
         relations: {
-          createdBy: true,
           provider: true,
         },
       });

@@ -2,9 +2,7 @@
   "name": "@financial-project/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {
-    "update-database-types": "supabase gen types typescript --linked > apps/dashboard/src/app/core/supabase/types/database.types.ts"
-  },
+  "scripts": {},
   "private": true,
   "dependencies": {
     "@angular/animations": "16.1.7",
@@ -15,6 +13,7 @@
     "@angular/platform-browser": "16.1.7",
     "@angular/platform-browser-dynamic": "16.1.7",
     "@angular/router": "16.1.7",
+    "@auth0/auth0-angular": "^2.2.1",
     "@nestjs/axios": "^3.0.0",
     "@nestjs/bull": "^10.0.1",
     "@nestjs/common": "^10.0.2",
@@ -30,12 +29,12 @@
     "@ngneat/until-destroy": "^10.0.0-beta.0",
     "@nx/angular": "16.5.5",
     "@supabase/supabase-js": "^2.25.0",
-    "argon2": "^0.31.0",
     "axios": "^1.5.0",
     "bull": "^4.11.3",
     "class-sanitizer": "^1.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "jwks-rsa": "^3.0.1",
     "luxon": "^3.3.0",
     "ng-zorro-antd": "16.1.0",
     "passport": "^0.6.0",

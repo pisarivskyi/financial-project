@@ -7,7 +7,6 @@ import { CategoryInterface } from '@financial-project/common';
 
 import { TableNameEnum } from '../../core/enums/table-name.enum';
 import { BaseEntity } from '../../core/models/base-entity.abstract';
-import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity(TableNameEnum.Categories)
 export class CategoryEntity extends BaseEntity implements CategoryInterface {
@@ -30,9 +29,9 @@ export class CategoryEntity extends BaseEntity implements CategoryInterface {
   @ApiProperty()
   icon: string;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn()
-  createdBy: UserEntity;
+  @Column()
+  @ApiProperty()
+  createdBy: string;
 
   @Column({ type: 'smallint', nullable: true })
   @IsOptional()

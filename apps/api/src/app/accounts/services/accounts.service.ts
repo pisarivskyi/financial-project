@@ -5,8 +5,9 @@ import { Job, Queue } from 'bull';
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { In, Repository } from 'typeorm';
 
+import { UserInterface } from '@financial-project/common';
+
 import { RecordEntity } from '../../records/entities/record.entity';
-import { UserEntity } from '../../users/entities/user.entity';
 import { ACCOUNT_JOB_QUEUE_NAME } from '../constants/account-job-queue-name.const';
 import { CreateAccountDto } from '../dto/create-account.dto';
 import { UpdateAccountDto } from '../dto/update-account.dto';
@@ -26,45 +27,36 @@ export class AccountsService {
     return this.accountsRepository.save(accounts);
   }
 
-  create(createAccountDto: CreateAccountDto, user: UserEntity): Promise<AccountEntity> {
+  create(createAccountDto: CreateAccountDto, user: UserInterface): Promise<AccountEntity> {
     const account = plainToInstance(AccountEntity, createAccountDto);
-    account.createdBy = user;
+    account.createdBy = user.sub;
 
     return this.accountsRepository.save(account);
   }
 
-  findAll(user: UserEntity): Promise<AccountEntity[]> {
+  findAll(user: UserInterface): Promise<AccountEntity[]> {
     return this.accountsRepository.find({
       where: {
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
     });
   }
 
-  findAllByBankIds(bankIds: string[], user: UserEntity): Promise<AccountEntity[]> {
+  findAllByBankIds(bankIds: string[], user: UserInterface): Promise<AccountEntity[]> {
     return this.accountsRepository.find({
       where: {
         bankAccountId: In(bankIds),
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
     });
   }
 
-  async findOne(id: string, user: UserEntity): Promise<AccountEntity> {
+  async findOne(id: string, user: UserInterface): Promise<AccountEntity> {
     try {
       const account = await this.accountsRepository.findOne({
         where: {
           id,
-          createdBy: {
-            id: user.id,
-          },
-        },
-        relations: {
-          createdBy: true,
+          createdBy: user.sub,
         },
       });
 
@@ -78,13 +70,11 @@ export class AccountsService {
     }
   }
 
-  async update(id: string, updateAccountDto: UpdateAccountDto, user: UserEntity): Promise<AccountEntity> {
+  async update(id: string, updateAccountDto: UpdateAccountDto, user: UserInterface): Promise<AccountEntity> {
     const targetAccount = await this.accountsRepository.findOne({
       where: {
         id,
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
     });
 
@@ -99,13 +89,11 @@ export class AccountsService {
     return this.findOne(id, user);
   }
 
-  async remove(id: string, user: UserEntity): Promise<AccountEntity> {
+  async remove(id: string, user: UserInterface): Promise<AccountEntity> {
     const targetAccount = await this.accountsRepository.findOne({
       where: {
         id,
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
     });
 
@@ -116,14 +104,12 @@ export class AccountsService {
     return this.accountsRepository.remove(targetAccount);
   }
 
-  async syncRecords(id: string, user: UserEntity): Promise<Job<AccountJobPayloadInterface>> {
+  async syncRecords(id: string, user: UserInterface): Promise<Job<AccountJobPayloadInterface>> {
     try {
       const account = await this.accountsRepository.findOne({
         where: {
           id,
-          createdBy: {
-            id: user.id,
-          },
+          createdBy: user.sub,
         },
         relations: {
           provider: true,
