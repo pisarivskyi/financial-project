@@ -2,9 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { UserInterface } from '@financial-project/common';
+
 import { CategoriesService } from '../categories/categories.service';
 import { CategoryEntity } from '../categories/entities/category.entity';
-import { UserEntity } from '../users/entities/user.entity';
 import { UpdateRecordDto } from './dto/update-record.dto';
 import { RecordEntity } from './entities/record.entity';
 
@@ -15,12 +16,10 @@ export class RecordsService {
     private categoriesService: CategoriesService
   ) {}
 
-  findAll(user: UserEntity): Promise<RecordEntity[]> {
+  findAll(user: UserInterface): Promise<RecordEntity[]> {
     return this.recordsRepository.find({
       where: {
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
       order: {
         bankCreatedAt: 'DESC',
@@ -28,14 +27,12 @@ export class RecordsService {
     });
   }
 
-  async findOne(id: string, user: UserEntity): Promise<RecordEntity> {
+  async findOne(id: string, user: UserInterface): Promise<RecordEntity> {
     try {
       const record = await this.recordsRepository.findOne({
         where: {
           id,
-          createdBy: {
-            id: user.id,
-          },
+          createdBy: user.sub,
         },
         relations: {
           account: true,
@@ -53,13 +50,11 @@ export class RecordsService {
     }
   }
 
-  async update(id: string, updateRecordDto: UpdateRecordDto, user: UserEntity): Promise<RecordEntity> {
+  async update(id: string, updateRecordDto: UpdateRecordDto, user: UserInterface): Promise<RecordEntity> {
     const targetRecord = await this.recordsRepository.findOne({
       where: {
         id,
-        createdBy: {
-          id: user.id,
-        },
+        createdBy: user.sub,
       },
     });
 

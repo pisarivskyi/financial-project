@@ -1,5 +1,3 @@
-import { UserInterface } from './user.interface';
-
 export interface CategoryInterface {
   name: string;
   color: string;
@@ -7,5 +5,5 @@ export interface CategoryInterface {
   parentCategory?: CategoryInterface;
   mccRangeStart?: number;
   mccRangeEnd?: number;
-  createdBy: UserInterface;
+  createdBy: string;
 }

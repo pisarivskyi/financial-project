@@ -1,11 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { ApiPathEnum } from '@financial-project/common';
+import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
-import { UserEntity } from '../users/entities/user.entity';
 import { BudgetsService } from './budgets.service';
 import { CreateBudgetDto } from './dto/create-budget.dto';
 import { UpdateBudgetDto } from './dto/update-budget.dto';
@@ -24,7 +23,7 @@ export class BudgetsController {
     description: 'Creates a new budget',
     type: BudgetEntity,
   })
-  create(@Body() createBudgetDto: CreateBudgetDto, @CurrentUser() user: UserEntity): Promise<BudgetEntity> {
+  create(@Body() createBudgetDto: CreateBudgetDto, @CurrentUser() user: UserInterface): Promise<BudgetEntity> {
     return this.budgetsService.create(createBudgetDto, user);
   }
 
@@ -36,7 +35,7 @@ export class BudgetsController {
     type: BudgetEntity,
     isArray: true,
   })
-  findAll(@CurrentUser() user: UserEntity): Promise<BudgetEntity[]> {
+  findAll(@CurrentUser() user: UserInterface): Promise<BudgetEntity[]> {
     return this.budgetsService.findAll(user);
   }
 
@@ -47,7 +46,7 @@ export class BudgetsController {
     description: 'Gets a single budget by id',
     type: BudgetEntity,
   })
-  findOne(@Param('id') id: string, @CurrentUser() user: UserEntity): Promise<BudgetEntity> {
+  findOne(@Param('id') id: string, @CurrentUser() user: UserInterface): Promise<BudgetEntity> {
     return this.budgetsService.findOne(id, user);
   }
 
@@ -61,7 +60,7 @@ export class BudgetsController {
   update(
     @Param('id') id: string,
     @Body() updateBudgetDto: UpdateBudgetDto,
-    @CurrentUser() user: UserEntity
+    @CurrentUser() user: UserInterface
   ): Promise<BudgetEntity> {
     return this.budgetsService.update(id, updateBudgetDto, user);
   }
@@ -73,7 +72,7 @@ export class BudgetsController {
     description: 'Removes a single budget by id',
     type: BudgetEntity,
   })
-  remove(@Param('id') id: string, @CurrentUser() user: UserEntity): Promise<BudgetEntity> {
+  remove(@Param('id') id: string, @CurrentUser() user: UserInterface): Promise<BudgetEntity> {
     return this.budgetsService.remove(id, user);
   }
 }

@@ -8,7 +8,6 @@ import { AccountEntity } from '../../accounts/entities/account.entity';
 import { CategoryEntity } from '../../categories/entities/category.entity';
 import { TableNameEnum } from '../../core/enums/table-name.enum';
 import { BaseEntity } from '../../core/models/base-entity.abstract';
-import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity(TableNameEnum.Records)
 export class RecordEntity extends BaseEntity implements RecordInterface {
@@ -57,8 +56,7 @@ export class RecordEntity extends BaseEntity implements RecordInterface {
   @JoinColumn()
   category?: CategoryEntity;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn()
+  @Column()
   @ApiProperty()
-  createdBy: UserEntity;
+  createdBy: string;
 }

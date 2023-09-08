@@ -1,4 +1,3 @@
-export interface UserInterface {
-  email: string;
-  password: string;
-}
+import { User } from '@auth0/auth0-angular';
+
+export type UserInterface = User;

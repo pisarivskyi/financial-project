@@ -7,7 +7,6 @@ import { AccountInterface, AccountTypeEnum, CurrencyEnum, ProviderTypeEnum } fro
 import { TableNameEnum } from '../../core/enums/table-name.enum';
 import { BaseEntity } from '../../core/models/base-entity.abstract';
 import { ProviderEntity } from '../../providers/entities/provider.entity';
-import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity(TableNameEnum.Accounts)
 export class AccountEntity extends BaseEntity implements AccountInterface {
@@ -85,10 +84,9 @@ export class AccountEntity extends BaseEntity implements AccountInterface {
   @ApiProperty()
   maskedPan?: string;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn()
+  @Column()
   @ApiProperty()
-  createdBy: UserEntity;
+  createdBy: string;
 
   @Column({ nullable: true })
   @ApiPropertyOptional()

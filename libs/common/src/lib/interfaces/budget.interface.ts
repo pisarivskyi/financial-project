@@ -1,6 +1,5 @@
 import { CurrencyEnum, PeriodEnum } from '../enums';
 import { CategoryInterface } from './category.interface';
-import { UserInterface } from './user.interface';
 
 export interface BudgetInterface {
   name: string;
@@ -11,5 +10,5 @@ export interface BudgetInterface {
   period: PeriodEnum;
   fromDate?: Date;
   toDate?: Date;
-  createdBy: UserInterface;
+  createdBy: string;
 }
