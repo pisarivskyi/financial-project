@@ -5,9 +5,12 @@ import { In, Repository } from 'typeorm';
 
 import { UserInterface } from '@financial-project/common';
 
+import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
+import { paginate } from '../core/pagination/utils/paginate.utils';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryEntity } from './entities/category.entity';
+import { PageDto } from '../core/pagination/dtos/page.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -34,8 +37,8 @@ export class CategoriesService {
     return this.categoriesRepository.save(category);
   }
 
-  findAll(user: UserInterface): Promise<CategoryEntity[]> {
-    return this.categoriesRepository.find({
+  async findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<CategoryEntity>> {
+    return paginate(this.categoriesRepository, params, {
       where: {
         createdBy: user.sub,
       },
