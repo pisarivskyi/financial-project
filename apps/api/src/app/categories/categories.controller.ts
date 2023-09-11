@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
+import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
+import { PageDto } from '../core/pagination/dtos/page.dto';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -24,8 +26,8 @@ export class CategoriesController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll(@CurrentUser() user: UserInterface) {
-    return this.categoriesService.findAll(user);
+  findAll(@Query() params: PageOptionsDto, @CurrentUser() user: UserInterface): Promise<PageDto<CategoryEntity>> {
+    return this.categoriesService.findAll(params, user);
   }
 
   @Get(':id')
