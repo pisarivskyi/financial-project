@@ -12,6 +12,7 @@ import { environment } from '../../../../environments/environment';
 import { appRoutes } from './app.routes';
 import { ENVIRONMENT_CONFIG_TOKEN } from './core/configuration/tokens/environment-config.token';
 import { FORM_AUTO_TIPS } from './shared/constants/form-auto-tips.const';
+import { devTools } from '@ngneat/elf-devtools';
 
 const ngZorroConfig: NzConfig = {
   form: {
@@ -19,12 +20,16 @@ const ngZorroConfig: NzConfig = {
   },
 };
 
-function initAppFactory(authService: AuthService): () => Observable<any> {
-  return () =>
-    authService.isLoading$.pipe(
-      filter((b) => b),
-      take(1)
-    );
+function initAppFactory(): () => void {
+  return () => devTools({
+    name: 'financial-project',
+  });
+
+  // return () =>
+  //   authService.isLoading$.pipe(
+  //     filter((b) => b),
+  //     take(1)
+  //   );
 }
 
 export const appConfig: ApplicationConfig = {
@@ -43,7 +48,7 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideAnimations(),
-    // { provide: APP_INITIALIZER, multi: true, useFactory: initAppFactory, deps: [AuthService] },
+    { provide: APP_INITIALIZER, multi: true, useFactory: initAppFactory, deps: [] },
     { provide: NZ_I18N, useValue: en_US },
     { provide: NZ_CONFIG, useValue: ngZorroConfig },
     { provide: ENVIRONMENT_CONFIG_TOKEN, useValue: environment },

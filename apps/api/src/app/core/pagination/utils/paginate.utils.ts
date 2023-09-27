@@ -10,13 +10,17 @@ export async function paginate<T>(
 ): Promise<PageDto<T>> {
   const [items, count] = await repository.findAndCount({
     ...options,
-    skip: (pagination.page - 1) * pagination.size,
-    take: pagination.size,
+    ...(pagination.pageIndex
+      ? {
+          skip: (pagination.pageIndex - 1) * pagination.pageSize,
+          take: pagination.pageSize,
+        }
+      : {}),
   });
 
   return new PageDto(items, {
-    pageSize: pagination.size,
-    pageIndex: pagination.page,
+    pageSize: pagination.pageSize,
+    pageIndex: pagination.pageIndex,
     total: count,
   });
 }

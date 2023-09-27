@@ -1,10 +1,7 @@
-<fpd-app-menu class="menu"></fpd-app-menu>
+<fpd-app-menu class="menu" (logout)="onLogOut()"></fpd-app-menu>
 
 <div class="content-wrapper">
   <div class="breadcrumbs"></div>
-
-  <button (click)="makeRequest()">make request</button>
-  <button (click)="logout()">logout</button>
 
   <main>
     <router-outlet></router-outlet>

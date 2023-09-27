@@ -21,13 +21,13 @@ export const dashboardRoutes: Route[] = [
       //   path: RoutePathEnum.Records,
       //   loadComponent: () => import('./records-container/records-container.component').then((mod) => mod.RecordsContainerComponent),
       // },
-      // {
-      //   path: RoutePathEnum.Categories,
-      //   loadComponent: () =>
-      //     import('./categories-container/categories-container.component').then(
-      //       (mod) => mod.CategoriesContainerComponent
-      //     ),
-      // },
+      {
+        path: RoutePathEnum.Categories,
+        loadComponent: () =>
+          import('./categories-container/categories-container.component').then(
+            (mod) => mod.CategoriesContainerComponent
+          ),
+      },
     ],
   },
 ];

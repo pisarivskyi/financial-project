@@ -10,7 +10,7 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
-import { Category } from '../../api/categories/models/category.model';
+import { CategoryModel } from '../../api/categories/models/category.model';
 import { AddCategoryModalComponent } from './components/add-category-modal/add-category-modal.component';
 import { EditCategoryModalComponent } from './components/edit-category-modal/edit-category-modal.component';
 import { CategoriesFacadeService } from './services/categories-facade.service';
@@ -42,26 +42,15 @@ export class CategoriesContainerComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.queryParams.pipe(untilDestroyed(this)).subscribe(({ page, size }) => {
       if (!page) {
-        this.changeRouteQueryParams({ page: 1, size: 20 }, true);
+        this.changeRouteQueryParams({ page: 1 }, true);
       } else {
         page = Number(page ?? 1);
-        size = Number(size ?? 20);
+        size = Number(size ?? 10);
 
-        this.categoriesFacadeService.updatePagination({
-          pageIndex: page,
-          pageSize: size,
-        });
+        this.categoriesFacadeService.updatePagination(page, size);
 
-        this.categoriesFacadeService.getCategories();
+        this.categoriesFacadeService.loadCategories();
       }
-    });
-
-    this.pagination$.pipe(untilDestroyed(this)).subscribe((pagination) => {
-      this.router.navigate(['./'], {
-        queryParams: { page: pagination.pageIndex, size: pagination.pageSize },
-        relativeTo: this.activatedRoute,
-        replaceUrl: false,
-      });
     });
   }
 
@@ -74,14 +63,14 @@ export class CategoriesContainerComponent implements OnInit {
 
     modalRef.afterClose.subscribe((created: boolean) => {
       if (created) {
-        this.categoriesFacadeService.getCategories();
+        this.categoriesFacadeService.loadCategories();
 
         this.messageService.success('Category item was created');
       }
     });
   }
 
-  onEditCategory(category: Category): void {
+  onEditCategory(category: CategoryModel): void {
     const modalRef = this.modalService.create({
       nzTitle: 'Edit category',
       nzContent: EditCategoryModalComponent,
@@ -91,16 +80,16 @@ export class CategoriesContainerComponent implements OnInit {
 
     modalRef.afterClose.subscribe((created: boolean) => {
       if (created) {
-        this.categoriesFacadeService.getCategories();
+        this.categoriesFacadeService.loadCategories();
 
         this.messageService.success('Category item was updated');
       }
     });
   }
 
-  onDeleteCategory(category: Category): void {
+  onDeleteCategory(category: CategoryModel): void {
     this.categoriesFacadeService.deleteCategory$(category.id).subscribe(() => {
-      this.categoriesFacadeService.getCategories();
+      this.categoriesFacadeService.loadCategories();
 
       this.messageService.success('Category item was deleted');
     });

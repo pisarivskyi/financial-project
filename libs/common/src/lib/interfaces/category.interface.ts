@@ -1,4 +1,5 @@
 export interface CategoryInterface {
+  id: string;
   name: string;
   color: string;
   icon: string;
@@ -6,4 +7,6 @@ export interface CategoryInterface {
   mccRangeStart?: number;
   mccRangeEnd?: number;
   createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

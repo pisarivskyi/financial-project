@@ -1,6 +1,6 @@
 import { Expose, instanceToPlain } from 'class-transformer';
 
-import { BaseModel } from '../../../core/supabase/models/base.model';
+import { BaseModel } from '../../../core/models/base.model';
 import { ApiInsertAccountRowData, ApiUpdateAccountRowData } from '../../../core/supabase/types/table.types';
 import { UUID } from '../../../core/supabase/types/uuid.type';
 import { CurrencyEnum } from '../../../shared/enums/currency.enum';

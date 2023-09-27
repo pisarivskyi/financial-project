@@ -1,17 +1,19 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, Max, Min } from 'class-validator';
+import { IsNumber, IsOptional, Max, Min, ValidateIf } from 'class-validator';
 
-export class PageOptionsDto {
+import { PaginationQueryParamsInterface } from '@financial-project/common';
+
+export class PageOptionsDto implements PaginationQueryParamsInterface {
   @Type(() => Number)
   @IsNumber()
   @IsOptional()
   @Min(1)
-  page?: number;
+  pageIndex: number;
 
   @Type(() => Number)
   @IsNumber()
-  @IsOptional()
+  @ValidateIf((o) => Boolean(o.pageIndex))
   @Min(1)
   @Max(100)
-  size?: number;
+  pageSize: number;
 }

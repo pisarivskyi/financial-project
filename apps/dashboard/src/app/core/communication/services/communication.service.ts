@@ -15,6 +15,7 @@ export class CommunicationService {
   makeRequest<T>(requestParams: HttpRequestParamsInterface): Observable<T> {
     return this.httpClient.request<T>(requestParams.method, this.prepareUrl(requestParams.path), {
       body: requestParams.payload,
+      params: requestParams.params,
     });
   }
 

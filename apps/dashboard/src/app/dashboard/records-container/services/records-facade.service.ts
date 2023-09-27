@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
 
 import { RecordModel } from '../../../api/records/models/record.model';
 import { PaginationInterface } from '../../../core/supabase/interfaces/pagination.interface';
-import { PaginationModel } from '../../../core/supabase/models/pagination.model';
+import { PaginationModel } from '../../../core/pagination/pagination.model';
 import { ApiInsertRecordRowData, ApiUpdateRecordRowData } from '../../../core/supabase/types/table.types';
 import { UUID } from '../../../core/supabase/types/uuid.type';
 import { RecordsService } from '../../services/records.service';

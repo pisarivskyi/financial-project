@@ -1,11 +1,12 @@
-import { PageMetaDto } from './page-meta.dto';
-import { PageMetaDtoParametersInterface } from '../interfaces/page-meta-dto-parameters.interface';
+import { PaginatedResponseInterface, PaginatedResponseMetaInterface } from '@financial-project/common';
 
-export class PageDto<T> {
+import { PageMetaDto } from './page-meta.dto';
+
+export class PageDto<T> implements PaginatedResponseInterface<T> {
   readonly data: T[];
   readonly meta: PageMetaDto;
 
-  constructor(data: T[], params: PageMetaDtoParametersInterface) {
+  constructor(data: T[], params: PaginatedResponseMetaInterface) {
     this.meta = new PageMetaDto(params);
     this.data = data;
   }

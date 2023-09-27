@@ -13,6 +13,7 @@
   <thead>
   <tr>
     <th>Name</th>
+    <th>Parent</th>
     <th>Date</th>
     <th>Updated</th>
     <th>Actions</th>
@@ -21,8 +22,9 @@
   <tbody>
   <tr *ngFor="let category of table.data">
     <td>{{ category.name }}</td>
+    <td>{{ category.parentCategory?.name }}</td>
     <td>{{ category.createdAt | date }}</td>
-    <td>{{ category.updatedAt | date : 'full' }}</td>
+    <td>{{ category.updatedAt | date }}</td>
     <td>
       <button nz-button (click)="onEditCategory(category)">edit</button>
 

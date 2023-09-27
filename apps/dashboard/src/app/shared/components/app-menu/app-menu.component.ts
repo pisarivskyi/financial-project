@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { NzMenuModule } from 'ng-zorro-antd/menu';
@@ -15,5 +15,8 @@ import { RoutePathEnum } from '../../../core/enums/route-path.enum';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppMenuComponent {
+  @Output()
+  logout = new EventEmitter<void>();
+
   RoutePathEnum = RoutePathEnum;
 }
