@@ -12,9 +12,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
-import { Category } from '../../../../api/categories/models/category.model';
+import { CategoryModel } from '../../../../api/categories/models/category.model';
 import { RecordModel } from '../../../../api/records/models/record.model';
-import { AuthenticationService } from '../../../../core/authentication/services/authentication.service';
 import { CURRENCY_OPTIONS } from '../../../../shared/constants/currency-options.const';
 import { CurrencyEnum } from '../../../../shared/enums/currency.enum';
 import { CreateFormGroupFromData } from '../../../../shared/types/create-form-group-from-data.type';
@@ -25,7 +24,7 @@ export interface RecordFormData {
   name: string;
   amount: number;
   currencyCode: CurrencyEnum;
-  category: Category | null;
+  category: CategoryModel | null;
 }
 
 export type RecordFormGroup = CreateFormGroupFromData<RecordFormData>;
@@ -69,7 +68,6 @@ export class RecordFormComponent implements OnInit {
   currencyOptions = CURRENCY_OPTIONS;
 
   constructor(
-    private authService: AuthenticationService,
     private recordsFacadeService: RecordsFacadeService,
     private categoriesFacadeService: CategoriesFacadeService
   ) {}
@@ -105,7 +103,7 @@ export class RecordFormComponent implements OnInit {
     this.categoriesFacadeService.getCategories();
   }
 
-  compareWithFn = (o1: Category, o2: Category): boolean => (o1 && o2 ? o1.id === o2.id : o1 === o2);
+  compareWithFn = (o1: CategoryModel, o2: CategoryModel): boolean => (o1 && o2 ? o1.id === o2.id : o1 === o2);
 
   getModel(): RecordModel {
     const record = new RecordModel();

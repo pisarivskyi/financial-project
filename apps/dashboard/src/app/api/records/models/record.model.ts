@@ -1,10 +1,12 @@
 import { Expose, Type, instanceToPlain } from 'class-transformer';
 
-import { BaseModel } from '../../../core/supabase/models/base.model';
+import { RecordInterface } from '@financial-project/common';
+
+import { BaseModel } from '../../../core/models/base.model';
 import { ApiInsertRecordRowData, ApiUpdateRecordRowData } from '../../../core/supabase/types/table.types';
 import { UUID } from '../../../core/supabase/types/uuid.type';
 import { CurrencyEnum } from '../../../shared/enums/currency.enum';
-import { Category } from '../../categories/models/category.model';
+import { CategoryModel } from '../../categories/models/category.model';
 
 export class RecordModel extends BaseModel {
   @Expose()
@@ -14,8 +16,8 @@ export class RecordModel extends BaseModel {
   amount!: number;
 
   @Expose()
-  @Type(() => Category)
-  category!: Category;
+  @Type(() => CategoryModel)
+  category!: CategoryModel;
 
   @Expose({ name: 'created_by' })
   createdBy!: UUID;

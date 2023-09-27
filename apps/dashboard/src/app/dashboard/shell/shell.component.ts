@@ -5,8 +5,6 @@ import { AuthService } from '@auth0/auth0-angular';
 
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
-import { HttpMethodEnum } from '../../core/communication/enums/http-method.enum';
-import { CommunicationService } from '../../core/communication/services/communication.service';
 import { AppMenuComponent } from '../../shared/components/app-menu/app-menu.component';
 
 @Component({
@@ -18,26 +16,9 @@ import { AppMenuComponent } from '../../shared/components/app-menu/app-menu.comp
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShellComponent {
-  constructor(private authService: AuthService, private com: CommunicationService) {}
+  constructor(private authService: AuthService) {}
 
-  logout() {
-    this.authService.logout({
-      // openUrl: false,
-    });
-  }
-
-  makeRequest(): void {
-    this.authService.user$.subscribe((u) => {
-      console.log(u);
-    });
-
-    this.com
-      .makeRequest({
-        method: HttpMethodEnum.Get,
-        path: '/categories',
-      })
-      .subscribe((d) => {
-        console.log(d);
-      });
+  onLogOut(): void {
+    this.authService.logout();
   }
 }

@@ -1,6 +1,6 @@
 import { PaginatedResponseMetaInterface } from '@financial-project/common';
 
-export class PageMetaDto implements PaginatedResponseMetaInterface {
+export class PaginatedResponseMeta implements PaginatedResponseMetaInterface {
   readonly pageIndex: number;
   readonly pageSize: number;
   readonly total: number;

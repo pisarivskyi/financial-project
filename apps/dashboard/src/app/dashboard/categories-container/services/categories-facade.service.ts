@@ -1,74 +1,72 @@
 import { Injectable } from '@angular/core';
-import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
-import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
+import { createStore } from '@ngneat/elf';
+import { selectAllEntities, setEntities, withEntities } from '@ngneat/elf-entities';
+import { getRequestResult, trackRequestResult } from '@ngneat/elf-requests';
+import { Observable, map, switchMap, take, tap } from 'rxjs';
 
-import { Category } from '../../../api/categories/models/category.model';
-import { PaginationInterface } from '../../../core/supabase/interfaces/pagination.interface';
-import { PaginationModel } from '../../../core/supabase/models/pagination.model';
-import {
-  ApiInsertCategoryRowData,
-  ApiUpdateCategoryRowData,
-} from '../../../core/supabase/types/table.types';
-import { UUID } from '../../../core/supabase/types/uuid.type';
+import { CategoryModel } from '../../../api/categories/models/category.model';
+import { updatePaginationData, withPaginationData } from '../../../core/pagination/utils/pagination-utils';
 import { CategoriesService } from '../../services/categories.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoriesFacadeService {
-  private isLoadingSubject$ = new BehaviorSubject<boolean>(false);
+  private readonly storyKey = 'categories';
 
-  private categoriesSubject$ = new BehaviorSubject<Category[]>([]);
+  private readonly requestKeys = {
+    getCategories: 'getCategories',
+  };
 
-  private paginationSubject$ = new BehaviorSubject<PaginationModel>(
-    new PaginationModel({
-      pageIndex: 1,
-      pageSize: 20,
-      total: 0,
-    })
-  );
+  store = createStore({ name: this.storyKey }, withEntities<CategoryModel>(), withPaginationData());
 
-  isLoading$ = this.isLoadingSubject$.asObservable();
+  categories$ = this.store.pipe(selectAllEntities());
 
-  categories$ = this.categoriesSubject$.asObservable();
+  pagination$ = this.store.pipe(map((s) => s.pagination));
 
-  pagination$ = this.paginationSubject$.asObservable();
+  isLoading$ = getRequestResult([this.requestKeys.getCategories]).pipe(map(({ isLoading }) => isLoading));
 
   constructor(private categoriesService: CategoriesService) {}
 
-  getCategories(): void {
-    this.isLoadingSubject$.next(true);
-
-    this.categoriesService
-      .getCategories$(this.paginationSubject$.value)
+  loadCategories(): void {
+    this.store
       .pipe(
-        tap(({ data, count }) => {
-          this.categoriesSubject$.next(data ?? []);
-
-          this.paginationSubject$.next(
-            this.paginationSubject$.value.patch({
-              total: count ?? this.paginationSubject$.value.total,
-            })
-          );
+        take(1),
+        switchMap(({ pagination }) => {
+          return this.categoriesService.getCategories$(pagination);
         }),
-        finalize(() => this.isLoadingSubject$.next(false))
+        tap(({ data, meta }) => {
+          this.store.update(setEntities(data), updatePaginationData(meta));
+        }),
+        trackRequestResult([this.requestKeys.getCategories], {
+          skipCache: true,
+        })
       )
       .subscribe();
   }
 
-  saveCategory$(categoryData: ApiInsertCategoryRowData): Observable<PostgrestResponse<Category>> {
-    return this.categoriesService.saveCategory$(categoryData);
+  saveCategory$(categoryToSave: CategoryModel): Observable<CategoryModel> {
+    return this.categoriesService.saveCategory$(categoryToSave);
   }
 
-  deleteCategory$(id: UUID): Observable<PostgrestSingleResponse<null>> {
+  deleteCategory$(id: string): Observable<CategoryModel> {
     return this.categoriesService.deleteCategory$(id);
   }
 
-  updateCategory$(id: UUID, categoryData: ApiUpdateCategoryRowData): Observable<PostgrestSingleResponse<null>> {
-    return this.categoriesService.updateCategory$(id, categoryData);
+  updateCategory$(categoryToUpdate: CategoryModel): Observable<CategoryModel> {
+    return this.categoriesService.updateCategory$(categoryToUpdate);
   }
 
-  updatePagination(pagination: Partial<PaginationInterface>): void {
-    this.paginationSubject$.next(this.paginationSubject$.value.patch(pagination));
+  getAllCategories$(): Observable<CategoryModel[]> {
+    return this.categoriesService.getCategories$().pipe(map((response) => response.data));
+  }
+
+  updatePagination(pageIndex: number, pageSize: number): void {
+    this.store.update(
+      updatePaginationData({
+        pageIndex,
+        pageSize,
+      })
+    );
   }
 }

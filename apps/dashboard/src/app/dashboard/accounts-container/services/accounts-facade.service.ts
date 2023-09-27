@@ -3,7 +3,7 @@ import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-j
 import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
 
 import { PaginationInterface } from '../../../core/supabase/interfaces/pagination.interface';
-import { PaginationModel } from '../../../core/supabase/models/pagination.model';
+import { PaginationModel } from '../../../core/pagination/pagination.model';
 import {
   ApiInsertAccountRowData, ApiUpdateAccountRowData,
 } from '../../../core/supabase/types/table.types';

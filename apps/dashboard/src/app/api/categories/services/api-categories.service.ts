@@ -1,74 +1,64 @@
 import { Injectable } from '@angular/core';
-import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
-import { plainToInstance } from 'class-transformer';
-import { Observable, from, map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
-import { DatabaseTableEnum } from '../../../core/supabase/enums/database-table.enum';
-import { PaginationInterface } from '../../../core/supabase/interfaces/pagination.interface';
-import { SupabaseService } from '../../../core/supabase/services/supabase.service';
-import {
-  ApiGetCategoryRowData,
-  ApiInsertCategoryRowData,
-  ApiUpdateCategoryRowData,
-} from '../../../core/supabase/types/table.types';
-import { UUID } from '../../../core/supabase/types/uuid.type';
-import { Category } from '../models/category.model';
+import { CategoryInterface, PaginatedResponseInterface } from '@financial-project/common';
+
+import { HttpMethodEnum } from '../../../core/communication/enums/http-method.enum';
+import { CommunicationService } from '../../../core/communication/services/communication.service';
+import { PaginatedResponse } from '../../../core/pagination/classes/paginated-response.class';
+import { PaginationParamsInterface } from '../../../core/pagination/interfaces/pagination-params.interface';
+import { CategoryModel } from '../models/category.model';
+import { ApiCategoriesTransformService } from './api-categories-transform.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiCategoriesService {
-  constructor(private supabaseService: SupabaseService) {}
+  readonly requests = {
+    categories: '/categories',
+  };
 
-  fetchCategories$(pagination?: PaginationInterface): Observable<PostgrestResponse<Category>> {
-    let builder = this.supabaseService.getClient().from(DatabaseTableEnum.Categories).select('*', { count: 'exact' });
+  constructor(
+    private apiCategoriesTransformService: ApiCategoriesTransformService,
+    private communicationService: CommunicationService
+  ) {}
 
-    if (pagination) {
-      const p = this.preparePagination(pagination);
-
-      builder = builder.range(p.from, p.to);
-    }
-
-    return from(builder.throwOnError()).pipe(map((response) => this.transformFromCategories(response)));
+  extractCategories$(pagination?: PaginationParamsInterface): Observable<PaginatedResponse<CategoryModel>> {
+    return this.communicationService
+      .makeRequest<PaginatedResponseInterface<CategoryInterface>>({
+        method: HttpMethodEnum.Get,
+        path: this.requests.categories,
+        params: this.apiCategoriesTransformService.toExtractCategoriesParams(pagination),
+      })
+      .pipe(map((response) => this.apiCategoriesTransformService.fromExtractCategories(response)));
   }
 
-  insertCategory$(categoryData: ApiInsertCategoryRowData): Observable<PostgrestResponse<Category>> {
-    return from(
-      this.supabaseService.getClient().from(DatabaseTableEnum.Categories).insert(categoryData).select().throwOnError()
-    ).pipe(map((response: PostgrestResponse<ApiGetCategoryRowData>) => this.transformFromCategories(response)));
+  insertCategory$(categoryToSave: CategoryModel): Observable<CategoryModel> {
+    return this.communicationService
+      .makeRequest<CategoryInterface>({
+        method: HttpMethodEnum.Post,
+        path: this.requests.categories,
+        payload: this.apiCategoriesTransformService.toInsertCategory(categoryToSave),
+      })
+      .pipe(map((response) => this.apiCategoriesTransformService.fromInsertCategory(response)));
   }
 
-  updateCategory$(id: UUID, categoryData: ApiUpdateCategoryRowData): Observable<PostgrestSingleResponse<null>> {
-    return from(
-      this.supabaseService
-        .getClient()
-        .from(DatabaseTableEnum.Categories)
-        .update(categoryData)
-        .eq('id', id)
-        .throwOnError()
-    );
+  updateCategory$(categoryToUpdate: CategoryModel): Observable<CategoryModel> {
+    return this.communicationService
+      .makeRequest<CategoryInterface>({
+        method: HttpMethodEnum.Patch,
+        path: `${this.requests.categories}/${categoryToUpdate.id}`,
+        payload: this.apiCategoriesTransformService.toUpdateCategory(categoryToUpdate),
+      })
+      .pipe(map((response) => this.apiCategoriesTransformService.fromUpdateCategory(response)));
   }
 
-  deleteCategory$(id: UUID): Observable<PostgrestSingleResponse<null>> {
-    return from(
-      this.supabaseService.getClient().from(DatabaseTableEnum.Categories).delete().eq('id', id).throwOnError()
-    );
-  }
-
-  private transformFromCategories(response: PostgrestResponse<ApiGetCategoryRowData>): PostgrestResponse<Category> {
-    return {
-      ...response,
-      ...(response.data?.length ? { data: plainToInstance(Category, response.data) } : { data: response.data }),
-    } as PostgrestResponse<Category>;
-  }
-
-  private preparePagination(pagination: PaginationInterface): { from: number; to: number } {
-    const from = (pagination.pageIndex - 1) * pagination.pageSize;
-    const to = from + (pagination.pageSize - 1);
-
-    return {
-      from,
-      to,
-    };
+  deleteCategory$(id: string): Observable<CategoryModel> {
+    return this.communicationService
+      .makeRequest<CategoryInterface>({
+        method: HttpMethodEnum.Patch,
+        path: `${this.requests.categories}/${id}`,
+      })
+      .pipe(map((response) => this.apiCategoriesTransformService.fromDeleteCategory(response)));
   }
 }

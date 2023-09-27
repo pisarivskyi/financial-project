@@ -1,3 +1,3 @@
-import { MonobankProviderDataInterface } from '../interfaces/monobank-provider-data.interface';
+import { MonobankProviderDataInterface } from '../interfaces';
 
 export type ProviderDataType = MonobankProviderDataInterface;

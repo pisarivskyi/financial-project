@@ -1,9 +1,42 @@
-<form nz-form [formGroup]="formGroup" [nzLayout]="'vertical'">
-  <nz-form-item>
-    <nz-form-label>Name</nz-form-label>
+<nz-spin [nzSpinning]="isLoading$ | async">
+  <form nz-form [formGroup]="formGroup" [nzLayout]="'vertical'">
+    <nz-form-item>
+      <nz-form-label>Name</nz-form-label>
 
-    <nz-form-control>
-      <input nz-input formControlName="name" type="text" />
-    </nz-form-control>
-  </nz-form-item>
-</form>
+      <nz-form-control>
+        <input nz-input formControlName="name" type="text" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Color</nz-form-label>
+
+      <nz-form-control>
+        <input nz-input formControlName="color" type="text" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Icon</nz-form-label>
+
+      <nz-form-control>
+        <input nz-input formControlName="icon" type="text" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Parent category</nz-form-label>
+
+      <nz-form-control>
+        <nz-select
+          formControlName="parentCategory"
+          nzPlaceHolder="Choose"
+          [nzLoading]="isLoading$ | async"
+          [nzOptions]="(categoriesOptions$ | async) ?? []"
+          [compareWith]="compareWithFn"
+        >
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-spin>

@@ -6,8 +6,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
-import { Category } from '../../../../api/categories/models/category.model';
-import { AuthenticationService } from '../../../../core/authentication/services/authentication.service';
+import { CategoryModel } from '../../../../api/categories/models/category.model';
 import { updateValueAndValidity } from '../../../../shared/utils/form-utils';
 import { CategoriesFacadeService } from '../../services/categories-facade.service';
 import { CategoryFormComponent } from '../category-form/category-form.component';
@@ -26,13 +25,9 @@ export class EditCategoryModalComponent {
 
   isLoading$ = new BehaviorSubject<boolean>(false);
 
-  category: Category;
+  category: CategoryModel;
 
-  constructor(
-    private modalRef: NzModalRef,
-    private authService: AuthenticationService,
-    private categoriesFacadeService: CategoriesFacadeService
-  ) {
+  constructor(private modalRef: NzModalRef, private categoriesFacadeService: CategoriesFacadeService) {
     this.category = this.modalRef.getConfig().nzData;
   }
 
@@ -40,13 +35,11 @@ export class EditCategoryModalComponent {
     if (this.categoryFormComponent.formGroup.valid) {
       this.isLoading$.next(true);
 
-      this.categoriesFacadeService
-        .updateCategory$(this.category.id, this.categoryFormComponent.getUpdatedModel().toUpdateData())
-        .subscribe(() => {
-          this.isLoading$.next(false);
+      this.categoriesFacadeService.updateCategory$(this.categoryFormComponent.getUpdatedModel()).subscribe(() => {
+        this.isLoading$.next(false);
 
-          this.modalRef.destroy(true);
-        });
+        this.modalRef.destroy(true);
+      });
     } else {
       updateValueAndValidity(this.categoryFormComponent.formGroup.controls);
     }
