@@ -7,6 +7,9 @@ import { In, Repository } from 'typeorm';
 
 import { UserInterface } from '@financial-project/common';
 
+import { PageOptionsDto } from '../../core/pagination/dtos/page-options.dto';
+import { PageDto } from '../../core/pagination/dtos/page.dto';
+import { paginate } from '../../core/pagination/utils/paginate.utils';
 import { RecordEntity } from '../../records/entities/record.entity';
 import { ACCOUNT_JOB_QUEUE_NAME } from '../constants/account-job-queue-name.const';
 import { CreateAccountDto } from '../dto/create-account.dto';
@@ -34,8 +37,8 @@ export class AccountsService {
     return this.accountsRepository.save(account);
   }
 
-  findAll(user: UserInterface): Promise<AccountEntity[]> {
-    return this.accountsRepository.find({
+  findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<AccountEntity>> {
+    return paginate(this.accountsRepository, params, {
       where: {
         createdBy: user.sub,
       },
