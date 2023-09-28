@@ -2,6 +2,7 @@ import { AccountTypeEnum, CurrencyEnum, ProviderTypeEnum } from '../enums';
 import { ProviderInterface } from './provider.interface';
 
 export interface AccountInterface {
+  id: string;
   bankAccountId?: string;
   name: string;
   type: AccountTypeEnum;
@@ -15,4 +16,6 @@ export interface AccountInterface {
   providerType: ProviderTypeEnum;
   lastSyncDate?: Date;
   createdBy: string;
+  updatedAt: Date;
+  createdAt: Date;
 }

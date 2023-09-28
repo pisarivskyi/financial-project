@@ -1,12 +1,12 @@
-import { ProviderEnum } from '../../api/accounts/enums/provider.enum';
+import { ProviderTypeEnum } from '@financial-project/common';
 
 export const PROVIDER_OPTIONS = [
   {
     label: 'Manual',
-    value: ProviderEnum.Manual,
+    value: ProviderTypeEnum.Manual,
   },
   {
     label: 'Monobank',
-    value: ProviderEnum.Monobank,
+    value: ProviderTypeEnum.Monobank,
   },
 ];

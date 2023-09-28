@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { MonobankModule } from '@financial-project/common';
+import { MonobankModule } from '@financial-project/providers';
 
 import { AccountsModule } from '../accounts/accounts.module';
 import { ProviderEntity } from './entities/provider.entity';

@@ -4,12 +4,8 @@ import { plainToClassFromExist } from 'class-transformer';
 import { firstValueFrom, map } from 'rxjs';
 import { Repository } from 'typeorm';
 
-import {
-  AccountTypeEnum,
-  ApiMonobankProviderService,
-  ProviderTypeEnum,
-  UserInterface,
-} from '@financial-project/common';
+import { AccountTypeEnum, ProviderTypeEnum, UserInterface } from '@financial-project/common';
+import { ApiMonobankProviderService } from '@financial-project/providers';
 
 import { AccountEntity } from '../../accounts/entities/account.entity';
 import { AccountsService } from '../../accounts/services/accounts.service';

@@ -2,7 +2,7 @@ import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { MonobankModule } from '@financial-project/common';
+import { MonobankModule } from '@financial-project/providers';
 
 import { CategoriesModule } from '../categories/categories.module';
 import { RecordEntity } from '../records/entities/record.entity';

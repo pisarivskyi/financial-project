@@ -1,4 +1,4 @@
-import { CurrencyEnum } from '../enums/currency.enum';
+import { CurrencyEnum } from '@financial-project/common';
 
 export const CURRENCY_OPTIONS = [
   {
