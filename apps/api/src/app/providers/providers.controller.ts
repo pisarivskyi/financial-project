@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { ProviderTypeEnum, UserInterface } from '@financial-project/common';
 
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
+import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
+import { PageDto } from '../core/pagination/dtos/page.dto';
 import { CreateProviderDto } from './dto/create-provider.dto';
 import { ProviderAccountsDto } from './dto/provider-accounts.dto';
 import { SaveAccountsDto } from './dto/save-accounts.dto';
@@ -19,8 +21,8 @@ export class ProvidersController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll(@CurrentUser() user: UserInterface): Promise<ProviderEntity[]> {
-    return this.providersService.findAll(user);
+  findAll(@Query() params: PageOptionsDto, @CurrentUser() user: UserInterface): Promise<PageDto<ProviderEntity>> {
+    return this.providersService.findAll(params, user);
   }
 
   @Get(':providerId')

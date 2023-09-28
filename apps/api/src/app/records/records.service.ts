@@ -6,6 +6,9 @@ import { UserInterface } from '@financial-project/common';
 
 import { CategoriesService } from '../categories/categories.service';
 import { CategoryEntity } from '../categories/entities/category.entity';
+import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
+import { PageDto } from '../core/pagination/dtos/page.dto';
+import { paginate } from '../core/pagination/utils/paginate.utils';
 import { UpdateRecordDto } from './dto/update-record.dto';
 import { RecordEntity } from './entities/record.entity';
 
@@ -16,8 +19,8 @@ export class RecordsService {
     private categoriesService: CategoriesService
   ) {}
 
-  findAll(user: UserInterface): Promise<RecordEntity[]> {
-    return this.recordsRepository.find({
+  findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<RecordEntity>> {
+    return paginate(this.recordsRepository, params, {
       where: {
         createdBy: user.sub,
       },

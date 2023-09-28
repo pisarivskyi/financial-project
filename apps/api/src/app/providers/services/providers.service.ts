@@ -9,6 +9,9 @@ import { ApiMonobankProviderService } from '@financial-project/providers';
 
 import { AccountEntity } from '../../accounts/entities/account.entity';
 import { AccountsService } from '../../accounts/services/accounts.service';
+import { PageOptionsDto } from '../../core/pagination/dtos/page-options.dto';
+import { PageDto } from '../../core/pagination/dtos/page.dto';
+import { paginate } from '../../core/pagination/utils/paginate.utils';
 import { CreateProviderDto } from '../dto/create-provider.dto';
 import { ProviderAccountsDto } from '../dto/provider-accounts.dto';
 import { SaveAccountsDto } from '../dto/save-accounts.dto';
@@ -25,8 +28,8 @@ export class ProvidersService {
     @InjectRepository(ProviderEntity) private readonly providersRepository: Repository<ProviderEntity>
   ) {}
 
-  findAll(user: UserInterface): Promise<ProviderEntity[]> {
-    return this.providersRepository.find({
+  findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<ProviderEntity>> {
+    return paginate(this.providersRepository, params, {
       where: {
         createdBy: user.sub,
       },
