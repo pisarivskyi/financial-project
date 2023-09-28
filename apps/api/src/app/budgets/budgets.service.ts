@@ -3,11 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
+import { UserInterface } from '@financial-project/common';
+
 import { CategoriesService } from '../categories/categories.service';
+import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
+import { PageDto } from '../core/pagination/dtos/page.dto';
+import { paginate } from '../core/pagination/utils/paginate.utils';
 import { CreateBudgetDto } from './dto/create-budget.dto';
 import { UpdateBudgetDto } from './dto/update-budget.dto';
 import { BudgetEntity } from './entities/budget.entity';
-import { UserInterface } from '@financial-project/common';
 
 @Injectable()
 export class BudgetsService {
@@ -35,8 +39,8 @@ export class BudgetsService {
     return this.budgetsRepository.save(budget);
   }
 
-  findAll(user: UserInterface): Promise<BudgetEntity[]> {
-    return this.budgetsRepository.find({
+  findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<BudgetEntity>> {
+    return paginate(this.budgetsRepository, params, {
       where: {
         createdBy: user.sub,
       },

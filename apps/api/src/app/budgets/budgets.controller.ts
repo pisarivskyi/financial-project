@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
+import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
+import { PageDto } from '../core/pagination/dtos/page.dto';
 import { BudgetsService } from './budgets.service';
 import { CreateBudgetDto } from './dto/create-budget.dto';
 import { UpdateBudgetDto } from './dto/update-budget.dto';
@@ -35,8 +37,8 @@ export class BudgetsController {
     type: BudgetEntity,
     isArray: true,
   })
-  findAll(@CurrentUser() user: UserInterface): Promise<BudgetEntity[]> {
-    return this.budgetsService.findAll(user);
+  findAll(@Query() params: PageOptionsDto, @CurrentUser() user: UserInterface): Promise<PageDto<BudgetEntity>> {
+    return this.budgetsService.findAll(params, user);
   }
 
   @Get(':id')
