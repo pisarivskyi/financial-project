@@ -6,12 +6,8 @@ import { DateTime } from 'luxon';
 import { firstValueFrom, map } from 'rxjs';
 import { In, Repository } from 'typeorm';
 
-import {
-  ApiMonobank,
-  ApiMonobankProviderService,
-  RecordCreationTypeEnum,
-  RecordTypeEnum,
-} from '@financial-project/common';
+import { RecordCreationTypeEnum, RecordTypeEnum } from '@financial-project/common';
+import { ApiMonobank, ApiMonobankProviderService } from '@financial-project/providers';
 
 import { CategoriesService } from '../../categories/categories.service';
 import { RecordEntity } from '../../records/entities/record.entity';

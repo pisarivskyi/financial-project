@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@financial-project/common": ["libs/common/src/index.ts"]
+      "@financial-project/common": ["libs/common/src/index.ts"],
+      "@financial-project/providers": ["libs/providers/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

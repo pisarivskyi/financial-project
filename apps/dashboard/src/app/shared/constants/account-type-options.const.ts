@@ -1,16 +1,16 @@
-import { AccountType } from '../../api/accounts/enums/account-type.enum';
+import { AccountTypeEnum } from '@financial-project/common';
 
 export const ACCOUNT_TYPE_OPTIONS = [
   {
     label: 'Cash',
-    value: AccountType.Cash,
+    value: AccountTypeEnum.Cash,
   },
   {
     label: 'Credit card',
-    value: AccountType.CreditCard,
+    value: AccountTypeEnum.CreditCard,
   },
   {
     label: 'Debit card',
-    value: AccountType.DebitCard,
+    value: AccountTypeEnum.DebitCard,
   },
 ];

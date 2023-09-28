@@ -1,5 +1,5 @@
 /* eslint @typescript-eslint/no-namespace: 0 */
-import { CurrencyEnum } from '../enums';
+import { CurrencyEnum } from '@financial-project/common';
 
 export namespace ApiMonobank {
   export namespace ClientInfo {
