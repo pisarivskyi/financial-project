@@ -48,11 +48,11 @@ export class RecordEntity extends BaseEntity implements RecordInterface {
   @Exclude({ toPlainOnly: true })
   metadata?: object;
 
-  @ManyToOne(() => AccountEntity)
+  @ManyToOne(() => AccountEntity, { onDelete: 'CASCADE' })
   @JoinColumn()
   account: AccountEntity;
 
-  @ManyToOne(() => CategoryEntity, { nullable: true })
+  @ManyToOne(() => CategoryEntity, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn()
   category?: CategoryEntity;
 

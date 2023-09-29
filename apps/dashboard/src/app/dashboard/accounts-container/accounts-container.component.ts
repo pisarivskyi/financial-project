@@ -10,17 +10,29 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
-import { Account } from '../../api/accounts/models/account.model';
+import { CurrencyEnum } from '@financial-project/common';
+
+import { AccountModel } from '../../api/accounts/models/account.model';
+import { AmountFormatPipe } from '../../shared/pipes/amount-format/amount-format.pipe';
+import { CurrencyFormatPipe } from '../../shared/pipes/currency-format/currency-format.pipe';
 import { AddAccountModalComponent } from './components/add-account-modal/add-account-modal.component';
 import { EditAccountModalComponent } from './components/edit-account-modal/edit-account-modal.component';
 import { AccountsFacadeService } from './services/accounts-facade.service';
-import { CurrencyEnum } from '../../shared/enums/currency.enum';
 
 @UntilDestroy()
 @Component({
   selector: 'fpd-accounts-container',
   standalone: true,
-  imports: [CommonModule, NzButtonModule, NzPopconfirmModule, NzTableModule, NzModalModule, NzMessageModule],
+  imports: [
+    CommonModule,
+    NzButtonModule,
+    NzPopconfirmModule,
+    NzTableModule,
+    NzModalModule,
+    NzMessageModule,
+    AmountFormatPipe,
+    CurrencyFormatPipe,
+  ],
   templateUrl: './accounts-container.component.html',
   styleUrls: ['./accounts-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,12 +62,9 @@ export class AccountsContainerComponent implements OnInit {
         page = Number(page ?? 1);
         size = Number(size ?? 20);
 
-        this.accountsFacadeService.updatePagination({
-          pageIndex: page,
-          pageSize: size,
-        });
+        this.accountsFacadeService.updatePagination(page, size);
 
-        this.accountsFacadeService.getAccounts();
+        this.accountsFacadeService.loadAccounts();
       }
     });
   }
@@ -69,14 +78,14 @@ export class AccountsContainerComponent implements OnInit {
 
     modalRef.afterClose.subscribe((created: boolean) => {
       if (created) {
-        this.accountsFacadeService.getAccounts();
+        this.accountsFacadeService.loadAccounts();
 
         this.messageService.success('Account was created');
       }
     });
   }
 
-  onEditAccount(account: Account): void {
+  onEditAccount(account: AccountModel): void {
     const modalRef = this.modalService.create({
       nzTitle: 'Edit account',
       nzContent: EditAccountModalComponent,
@@ -86,16 +95,16 @@ export class AccountsContainerComponent implements OnInit {
 
     modalRef.afterClose.subscribe((created: boolean) => {
       if (created) {
-        this.accountsFacadeService.getAccounts();
+        this.accountsFacadeService.loadAccounts();
 
         this.messageService.success('Account item was updated');
       }
     });
   }
 
-  onDeleteAccount(account: Account): void {
+  onDeleteAccount(account: AccountModel): void {
     this.accountsFacadeService.deleteAccount$(account.id).subscribe(() => {
-      this.accountsFacadeService.getAccounts();
+      this.accountsFacadeService.loadAccounts();
 
       this.messageService.success('Account item was deleted');
     });

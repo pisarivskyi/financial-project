@@ -1,5 +1,3 @@
-import { AccountInterface, OmitFields } from '@financial-project/common';
+import { AccountInterface } from '@financial-project/common';
 
-export type InsertAccountDataType = OmitFields<AccountInterface>;
-
-export type UpdateCategoryDataType = Partial<InsertAccountDataType>;
+export type UpdateAccountDataType = Partial<Pick<AccountInterface, 'name'>>;

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { RecordModel } from '../../api/records/models/record.model';
 import { ApiRecordsService } from '../../api/records/services/api-records.service';
 import { PaginatedResponse } from '../../core/pagination/classes/paginated-response.class';
-import { PaginationInterface } from '../../core/supabase/interfaces/pagination.interface';
+import { PaginationParamsInterface } from '../../core/pagination/interfaces/pagination-params.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ import { PaginationInterface } from '../../core/supabase/interfaces/pagination.i
 export class RecordsService {
   constructor(private apiRecordsService: ApiRecordsService) {}
 
-  getRecords$(pagination?: PaginationInterface): Observable<PaginatedResponse<RecordModel>> {
+  getRecords$(pagination?: PaginationParamsInterface): Observable<PaginatedResponse<RecordModel>> {
     return this.apiRecordsService.extractRecords$(pagination);
   }
 
