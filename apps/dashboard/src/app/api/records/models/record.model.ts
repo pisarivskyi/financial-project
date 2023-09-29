@@ -1,14 +1,17 @@
-import { Expose, Type, instanceToPlain } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 
-import { RecordInterface } from '@financial-project/common';
+import {
+  AccountInterface,
+  CurrencyEnum,
+  RecordCreationTypeEnum,
+  RecordInterface,
+  RecordTypeEnum,
+} from '@financial-project/common';
 
 import { BaseModel } from '../../../core/models/base.model';
-import { ApiInsertRecordRowData, ApiUpdateRecordRowData } from '../../../core/supabase/types/table.types';
-import { UUID } from '../../../core/supabase/types/uuid.type';
-import { CurrencyEnum } from '../../../shared/enums/currency.enum';
 import { CategoryModel } from '../../categories/models/category.model';
 
-export class RecordModel extends BaseModel {
+export class RecordModel extends BaseModel implements RecordInterface {
   @Expose()
   name!: string;
 
@@ -17,45 +20,42 @@ export class RecordModel extends BaseModel {
 
   @Expose()
   @Type(() => CategoryModel)
-  category!: CategoryModel;
+  category?: CategoryModel;
 
-  @Expose({ name: 'created_by' })
-  createdBy!: UUID;
+  @Expose()
+  createdBy!: string;
 
-  @Expose({ name: 'currency_code' })
+  @Expose()
   currencyCode!: CurrencyEnum;
 
-  toInsertData(): ApiInsertRecordRowData {
-    const {
-      account,
-      type,
-      name,
-      currency_code,
-      amount,
-      category,
-      created_by,
-    }: Record<keyof ApiInsertRecordRowData, any> = instanceToPlain(this);
+  @Expose()
+  account!: AccountInterface;
 
-    return {
-      account, // TODO: implement field
-      type, // TODO: implement field
-      name,
-      currency_code,
-      amount,
-      category: category.id,
-      created_by: created_by,
-    };
-  }
+  @Expose()
+  balance?: number;
 
-  toUpdateData(): ApiUpdateRecordRowData {
-    const { account, type, name, currency_code, amount, category }: Record<keyof ApiUpdateRecordRowData, any> =
-      instanceToPlain(this);
+  @Expose()
+  @Type(() => Date)
+  bankCreatedAt?: Date;
 
-    return {
-      name,
-      currency_code,
-      amount,
-      category: category.id,
-    };
-  }
+  @Expose()
+  bankRecordId?: string;
+
+  @Expose()
+  comment!: string;
+
+  @Expose()
+  creationType!: RecordCreationTypeEnum;
+
+  @Expose()
+  description!: string;
+
+  @Expose()
+  mcc?: number;
+
+  @Expose()
+  metadata?: object;
+
+  @Expose()
+  type!: RecordTypeEnum;
 }

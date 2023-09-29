@@ -1,9 +1,0 @@
-<nz-spin [nzSpinning]="isLoading$ | async">
-  <fpd-record-form #form></fpd-record-form>
-</nz-spin>
-
-<div *nzModalFooter>
-  <button nz-button nzType="default" [disabled]="isLoading$ | async" (click)="onDestroyModal()">Cancel</button>
-
-  <button nz-button nzType="primary" [disabled]="isLoading$ | async" (click)="onSubmit()">Save</button>
-</div>

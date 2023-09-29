@@ -1,5 +1,3 @@
-<button nz-button (click)="onAddRecord()">Add new record</button>
-
 <nz-table
   #table
   [nzLoading]="isLoading$ | async"
@@ -15,7 +13,6 @@
       <th>Name</th>
       <th>Category</th>
       <th>Amount</th>
-      <th>Currency</th>
       <th>Date</th>
       <th>Updated</th>
       <th>Actions</th>
@@ -24,24 +21,12 @@
   <tbody>
     <tr *ngFor="let record of table.data">
       <td>{{ record.name }}</td>
-      <td>{{ record.category.name }}</td>
-      <td>{{ record.amount }}</td>
-      <td>{{ CurrencyEnum[record.currencyCode] }}</td>
+      <td>{{ record.category?.name ?? 'none' }}</td>
+      <td>{{ record.amount | amountFormat | currencyFormat : record.currencyCode }}</td>
       <td>{{ record.createdAt | date }}</td>
       <td>{{ record.updatedAt | date : 'full' }}</td>
       <td>
         <button nz-button (click)="onEditRecord(record)">edit</button>
-
-        <button
-          nz-button
-          nz-popconfirm
-          nzPopconfirmTitle="Are you sure?"
-          nzOkText="ok"
-          nzCancelText="cancel"
-          (nzOnConfirm)="onDeleteRecord(record)"
-        >
-          delete
-        </button>
       </td>
     </tr>
   </tbody>
