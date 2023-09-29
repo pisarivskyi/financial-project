@@ -3,6 +3,7 @@ import { APP_INITIALIZER, ApplicationConfig } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { AuthHttpInterceptor, AuthService, authHttpInterceptorFn, provideAuth0 } from '@auth0/auth0-angular';
+import { devTools } from '@ngneat/elf-devtools';
 import { Observable, filter, take } from 'rxjs';
 
 import { NZ_CONFIG, NzConfig } from 'ng-zorro-antd/core/config';
@@ -12,7 +13,6 @@ import { environment } from '../../../../environments/environment';
 import { appRoutes } from './app.routes';
 import { ENVIRONMENT_CONFIG_TOKEN } from './core/configuration/tokens/environment-config.token';
 import { FORM_AUTO_TIPS } from './shared/constants/form-auto-tips.const';
-import { devTools } from '@ngneat/elf-devtools';
 
 const ngZorroConfig: NzConfig = {
   form: {
@@ -20,16 +20,17 @@ const ngZorroConfig: NzConfig = {
   },
 };
 
-function initAppFactory(): () => void {
-  return () => devTools({
-    name: 'financial-project',
-  });
+function initAppFactory(authService: AuthService): () => Observable<any> {
+  return () => {
+    devTools({
+      name: 'financial-project',
+    });
 
-  // return () =>
-  //   authService.isLoading$.pipe(
-  //     filter((b) => b),
-  //     take(1)
-  //   );
+    return authService.isLoading$.pipe(
+      filter((b) => !b),
+      take(1)
+    );
+  };
 }
 
 export const appConfig: ApplicationConfig = {
@@ -48,7 +49,7 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideAnimations(),
-    { provide: APP_INITIALIZER, multi: true, useFactory: initAppFactory, deps: [] },
+    { provide: APP_INITIALIZER, multi: true, useFactory: initAppFactory, deps: [AuthService] },
     { provide: NZ_I18N, useValue: en_US },
     { provide: NZ_CONFIG, useValue: ngZorroConfig },
     { provide: ENVIRONMENT_CONFIG_TOKEN, useValue: environment },
