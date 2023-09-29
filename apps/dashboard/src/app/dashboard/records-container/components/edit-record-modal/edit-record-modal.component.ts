@@ -7,7 +7,6 @@ import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { RecordModel } from '../../../../api/records/models/record.model';
-import { AuthenticationService } from '../../../../core/authentication/services/authentication.service';
 import { updateValueAndValidity } from '../../../../shared/utils/form-utils';
 import { RecordsFacadeService } from '../../services/records-facade.service';
 import { RecordFormComponent } from '../record-form/record-form.component';
@@ -28,11 +27,7 @@ export class EditRecordModalComponent {
 
   record: RecordModel;
 
-  constructor(
-    private modalRef: NzModalRef,
-    private authService: AuthenticationService,
-    private recordsFacadeService: RecordsFacadeService
-  ) {
+  constructor(private modalRef: NzModalRef, private recordsFacadeService: RecordsFacadeService) {
     this.record = this.modalRef.getConfig().nzData;
   }
 
@@ -40,13 +35,11 @@ export class EditRecordModalComponent {
     if (this.recordFormComponent.formGroup.valid) {
       this.isLoading$.next(true);
 
-      this.recordsFacadeService
-        .updateRecord$(this.record.id, this.recordFormComponent.getUpdatedModel().toUpdateData())
-        .subscribe((d) => {
-          this.isLoading$.next(false);
+      this.recordsFacadeService.updateRecord$(this.recordFormComponent.getUpdatedModel()).subscribe((d) => {
+        this.isLoading$.next(false);
 
-          this.modalRef.destroy(true);
-        });
+        this.modalRef.destroy(true);
+      });
     } else {
       updateValueAndValidity(this.recordFormComponent.formGroup.controls);
     }

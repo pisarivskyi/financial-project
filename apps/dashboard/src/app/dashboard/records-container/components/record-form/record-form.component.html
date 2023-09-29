@@ -9,18 +9,10 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label>Amount</nz-form-label>
+      <nz-form-label>Comment</nz-form-label>
 
       <nz-form-control>
-        <nz-input-number formControlName="amount"></nz-input-number>
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item>
-      <nz-form-label>Currency</nz-form-label>
-
-      <nz-form-control>
-        <nz-select formControlName="currencyCode" nzPlaceHolder="Choose" [nzOptions]="currencyOptions"> </nz-select>
+        <input nz-input formControlName="comment" type="text" />
       </nz-form-control>
     </nz-form-item>
 

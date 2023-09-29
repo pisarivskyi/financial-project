@@ -1,72 +1,45 @@
 import { Injectable } from '@angular/core';
-import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
-import { plainToInstance } from 'class-transformer';
-import { Observable, from, map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
-import { DatabaseTableEnum } from '../../../core/supabase/enums/database-table.enum';
-import { PaginationInterface } from '../../../core/supabase/interfaces/pagination.interface';
-import { SupabaseService } from '../../../core/supabase/services/supabase.service';
-import {
-  ApiGetRecordRowData,
-  ApiInsertRecordRowData,
-  ApiUpdateRecordRowData,
-} from '../../../core/supabase/types/table.types';
-import { UUID } from '../../../core/supabase/types/uuid.type';
+import { PaginatedResponseInterface, RecordInterface } from '@financial-project/common';
+
+import { HttpMethodEnum } from '../../../core/communication/enums/http-method.enum';
+import { CommunicationService } from '../../../core/communication/services/communication.service';
+import { PaginatedResponse } from '../../../core/pagination/classes/paginated-response.class';
+import { PaginationParamsInterface } from '../../../core/pagination/interfaces/pagination-params.interface';
 import { RecordModel } from '../models/record.model';
+import { ApiRecordsTransformService } from './api-records-transform.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiRecordsService {
-  constructor(private supabaseService: SupabaseService) {}
+  readonly requests = {
+    records: '/records',
+  };
 
-  fetchRecords$(pagination?: PaginationInterface): Observable<PostgrestResponse<RecordModel>> {
-    let builder = this.supabaseService
-      .getClient()
-      .from(DatabaseTableEnum.Records)
-      .select('*, category(id, name)', { count: 'exact' });
+  constructor(
+    private apiRecordsTransformService: ApiRecordsTransformService,
+    private communicationService: CommunicationService
+  ) {}
 
-    if (pagination) {
-      const p = this.preparePagination(pagination);
-
-      builder = builder.range(p.from, p.to);
-    }
-
-    return from(builder.throwOnError()).pipe(
-      map((response: PostgrestResponse<ApiGetRecordRowData>) => this.transformFromFetchRecords(response))
-    );
+  extractRecords$(pagination?: PaginationParamsInterface): Observable<PaginatedResponse<RecordModel>> {
+    return this.communicationService
+      .makeRequest<PaginatedResponseInterface<RecordInterface>>({
+        method: HttpMethodEnum.Get,
+        path: this.requests.records,
+        params: this.apiRecordsTransformService.toExtractRecordsParams(pagination),
+      })
+      .pipe(map((response) => this.apiRecordsTransformService.fromExtractRecords(response)));
   }
 
-  insertRecord$(recordData: ApiInsertRecordRowData): Observable<PostgrestResponse<RecordModel>> {
-    return from(
-      this.supabaseService.getClient().from(DatabaseTableEnum.Records).insert(recordData).select().throwOnError()
-    ).pipe(map((response: PostgrestResponse<ApiGetRecordRowData>) => this.transformFromFetchRecords(response)));
-  }
-
-  updateRecord$(id: UUID, recordData: ApiUpdateRecordRowData): Observable<PostgrestSingleResponse<null>> {
-    return from(
-      this.supabaseService.getClient().from(DatabaseTableEnum.Records).update(recordData).eq('id', id).throwOnError()
-    );
-  }
-
-  deleteRecord$(id: UUID): Observable<PostgrestSingleResponse<null>> {
-    return from(this.supabaseService.getClient().from(DatabaseTableEnum.Records).delete().eq('id', id).throwOnError());
-  }
-
-  private transformFromFetchRecords(response: PostgrestResponse<ApiGetRecordRowData>): PostgrestResponse<RecordModel> {
-    return {
-      ...response,
-      ...(response.data?.length ? { data: plainToInstance(RecordModel, response.data) } : { data: response.data }),
-    } as PostgrestResponse<RecordModel>;
-  }
-
-  private preparePagination(pagination: PaginationInterface): { from: number; to: number } {
-    const from = (pagination.pageIndex - 1) * pagination.pageSize;
-    const to = from + (pagination.pageSize - 1);
-
-    return {
-      from,
-      to,
-    };
+  updateRecord$(recordToUpdate: RecordModel): Observable<RecordModel> {
+    return this.communicationService
+      .makeRequest<RecordInterface>({
+        method: HttpMethodEnum.Patch,
+        path: `${this.requests.records}/${recordToUpdate.id}`,
+        payload: this.apiRecordsTransformService.toUpdateRecord(recordToUpdate),
+      })
+      .pipe(map((response) => this.apiRecordsTransformService.fromUpdateRecord(response)));
   }
 }

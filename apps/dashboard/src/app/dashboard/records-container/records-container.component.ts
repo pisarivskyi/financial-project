@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { take } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
@@ -10,17 +11,25 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
 import { RecordModel } from '../../api/records/models/record.model';
-import { CurrencyEnum } from '../../shared/enums/currency.enum';
-import { AddRecordModalComponent } from './components/add-record-modal/add-record-modal.component';
+import { AmountFormatPipe } from '../../shared/pipes/amount-format/amount-format.pipe';
+import { CurrencyFormatPipe } from '../../shared/pipes/currency-format/currency-format.pipe';
 import { EditRecordModalComponent } from './components/edit-record-modal/edit-record-modal.component';
 import { RecordsFacadeService } from './services/records-facade.service';
-import { take } from 'rxjs';
 
 @UntilDestroy()
 @Component({
   selector: 'fpd-records-container',
   standalone: true,
-  imports: [CommonModule, NzTableModule, NzModalModule, NzButtonModule, NzPopconfirmModule, NzMessageModule],
+  imports: [
+    CommonModule,
+    NzTableModule,
+    NzModalModule,
+    NzButtonModule,
+    NzPopconfirmModule,
+    NzMessageModule,
+    AmountFormatPipe,
+    CurrencyFormatPipe,
+  ],
   templateUrl: './records-container.component.html',
   styleUrls: ['./records-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,8 +40,6 @@ export class RecordsContainerComponent implements OnInit {
   isLoading$ = this.recordsFacadeService.isLoading$;
 
   pagination$ = this.recordsFacadeService.pagination$;
-
-  CurrencyEnum = CurrencyEnum;
 
   constructor(
     private recordsFacadeService: RecordsFacadeService,
@@ -50,10 +57,7 @@ export class RecordsContainerComponent implements OnInit {
         page = Number(page ?? 1);
         size = Number(size ?? 20);
 
-        this.recordsFacadeService.updatePagination({
-          pageIndex: page,
-          pageSize: size,
-        });
+        this.recordsFacadeService.updatePagination(page, size);
 
         this.recordsFacadeService.getRecords();
       }
@@ -65,22 +69,6 @@ export class RecordsContainerComponent implements OnInit {
         relativeTo: this.activatedRoute,
         replaceUrl: false,
       });
-    });
-  }
-
-  onAddRecord(): void {
-    const modalRef = this.modalService.create({
-      nzTitle: 'Add new record',
-      nzContent: AddRecordModalComponent,
-      nzCentered: true,
-    });
-
-    modalRef.afterClose.subscribe((created: boolean) => {
-      if (created) {
-        this.recordsFacadeService.getRecords();
-
-        this.messageService.success('Record item was created');
-      }
     });
   }
 
@@ -98,14 +86,6 @@ export class RecordsContainerComponent implements OnInit {
 
         this.messageService.success('Record item was updated');
       }
-    });
-  }
-
-  onDeleteRecord(record: RecordModel): void {
-    this.recordsFacadeService.deleteRecord$(record.id).subscribe(() => {
-      this.recordsFacadeService.getRecords();
-
-      this.messageService.success('Record item was deleted');
     });
   }
 

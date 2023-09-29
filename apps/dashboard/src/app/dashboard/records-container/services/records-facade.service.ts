@@ -1,71 +1,60 @@
 import { Injectable } from '@angular/core';
-import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
-import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
+import { createStore } from '@ngneat/elf';
+import { selectAllEntities, setEntities, withEntities } from '@ngneat/elf-entities';
+import { getRequestResult, trackRequestResult } from '@ngneat/elf-requests';
+import { Observable, map, switchMap, take, tap } from 'rxjs';
 
 import { RecordModel } from '../../../api/records/models/record.model';
-import { PaginationInterface } from '../../../core/supabase/interfaces/pagination.interface';
-import { PaginationModel } from '../../../core/pagination/pagination.model';
-import { ApiInsertRecordRowData, ApiUpdateRecordRowData } from '../../../core/supabase/types/table.types';
-import { UUID } from '../../../core/supabase/types/uuid.type';
+import { updatePaginationData, withPaginationData } from '../../../core/pagination/utils/pagination-utils';
 import { RecordsService } from '../../services/records.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecordsFacadeService {
-  private isLoadingSubject$ = new BehaviorSubject<boolean>(false);
+  private readonly storyKey = 'records';
 
-  private recordsSubject$ = new BehaviorSubject<RecordModel[]>([]);
+  private readonly requestKeys = {
+    getRecords: 'getRecords',
+  };
 
-  private paginationSubject$ = new BehaviorSubject<PaginationModel>(
-    new PaginationModel({
-      pageIndex: 1,
-      pageSize: 20,
-      total: 0,
-    })
-  );
+  store = createStore({ name: this.storyKey }, withEntities<RecordModel>(), withPaginationData());
 
-  isLoading$ = this.isLoadingSubject$.asObservable();
+  records$ = this.store.pipe(selectAllEntities());
 
-  records$ = this.recordsSubject$.asObservable();
+  pagination$ = this.store.pipe(map((s) => s.pagination));
 
-  pagination$ = this.paginationSubject$.asObservable();
+  isLoading$ = getRequestResult([this.requestKeys.getRecords]).pipe(map(({ isLoading }) => isLoading));
 
   constructor(private recordsService: RecordsService) {}
 
   getRecords(): void {
-    this.isLoadingSubject$.next(true);
-
-    this.recordsService
-      .getRecords$(this.paginationSubject$.value)
+    this.store
       .pipe(
-        tap(({ data, count }) => {
-          this.recordsSubject$.next(data ?? []);
-
-          this.paginationSubject$.next(
-            this.paginationSubject$.value.patch({
-              total: count ?? this.paginationSubject$.value.total,
-            })
-          );
+        take(1),
+        switchMap(({ pagination }) => {
+          return this.recordsService.getRecords$(pagination);
         }),
-        finalize(() => this.isLoadingSubject$.next(false))
+        tap(({ data, meta }) => {
+          this.store.update(setEntities(data), updatePaginationData(meta));
+        }),
+        trackRequestResult([this.requestKeys.getRecords], {
+          skipCache: true,
+        })
       )
       .subscribe();
   }
 
-  saveRecord$(recordData: ApiInsertRecordRowData): Observable<PostgrestResponse<RecordModel>> {
-    return this.recordsService.saveRecord$(recordData);
+  updateRecord$(recordToUpdate: RecordModel): Observable<RecordModel> {
+    return this.recordsService.updateRecord$(recordToUpdate);
   }
 
-  deleteRecord$(id: UUID): Observable<PostgrestSingleResponse<null>> {
-    return this.recordsService.deleteRecord$(id);
-  }
-
-  updateRecord$(id: UUID, recordData: ApiUpdateRecordRowData): Observable<PostgrestSingleResponse<null>> {
-    return this.recordsService.updateRecord$(id, recordData);
-  }
-
-  updatePagination(pagination: Partial<PaginationInterface>): void {
-    this.paginationSubject$.next(this.paginationSubject$.value.patch(pagination));
+  updatePagination(pageIndex: number, pageSize: number): void {
+    this.store.update(
+      updatePaginationData({
+        pageIndex,
+        pageSize,
+      })
+    );
   }
 }

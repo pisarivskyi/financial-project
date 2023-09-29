@@ -8,19 +8,20 @@ export const dashboardRoutes: Route[] = [
     path: '',
     component: ShellComponent,
     children: [
-      // {
-      //   path: '',
-      //   pathMatch: 'full',
-      //   redirectTo: RoutePathEnum.Records,
-      // },
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: RoutePathEnum.Records,
+      },
       // {
       //   path: RoutePathEnum.Accounts,
       //   loadComponent: () => import('./accounts-container/accounts-container.component').then((mod) => mod.AccountsContainerComponent),
       // },
-      // {
-      //   path: RoutePathEnum.Records,
-      //   loadComponent: () => import('./records-container/records-container.component').then((mod) => mod.RecordsContainerComponent),
-      // },
+      {
+        path: RoutePathEnum.Records,
+        loadComponent: () =>
+          import('./records-container/records-container.component').then((mod) => mod.RecordsContainerComponent),
+      },
       {
         path: RoutePathEnum.Categories,
         loadComponent: () =>
