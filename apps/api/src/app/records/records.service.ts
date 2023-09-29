@@ -24,6 +24,10 @@ export class RecordsService {
       where: {
         createdBy: user.sub,
       },
+      relations: {
+        account: true,
+        category: true,
+      },
       order: {
         bankCreatedAt: 'DESC',
       },
@@ -75,6 +79,7 @@ export class RecordsService {
       targetRecord.category = category;
     }
 
+    targetRecord.name = updateRecordDto.name ?? targetRecord.name;
     targetRecord.comment = updateRecordDto.comment ?? targetRecord.comment;
 
     await this.recordsRepository.save(targetRecord);
