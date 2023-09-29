@@ -56,7 +56,7 @@ export class ApiCategoriesService {
   deleteCategory$(id: string): Observable<CategoryModel> {
     return this.communicationService
       .makeRequest<CategoryInterface>({
-        method: HttpMethodEnum.Patch,
+        method: HttpMethodEnum.Delete,
         path: `${this.requests.categories}/${id}`,
       })
       .pipe(map((response) => this.apiCategoriesTransformService.fromDeleteCategory(response)));

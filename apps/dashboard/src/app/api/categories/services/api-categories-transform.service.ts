@@ -36,7 +36,7 @@ export class ApiCategoriesTransformService {
       name,
       color,
       icon,
-      parentCategory: parentCategory.id,
+      parentCategory: parentCategory?.id,
     };
   }
 

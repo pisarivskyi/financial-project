@@ -8,6 +8,7 @@ import { PaginatedResponse } from '../../../core/pagination/classes/paginated-re
 import { PaginationParamsInterface } from '../../../core/pagination/interfaces/pagination-params.interface';
 import { toPaginationQueryParams } from '../../../core/pagination/utils/pagination-utils';
 import { AccountModel } from '../models/account.model';
+import { UpdateAccountDataType } from '../types/api-accounts.types';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,14 @@ export class ApiAccountsTransformService {
     return new HttpParams({
       fromObject: toPaginationQueryParams(pagination),
     });
+  }
+
+  toUpdateAccount({ name }: AccountModel): UpdateAccountDataType {
+    return { name };
+  }
+
+  fromUpdateAccount(response: AccountInterface): AccountModel {
+    return this.toAccountModel(response);
   }
 
   fromDeleteAccount(response: AccountInterface): AccountModel {

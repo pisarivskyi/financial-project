@@ -1,67 +1,53 @@
-import { Expose, instanceToPlain } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+
+import {
+  AccountInterface,
+  AccountTypeEnum,
+  CurrencyEnum,
+  ProviderInterface,
+  ProviderTypeEnum,
+} from '@financial-project/common';
 
 import { BaseModel } from '../../../core/models/base.model';
-import { ApiInsertAccountRowData, ApiUpdateAccountRowData } from '../../../core/supabase/types/table.types';
-import { UUID } from '../../../core/supabase/types/uuid.type';
-import { CurrencyEnum } from '../../../shared/enums/currency.enum';
-import { AccountType } from '../enums/account-type.enum';
-import { ProviderEnum } from '../enums/provider.enum';
 
-export class Account extends BaseModel {
+export class AccountModel extends BaseModel implements AccountInterface {
   @Expose()
   name!: string;
 
   @Expose()
-  balance!: string;
-
-  @Expose({ name: 'created_by' })
-  createdBy!: UUID;
+  balance!: number;
 
   @Expose()
-  type!: AccountType;
+  createdBy!: string;
 
   @Expose()
-  provider!: ProviderEnum;
+  type!: AccountTypeEnum;
 
-  @Expose({ name: 'currency_code' })
+  @Expose()
+  provider!: ProviderInterface;
+
+  @Expose()
   currencyCode!: CurrencyEnum;
 
-  @Expose({ name: 'bank_specific_type' })
+  @Expose()
   bankSpecificType?: string;
 
   @Expose()
   color?: string;
 
   @Expose()
-  metadata!: JSON;
+  metadata!: object;
 
-  toInsertData(): ApiInsertAccountRowData {
-    const {
-      name,
-      created_by,
-      provider,
-      type,
-      balance,
-      color,
-      currency_code,
-    }: Record<keyof ApiInsertAccountRowData, any> = instanceToPlain(this);
+  @Expose()
+  bankAccountId!: string;
 
-    return {
-      name,
-      created_by,
-      provider,
-      type,
-      balance,
-      color,
-      currency_code,
-    };
-  }
+  @Expose()
+  @Type(() => Date)
+  lastSyncDate!: Date;
 
-  toUpdateData(): ApiUpdateAccountRowData {
-    const { name }: Record<keyof ApiInsertAccountRowData, any> = instanceToPlain(this);
+  @Expose()
+  maskedPan!: string;
 
-    return {
-      name,
-    };
-  }
+  @Expose()
+  providerType!: ProviderTypeEnum;
 }

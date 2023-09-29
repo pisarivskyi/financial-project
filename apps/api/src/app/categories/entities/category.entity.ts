@@ -45,7 +45,7 @@ export class CategoryEntity extends BaseEntity implements CategoryInterface {
   @ApiPropertyOptional()
   mccRangeEnd?: number;
 
-  @ManyToOne(() => CategoryEntity, { nullable: true })
+  @ManyToOne(() => CategoryEntity, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn()
   @IsOptional()
   @ApiPropertyOptional({ type: () => CategoryEntity })

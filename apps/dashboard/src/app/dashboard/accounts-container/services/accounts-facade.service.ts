@@ -1,73 +1,63 @@
 import { Injectable } from '@angular/core';
-import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js';
-import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
+import { createStore } from '@ngneat/elf';
+import { selectAllEntities, setEntities, withEntities } from '@ngneat/elf-entities';
+import { getRequestResult, trackRequestResult } from '@ngneat/elf-requests';
+import { Observable, map, switchMap, take, tap } from 'rxjs';
 
-import { PaginationInterface } from '../../../core/supabase/interfaces/pagination.interface';
-import { PaginationModel } from '../../../core/pagination/pagination.model';
-import {
-  ApiInsertAccountRowData, ApiUpdateAccountRowData,
-} from '../../../core/supabase/types/table.types';
-import { UUID } from '../../../core/supabase/types/uuid.type';
-import { Account } from '../../../api/accounts/models/account.model';
+import { AccountModel } from '../../../api/accounts/models/account.model';
+import { updatePaginationData, withPaginationData } from '../../../core/pagination/utils/pagination-utils';
 import { AccountsService } from '../../services/accounts.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountsFacadeService {
-  private isLoadingSubject$ = new BehaviorSubject<boolean>(false);
+  private readonly storyKey = 'accounts';
 
-  private accountsSubject$ = new BehaviorSubject<Account[]>([]);
+  private readonly requestKeys = {
+    getAccounts: 'getAccounts',
+  };
 
-  private paginationSubject$ = new BehaviorSubject<PaginationModel>(
-    new PaginationModel({
-      pageIndex: 1,
-      pageSize: 20,
-      total: 0,
-    })
-  );
+  store = createStore({ name: this.storyKey }, withEntities<AccountModel>(), withPaginationData());
 
-  isLoading$ = this.isLoadingSubject$.asObservable();
+  isLoading$ = getRequestResult([this.requestKeys.getAccounts]).pipe(map(({ isLoading }) => isLoading));
 
-  accounts$ = this.accountsSubject$.asObservable();
+  accounts$ = this.store.pipe(selectAllEntities());
 
-  pagination$ = this.paginationSubject$.asObservable();
+  pagination$ = this.store.pipe(map((s) => s.pagination));
 
   constructor(private accountsService: AccountsService) {}
 
-  getAccounts(): void {
-    this.isLoadingSubject$.next(true);
-
-    this.accountsService
-      .getAccounts$(this.paginationSubject$.value)
+  loadAccounts(): void {
+    this.store
       .pipe(
-        tap(({ data, count }) => {
-          this.accountsSubject$.next(data ?? []);
-
-          this.paginationSubject$.next(
-            this.paginationSubject$.value.patch({
-              total: count ?? this.paginationSubject$.value.total,
-            })
-          );
+        take(1),
+        switchMap(({ pagination }) => {
+          return this.accountsService.getAccounts$(pagination);
         }),
-        finalize(() => this.isLoadingSubject$.next(false))
+        tap(({ data, meta }) => {
+          this.store.update(setEntities(data), updatePaginationData(meta));
+        }),
+        trackRequestResult([this.requestKeys.getAccounts], {
+          skipCache: true,
+        })
       )
       .subscribe();
   }
-
-  saveAccount$(accountData: ApiInsertAccountRowData): Observable<PostgrestResponse<Account>> {
-    return this.accountsService.saveAccount$(accountData);
-  }
-
-  deleteAccount$(id: UUID): Observable<PostgrestSingleResponse<null>> {
+  deleteAccount$(id: string): Observable<AccountModel> {
     return this.accountsService.deleteAccount$(id);
   }
 
-  updateAccount$(id: UUID, accountData: ApiUpdateAccountRowData): Observable<PostgrestSingleResponse<null>> {
-    return this.accountsService.updateAccount$(id, accountData);
+  updateAccount$(accountToUpdate: AccountModel): Observable<AccountModel> {
+    return this.accountsService.updateAccount$(accountToUpdate);
   }
 
-  updatePagination(pagination: Partial<PaginationInterface>): void {
-    this.paginationSubject$.next(this.paginationSubject$.value.patch(pagination));
+  updatePagination(pageIndex: number, pageSize: number): void {
+    this.store.update(
+      updatePaginationData({
+        pageIndex,
+        pageSize,
+      })
+    );
   }
 }

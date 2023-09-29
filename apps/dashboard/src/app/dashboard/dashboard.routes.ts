@@ -13,10 +13,11 @@ export const dashboardRoutes: Route[] = [
         pathMatch: 'full',
         redirectTo: RoutePathEnum.Records,
       },
-      // {
-      //   path: RoutePathEnum.Accounts,
-      //   loadComponent: () => import('./accounts-container/accounts-container.component').then((mod) => mod.AccountsContainerComponent),
-      // },
+      {
+        path: RoutePathEnum.Accounts,
+        loadComponent: () =>
+          import('./accounts-container/accounts-container.component').then((mod) => mod.AccountsContainerComponent),
+      },
       {
         path: RoutePathEnum.Records,
         loadComponent: () =>
