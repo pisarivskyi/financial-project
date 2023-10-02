@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { IsNotEmpty, IsObject } from 'class-validator';
+import { IsNotEmpty, IsObject, IsString } from 'class-validator';
 import { Column, Entity } from 'typeorm';
 
 import { ProviderDataType, ProviderInterface, ProviderTypeEnum } from '@financial-project/common';
@@ -10,6 +10,11 @@ import { BaseEntity } from '../../core/models/base-entity.abstract';
 
 @Entity(TableNameEnum.Providers)
 export class ProviderEntity extends BaseEntity implements ProviderInterface {
+  @Column()
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
   @Column({ type: 'enum', enum: ProviderTypeEnum, enumName: 'provider_type_enum' })
   providerType: ProviderTypeEnum;
 

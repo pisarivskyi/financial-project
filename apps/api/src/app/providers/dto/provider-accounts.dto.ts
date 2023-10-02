@@ -1,6 +1,6 @@
-import { CurrencyEnum, ProviderTypeEnum } from '@financial-project/common';
+import { CurrencyEnum, ProviderAccountsInterface, ProviderTypeEnum } from '@financial-project/common';
 
-export class ProviderAccountsDto {
+export class ProviderAccountsDto implements ProviderAccountsInterface {
   clientId: string;
   providerId: string;
   providerType: ProviderTypeEnum;
