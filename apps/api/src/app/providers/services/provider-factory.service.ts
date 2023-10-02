@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
 
-import { MonobankProviderDataInterface, ProviderDataType, ProviderTypeEnum } from '@financial-project/common';
+import { ProviderTypeEnum } from '@financial-project/common';
 
+import { CreateProviderDto } from '../dto/create-provider.dto';
 import { ProviderEntity } from '../entities/provider.entity';
 
 @Injectable()
 export class ProviderFactoryService {
-  create(provider: ProviderTypeEnum, data: ProviderDataType): ProviderEntity {
+  create(provider: ProviderTypeEnum, providerDto: CreateProviderDto): ProviderEntity {
     switch (provider) {
       case ProviderTypeEnum.Monobank: {
-        return this.createMonobankProvider(data);
+        return this.createMonobankProvider(providerDto);
       }
 
       default: {
@@ -18,10 +19,11 @@ export class ProviderFactoryService {
     }
   }
 
-  private createMonobankProvider(data: MonobankProviderDataInterface): ProviderEntity {
+  private createMonobankProvider(providerDto: CreateProviderDto): ProviderEntity {
     const provider = new ProviderEntity();
+    provider.name = providerDto.name;
     provider.providerType = ProviderTypeEnum.Monobank;
-    provider.data = data;
+    provider.data = providerDto.data;
 
     return provider;
   }

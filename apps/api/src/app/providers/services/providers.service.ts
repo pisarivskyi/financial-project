@@ -63,7 +63,7 @@ export class ProvidersService {
     providerType: ProviderTypeEnum,
     user: UserInterface
   ): Promise<ProviderEntity> {
-    const provider = this.providerFactoryService.create(providerType, createProviderDto.data);
+    const provider = this.providerFactoryService.create(providerType, createProviderDto);
     provider.createdBy = user.sub;
 
     return this.providersRepository.save(provider);
@@ -191,7 +191,7 @@ export class ProvidersService {
             accountsData.clientId = data.clientId;
             accountsData.providerType = ProviderTypeEnum.Monobank;
             // TODO: think if you really need this
-            // accountsData.originalData = data;
+            accountsData.originalData = data;
 
             accountsData.accounts = data.accounts.map(({ id, maskedPan, currencyCode, balance, creditLimit }) => ({
               id,

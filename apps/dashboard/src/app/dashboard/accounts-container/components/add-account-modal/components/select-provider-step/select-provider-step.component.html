@@ -1,0 +1,15 @@
+<p>Select existing bank provider</p>
+
+<nz-select class="providers-select" [(ngModel)]="selectedProvider" (ngModelChange)="onProviderChange($event)">
+  <nz-option *ngFor="let provider of providers" [nzValue]="provider" [nzLabel]="provider.providerType"></nz-option>
+</nz-select>
+
+<p>or</p>
+
+<button nzType="primary" nz-button (click)="onAddProviderStep()">Add provider</button>
+
+<div *nzModalFooter>
+  <button nz-button nzType="primary" [disabled]="!selectedProvider" (click)="onNext()">Next</button>
+
+  <button nz-button nzType="default" (click)="onClose()">Cancel</button>
+</div>

@@ -1,0 +1,17 @@
+<h3>Add new bank provider</h3>
+
+<p>Please, choose what bank provider you would like to add:</p>
+
+<nz-select class="providers-select" [(ngModel)]="selectedProviderType" (ngModelChange)="onProviderChange($event)">
+  <nz-option
+    *ngFor="let provider of PROVIDER_OPTIONS"
+    [nzValue]="provider.value"
+    [nzLabel]="provider.label"
+  ></nz-option>
+</nz-select>
+
+<div *nzModalFooter>
+  <button nz-button nzType="primary" [disabled]="!selectedProviderType" (click)="onNext()">Next</button>
+
+  <button nz-button nzType="default" (click)="onClose()">Cancel</button>
+</div>

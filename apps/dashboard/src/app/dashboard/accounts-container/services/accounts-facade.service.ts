@@ -4,9 +4,16 @@ import { selectAllEntities, setEntities, withEntities } from '@ngneat/elf-entiti
 import { getRequestResult, trackRequestResult } from '@ngneat/elf-requests';
 import { Observable, map, switchMap, take, tap } from 'rxjs';
 
+import { ProviderAccountDataInterface } from '@financial-project/common';
+
 import { AccountModel } from '../../../api/accounts/models/account.model';
+import { SynchronizationJobModel } from '../../../api/accounts/models/synchronization-job.model';
+import { ProviderAccountsModel } from '../../../api/providers/models/provider-accounts.model';
+import { ProviderModel } from '../../../api/providers/models/provider.model';
+import { PaginatedResponse } from '../../../core/pagination/classes/paginated-response.class';
 import { updatePaginationData, withPaginationData } from '../../../core/pagination/utils/pagination-utils';
 import { AccountsService } from '../../services/accounts.service';
+import { ProvidersService } from '../../services/providers.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +33,7 @@ export class AccountsFacadeService {
 
   pagination$ = this.store.pipe(map((s) => s.pagination));
 
-  constructor(private accountsService: AccountsService) {}
+  constructor(private accountsService: AccountsService, private providersService: ProvidersService) {}
 
   loadAccounts(): void {
     this.store
@@ -44,6 +51,7 @@ export class AccountsFacadeService {
       )
       .subscribe();
   }
+
   deleteAccount$(id: string): Observable<AccountModel> {
     return this.accountsService.deleteAccount$(id);
   }
@@ -59,5 +67,29 @@ export class AccountsFacadeService {
         pageSize,
       })
     );
+  }
+
+  getProviders$(): Observable<PaginatedResponse<ProviderModel>> {
+    return this.providersService.getProviders$();
+  }
+
+  saveProvider$(provider: ProviderModel): Observable<ProviderModel> {
+    return this.providersService.saveProvider$(provider);
+  }
+
+  getProviderAccounts$(providerId: string): Observable<ProviderAccountsModel> {
+    return this.providersService.getProviderAccounts$(providerId);
+  }
+
+  saveProviderAccounts$(providerId: string, accounts: ProviderAccountDataInterface[]): Observable<AccountModel[]> {
+    return this.providersService.saveProviderAccounts$(providerId, accounts);
+  }
+
+  triggerSynchronizationForAccount$(id: string): Observable<SynchronizationJobModel> {
+    return this.accountsService.triggerSynchronizationForAccount$(id);
+  }
+
+  getSynchronizationJob$(id: string): Observable<SynchronizationJobModel> {
+    return this.accountsService.getSynchronizationJob$(id);
   }
 }

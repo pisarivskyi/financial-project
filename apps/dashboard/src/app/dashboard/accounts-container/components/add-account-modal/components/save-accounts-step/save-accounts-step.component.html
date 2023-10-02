@@ -1,0 +1,22 @@
+<nz-spin [nzSpinning]="isLoading$ | async">
+  <ng-container *ngIf="savedAccounts$ | async as accounts">
+    <ng-container *ngIf="accounts.length">
+      <p>Accounts was saved:</p>
+
+      <p *ngFor="let account of accounts">
+        {{ account.name }} - {{ account.maskedPan }} -
+        {{ account.balance | amountFormat | currencyFormat : account.currencyCode }}
+      </p>
+
+      <p>Next you could setup initial synchronization.</p>
+    </ng-container>
+  </ng-container>
+</nz-spin>
+
+<div *nzModalFooter>
+  <button nz-button nzType="primary" [disabled]="!(savedAccounts$ | async)?.length" (click)="onNext()">
+    Setup initial synchronization
+  </button>
+
+  <button nz-button nzType="default" [disabled]="!(savedAccounts$ | async)?.length" (click)="onClose()">Later</button>
+</div>

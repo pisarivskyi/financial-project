@@ -1,7 +1,47 @@
 <nz-spin [nzSpinning]="isLoading$ | async">
-  hello
+  <ng-container [ngSwitch]="currentStep">
+    <fpd-add-provider-step
+      *ngSwitchCase="AddAccountStepEnum.AddProvider"
+      (selectedProviderTypeToAdd)="onSelectedProviderTypeToAdd($event)"
+      (saveProviderDataStep)="onSaveProviderDataStep()"
+    ></fpd-add-provider-step>
+
+    <fpd-save-provider-data-step
+      *ngSwitchCase="AddAccountStepEnum.SaveProviderData"
+      (selectProvider)="onSelectProvider($event)"
+      (selectProviderAccountsStep)="onSelectProviderAccountsStep()"
+    ></fpd-save-provider-data-step>
+
+    <fpd-select-provider-step
+      *ngSwitchCase="AddAccountStepEnum.SelectProvider"
+      [providers]="(providers$ | async) ?? []"
+      (selectProvider)="onSelectProvider($event)"
+      (addProviderStep)="onAddProviderStep()"
+      (selectProviderAccountsStep)="onSelectProviderAccountsStep()"
+    ></fpd-select-provider-step>
+
+    <fpd-select-provider-accounts-step
+      *ngSwitchCase="AddAccountStepEnum.SelectProviderAccounts"
+      [selectProvider]="selectedProvider"
+      (selectAccounts)="onSelectAccounts($event)"
+      (saveAccountsStep)="onSaveAccountsStep()"
+    ></fpd-select-provider-accounts-step>
+
+    <fpd-save-accounts-step
+      *ngSwitchCase="AddAccountStepEnum.SaveAccounts"
+      [selectProvider]="selectedProvider"
+      [selectedProviderAccounts]="selectedProviderAccounts"
+      (savedAccounts)="onSavedAccounts($event)"
+      (synchronizationStep)="onSynchronizationStep()"
+    ></fpd-save-accounts-step>
+
+    <fpd-setup-initial-synchronization-step
+      *ngSwitchCase="AddAccountStepEnum.Synchronization"
+      [accounts]="savedAccounts"
+    ></fpd-setup-initial-synchronization-step>
+  </ng-container>
 </nz-spin>
 
 <div *nzModalFooter>
-  <button nz-button nzType="default" [disabled]="isLoading$ | async" (click)="onDestroyModal()">Cancel</button>
+  <button nz-button nzType="default" (click)="onDestroyModal()">Cancel</button>
 </div>
