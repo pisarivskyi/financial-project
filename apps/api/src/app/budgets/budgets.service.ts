@@ -44,6 +44,9 @@ export class BudgetsService {
       where: {
         createdBy: user.sub,
       },
+      order: {
+        createdAt: 'DESC',
+      },
       relations: { categories: true },
     });
   }

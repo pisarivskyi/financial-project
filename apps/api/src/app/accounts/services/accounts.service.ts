@@ -42,6 +42,9 @@ export class AccountsService {
       where: {
         createdBy: user.sub,
       },
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 
@@ -50,6 +53,9 @@ export class AccountsService {
       where: {
         bankAccountId: In(bankIds),
         createdBy: user.sub,
+      },
+      order: {
+        createdAt: 'DESC',
       },
     });
   }

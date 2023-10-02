@@ -33,6 +33,9 @@ export class ProvidersService {
       where: {
         createdBy: user.sub,
       },
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 

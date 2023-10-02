@@ -42,6 +42,9 @@ export class CategoriesService {
       where: {
         createdBy: user.sub,
       },
+      order: {
+        createdAt: 'DESC',
+      },
       relations: { parentCategory: true },
     });
   }
