@@ -2,7 +2,13 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-import { AccountInterface, AccountTypeEnum, CurrencyEnum, ProviderTypeEnum } from '@financial-project/common';
+import {
+  AccountInterface,
+  AccountTypeEnum,
+  CurrencyEnum,
+  IssuerEnum,
+  ProviderTypeEnum,
+} from '@financial-project/common';
 
 import { TableNameEnum } from '../../core/enums/table-name.enum';
 import { BaseEntity } from '../../core/models/base-entity.abstract';
@@ -25,7 +31,7 @@ export class AccountEntity extends BaseEntity implements AccountInterface {
   @Column({
     type: 'enum',
     enum: AccountTypeEnum,
-    enumName: 'account_type_enum'
+    enumName: 'account_type_enum',
   })
   @IsNotEmpty()
   @ApiProperty({ enum: AccountTypeEnum, enumName: 'AccountType' })
@@ -72,7 +78,7 @@ export class AccountEntity extends BaseEntity implements AccountInterface {
   @Column({
     type: 'enum',
     enum: ProviderTypeEnum,
-    enumName: 'provider_type_enum'
+    enumName: 'provider_type_enum',
   })
   @IsNotEmpty()
   @ApiProperty({ enum: ProviderTypeEnum, enumName: 'ProviderTypeEnum' })
@@ -91,4 +97,14 @@ export class AccountEntity extends BaseEntity implements AccountInterface {
   @Column({ nullable: true })
   @ApiPropertyOptional()
   lastSyncDate?: Date;
+
+  @Column({
+    type: 'enum',
+    enum: IssuerEnum,
+    enumName: 'issuer_enum',
+    default: IssuerEnum.Unknown,
+  })
+  @IsNotEmpty()
+  @ApiProperty({ enum: IssuerEnum, enumName: 'IssuerEnum' })
+  issuer: IssuerEnum;
 }

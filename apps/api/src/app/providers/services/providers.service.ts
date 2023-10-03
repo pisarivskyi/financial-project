@@ -17,12 +17,14 @@ import { ProviderAccountsDto } from '../dto/provider-accounts.dto';
 import { SaveAccountsDto } from '../dto/save-accounts.dto';
 import { UpdateProviderDto } from '../dto/update-provider.dto';
 import { ProviderEntity } from '../entities/provider.entity';
+import { IssuerService } from './issuer.service';
 import { ProviderFactoryService } from './provider-factory.service';
 
 @Injectable()
 export class ProvidersService {
   constructor(
     private readonly providerFactoryService: ProviderFactoryService,
+    private readonly issuerService: IssuerService,
     private readonly accountsService: AccountsService,
     private readonly apiMonobankProviderService: ApiMonobankProviderService,
     @InjectRepository(ProviderEntity) private readonly providersRepository: Repository<ProviderEntity>
@@ -135,6 +137,7 @@ export class ProvidersService {
         account.name = `${provider.providerType} ${monobankAccount.type}`;
         account.type = monobankAccount.creditLimit ? AccountTypeEnum.CreditCard : AccountTypeEnum.DebitCard;
         account.provider = provider;
+        account.issuer = this.issuerService.getIssuer(monobankAccount.maskedPan[0]);
         account.providerType = ProviderTypeEnum.Monobank;
         account.bankAccountId = monobankAccount.id;
         account.bankSpecificType = monobankAccount.type;
