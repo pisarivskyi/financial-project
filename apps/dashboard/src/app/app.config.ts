@@ -6,19 +6,13 @@ import { AuthHttpInterceptor, AuthService, authHttpInterceptorFn, provideAuth0 }
 import { devTools } from '@ngneat/elf-devtools';
 import { Observable, filter, take } from 'rxjs';
 
-import { NZ_CONFIG, NzConfig } from 'ng-zorro-antd/core/config';
+import { NZ_CONFIG } from 'ng-zorro-antd/core/config';
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 
 import { environment } from '../../../../environments/environment';
 import { appRoutes } from './app.routes';
 import { ENVIRONMENT_CONFIG_TOKEN } from './core/configuration/tokens/environment-config.token';
-import { FORM_AUTO_TIPS } from './shared/constants/form-auto-tips.const';
-
-const ngZorroConfig: NzConfig = {
-  form: {
-    nzAutoTips: FORM_AUTO_TIPS,
-  },
-};
+import { nzConfigFactory } from './core/nz-config/nz-config.factory';
 
 function initAppFactory(authService: AuthService): () => Observable<any> {
   return () => {
@@ -51,7 +45,10 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     { provide: APP_INITIALIZER, multi: true, useFactory: initAppFactory, deps: [AuthService] },
     { provide: NZ_I18N, useValue: en_US },
-    { provide: NZ_CONFIG, useValue: ngZorroConfig },
+    {
+      provide: NZ_CONFIG,
+      useFactory: nzConfigFactory,
+    },
     { provide: ENVIRONMENT_CONFIG_TOKEN, useValue: environment },
     {
       provide: HTTP_INTERCEPTORS,

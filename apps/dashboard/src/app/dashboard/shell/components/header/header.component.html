@@ -1,0 +1,15 @@
+<ng-container *ngIf="user">
+  <div class="user-menu" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
+    <p>{{ user.name }}</p>
+    <nz-avatar [nzSrc]="user?.picture" [nzSize]="40"></nz-avatar>
+  </div>
+
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu>
+      <li nz-menu-item>Profile</li>
+      <li nz-menu-item>Settings</li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item (click)="logout.emit()">Logout</li>
+    </ul>
+  </nz-dropdown-menu>
+</ng-container>

@@ -1,0 +1,22 @@
+@import '../variables';
+
+html {
+  height: 100%;
+}
+
+body {
+  height: auto;
+  min-height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  //min-height: 100%;
+}
+
+.fpd-card {
+  background: $white;
+  padding: 32px;
+  border-radius: 16px;
+}
