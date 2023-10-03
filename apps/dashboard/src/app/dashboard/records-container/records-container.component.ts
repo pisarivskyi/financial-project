@@ -5,6 +5,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { take } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
@@ -15,6 +16,8 @@ import { AmountFormatPipe } from '../../shared/pipes/amount-format/amount-format
 import { CurrencyFormatPipe } from '../../shared/pipes/currency-format/currency-format.pipe';
 import { EditRecordModalComponent } from './components/edit-record-modal/edit-record-modal.component';
 import { RecordsFacadeService } from './services/records-facade.service';
+import { RecordTypeEnum } from '@financial-project/common';
+import { IconEnum } from '../../shared/enums/icon.enum';
 
 @UntilDestroy()
 @Component({
@@ -27,6 +30,7 @@ import { RecordsFacadeService } from './services/records-facade.service';
     NzButtonModule,
     NzPopconfirmModule,
     NzMessageModule,
+    NzIconModule,
     AmountFormatPipe,
     CurrencyFormatPipe,
   ],
@@ -40,6 +44,8 @@ export class RecordsContainerComponent implements OnInit {
   isLoading$ = this.recordsFacadeService.isLoading$;
 
   pagination$ = this.recordsFacadeService.pagination$;
+
+  readonly IconEnum = IconEnum;
 
   constructor(
     private recordsFacadeService: RecordsFacadeService,
@@ -106,4 +112,6 @@ export class RecordsContainerComponent implements OnInit {
       replaceUrl,
     });
   }
+
+  protected readonly RecordTypeEnum = RecordTypeEnum;
 }
