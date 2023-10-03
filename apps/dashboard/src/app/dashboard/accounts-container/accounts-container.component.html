@@ -1,8 +1,6 @@
 <fpd-page-header [title]="'Accounts'" [actions]="actions"></fpd-page-header>
 
 <div class="fpd-card">
-<!--  <button nz-button (click)="onAddAccount()">Add new account</button>-->
-
   <nz-table
     #table
     [nzLoading]="isLoading$ | async"
@@ -25,7 +23,10 @@
     </thead>
     <tbody>
     <tr *ngFor="let account of table.data">
-      <td>{{ account.name }}</td>
+      <td>
+        <img [attr.src]="ISSUER_TO_LOGO[account.issuer]" alt="">
+        {{ account.name }} {{ account.maskedPan }}
+      </td>
       <td>{{ account.balance | amountFormat | currencyFormat : account.currencyCode }}</td>
       <td>{{ CurrencyEnum[account.currencyCode] }}</td>
       <td>{{ account.createdAt | date }}</td>

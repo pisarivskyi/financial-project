@@ -13,13 +13,14 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { CurrencyEnum } from '@financial-project/common';
 
 import { AccountModel } from '../../api/accounts/models/account.model';
+import { PageHeaderActionInterface } from '../../shared/components/page-header/interfaces/page-header-action.interface';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { ISSUER_TO_LOGO } from '../../shared/constants/issuer-to-logo.const';
 import { AmountFormatPipe } from '../../shared/pipes/amount-format/amount-format.pipe';
 import { CurrencyFormatPipe } from '../../shared/pipes/currency-format/currency-format.pipe';
 import { AddAccountModalComponent } from './components/add-account-modal/add-account-modal.component';
 import { EditAccountModalComponent } from './components/edit-account-modal/edit-account-modal.component';
 import { AccountsFacadeService } from './services/accounts-facade.service';
-import { PageHeaderActionInterface } from '../../shared/components/page-header/interfaces/page-header-action.interface';
 
 @UntilDestroy()
 @Component({
@@ -56,8 +57,10 @@ export class AccountsContainerComponent implements OnInit {
       action: () => {
         this.onAddAccount();
       },
-    }
-  ]
+    },
+  ];
+
+  readonly ISSUER_TO_LOGO = ISSUER_TO_LOGO;
 
   constructor(
     private accountsFacadeService: AccountsFacadeService,
