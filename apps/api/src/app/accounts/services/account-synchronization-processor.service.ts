@@ -102,12 +102,14 @@ export class AccountSynchronizationProcessorService {
     record.name = statement.description;
     record.comment = statement.comment;
     record.amount = Math.abs(statement.amount);
+    record.operationAmount = Math.abs(statement.operationAmount);
     record.type = Math.sign(statement.amount) === 1 ? RecordTypeEnum.Income : RecordTypeEnum.Outcome;
     record.account = account;
     record.balance = statement.balance;
     // record.category?: CategoryInterface;
     record.creationType = RecordCreationTypeEnum.Synced;
-    record.currencyCode = statement.currencyCode;
+    record.currencyCode = account.currencyCode;
+    record.operationCurrencyCode = statement.currencyCode;
     record.description = statement.description;
     record.mcc = statement.mcc;
     record.metadata = statement;
