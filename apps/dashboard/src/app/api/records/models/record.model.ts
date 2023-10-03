@@ -19,6 +19,9 @@ export class RecordModel extends BaseModel implements RecordInterface {
   amount!: number;
 
   @Expose()
+  operationAmount!: number;
+
+  @Expose()
   @Type(() => CategoryModel)
   category?: CategoryModel;
 
@@ -27,6 +30,9 @@ export class RecordModel extends BaseModel implements RecordInterface {
 
   @Expose()
   currencyCode!: CurrencyEnum;
+
+  @Expose()
+  operationCurrencyCode!: CurrencyEnum;
 
   @Expose()
   account!: AccountInterface;

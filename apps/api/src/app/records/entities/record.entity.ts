@@ -20,6 +20,9 @@ export class RecordEntity extends BaseEntity implements RecordInterface {
   @Column()
   amount: number;
 
+  @Column({ nullable: true })
+  operationAmount: number;
+
   @Column({ type: 'enum', enum: RecordTypeEnum, enumName: 'record_type_enum' })
   type: RecordTypeEnum;
 
@@ -34,6 +37,9 @@ export class RecordEntity extends BaseEntity implements RecordInterface {
 
   @Column({ type: 'enum', enum: CurrencyEnum, enumName: 'currency_enum' })
   currencyCode: CurrencyEnum;
+
+  @Column({ type: 'enum', enum: CurrencyEnum, enumName: 'currency_enum', nullable: true })
+  operationCurrencyCode: CurrencyEnum;
 
   @Column({ default: '' })
   description: string;
