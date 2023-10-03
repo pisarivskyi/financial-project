@@ -1,0 +1,18 @@
+@import 'apps/dashboard/src/styles/variables';
+
+:host {
+  display: flex;
+  padding: 16px 32px;
+  background: $white;
+  justify-content: flex-end;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  p {
+    margin: 0 10px 0 0;
+  }
+}

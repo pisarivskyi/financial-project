@@ -1,9 +1,9 @@
-<fpd-app-menu class="menu" (logout)="onLogOut()"></fpd-app-menu>
+<fpd-sidebar></fpd-sidebar>
 
 <div class="content-wrapper">
-  <div class="breadcrumbs"></div>
+  <fpd-header [user]="user$ | async" (logout)="onLogOut()"></fpd-header>
 
-  <main>
+  <main class="main-content">
     <router-outlet></router-outlet>
   </main>
 </div>

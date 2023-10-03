@@ -1,0 +1,13 @@
+@import 'apps/dashboard/src/styles/variables';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  border-right: 1px solid #eeeeee;
+  background: $white;
+}
+
+.logo {
+  padding: 16px 24px;
+}

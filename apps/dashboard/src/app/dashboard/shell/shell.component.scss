@@ -1,14 +1,16 @@
+@import "apps/dashboard/src/styles/variables";
+
 :host {
   display: flex;
-  height: 100%;
-}
-
-.menu {
-  height: 100%;
+  flex-grow: 1;
+  background: $page-bg;
 }
 
 .content-wrapper {
   margin: 0 auto;
-  max-width: 1200px;
   width: 100%;
+}
+
+.main-content {
+  padding: 36px;
 }

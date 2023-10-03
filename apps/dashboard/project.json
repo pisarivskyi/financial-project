@@ -17,8 +17,11 @@
         "tsConfig": "apps/dashboard/tsconfig.app.json",
         "allowedCommonJsDependencies": ["cross-fetch", "websocket"],
         "assets": ["apps/dashboard/src/favicon.ico", "apps/dashboard/src/assets"],
-        "styles": ["node_modules/ng-zorro-antd/ng-zorro-antd.min.css", "apps/dashboard/src/styles.scss"],
-        "scripts": []
+        "styles": ["apps/dashboard/src/styles/ant-theme/theme.less", "apps/dashboard/src/styles/index.scss"],
+        "scripts": [],
+        "stylePreprocessorOptions": {
+          "includePaths": ["node_modules/"]
+        }
       },
       "configurations": {
         "production": {

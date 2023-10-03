@@ -1,0 +1,16 @@
+<h1 class="logo">Budget</h1>
+
+<ul nz-menu nzMode="inline">
+  <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Accounts]">Accounts</a>
+  </li>
+  <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Records]">Records</a>
+  </li>
+  <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Categories]">Categories</a>
+  </li>
+  <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Budgets]">Budgets</a>
+  </li>
+</ul>
