@@ -1,8 +1,9 @@
-import { AccountTypeEnum, CurrencyEnum, ProviderTypeEnum } from '../enums';
+import { AccountTypeEnum, CurrencyEnum, IssuerEnum, ProviderTypeEnum } from '../enums';
 import { ProviderInterface } from './provider.interface';
 
 export interface AccountInterface {
   id: string;
+  issuer: IssuerEnum;
   bankAccountId?: string;
   name: string;
   type: AccountTypeEnum;
