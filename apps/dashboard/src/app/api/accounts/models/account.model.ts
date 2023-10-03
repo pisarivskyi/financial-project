@@ -4,6 +4,7 @@ import {
   AccountInterface,
   AccountTypeEnum,
   CurrencyEnum,
+  IssuerEnum,
   ProviderInterface,
   ProviderTypeEnum,
 } from '@financial-project/common';
@@ -50,4 +51,7 @@ export class AccountModel extends BaseModel implements AccountInterface {
 
   @Expose()
   providerType!: ProviderTypeEnum;
+
+  @Expose()
+  issuer!: IssuerEnum;
 }
