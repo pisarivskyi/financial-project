@@ -16,7 +16,15 @@
         "polyfills": ["zone.js"],
         "tsConfig": "apps/dashboard/tsconfig.app.json",
         "allowedCommonJsDependencies": ["cross-fetch", "websocket"],
-        "assets": ["apps/dashboard/src/favicon.ico", "apps/dashboard/src/assets"],
+        "assets": [
+          "apps/dashboard/src/favicon.ico",
+          "apps/dashboard/src/assets",
+          {
+            "glob": "**/*",
+            "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+            "output": "/assets/"
+          }
+        ],
         "styles": ["apps/dashboard/src/styles/ant-theme/theme.less", "apps/dashboard/src/styles/index.scss"],
         "scripts": [],
         "stylePreprocessorOptions": {

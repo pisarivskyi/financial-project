@@ -10,26 +10,41 @@
     (nzPageIndexChange)="onPageIndexChanged($event)"
   >
     <thead>
-    <tr>
-      <th>Name</th>
-      <th>Category</th>
-      <th>Amount</th>
-      <th>Date</th>
-      <th>Updated</th>
-      <th>Actions</th>
-    </tr>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Updated</th>
+        <th>Actions</th>
+      </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let record of table.data">
-      <td>{{ record.name }}</td>
-      <td>{{ record.category?.name ?? 'none' }}</td>
-      <td>{{ record.amount | amountFormat | currencyFormat : record.currencyCode }}</td>
-      <td>{{ record.createdAt | date }}</td>
-      <td>{{ record.updatedAt | date : 'full' }}</td>
-      <td>
-        <button nz-button (click)="onEditRecord(record)">edit</button>
-      </td>
-    </tr>
+      <tr *ngFor="let record of table.data">
+        <td>
+          <span
+            *ngIf="record.type === RecordTypeEnum.Income"
+            class="income"
+            nz-icon
+            nzType="arrow-down"
+          ></span>
+          <span
+            *ngIf="record.type === RecordTypeEnum.Outcome"
+            class="outcome"
+            nz-icon
+            nzType="arrow-up"
+            nzTheme="outline"
+          ></span>
+          {{ record.name }}
+        </td>
+        <td>{{ record.category?.name ?? 'none' }}</td>
+        <td>{{ record.amount | amountFormat | currencyFormat : record.currencyCode }}</td>
+        <td>{{ record.createdAt | date }}</td>
+        <td>{{ record.updatedAt | date : 'full' }}</td>
+        <td>
+          <button nz-button (click)="onEditRecord(record)">edit</button>
+        </td>
+      </tr>
     </tbody>
   </nz-table>
 </div>

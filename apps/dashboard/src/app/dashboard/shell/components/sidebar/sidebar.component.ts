@@ -2,19 +2,23 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 
 import { RoutePathEnum } from '../../../../core/enums/route-path.enum';
-import { NzButtonModule } from 'ng-zorro-antd/button';
+import { IconEnum } from '../../../../shared/enums/icon.enum';
 
 @Component({
   selector: 'fpd-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink, NzMenuModule, NzButtonModule],
+  imports: [CommonModule, RouterLink, NzMenuModule, NzButtonModule, NzIconModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
   RoutePathEnum = RoutePathEnum;
+
+  readonly IconEnum = IconEnum;
 }

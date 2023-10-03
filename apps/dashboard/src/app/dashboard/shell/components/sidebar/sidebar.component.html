@@ -2,15 +2,23 @@
 
 <ul nz-menu nzMode="inline">
   <li nz-menu-item nzMatchRouter>
-    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Accounts]">Accounts</a>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Accounts]">
+      <span nz-icon [nzType]="IconEnum.AccountBalance"></span><span>Accounts</span>
+    </a>
   </li>
   <li nz-menu-item nzMatchRouter>
-    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Records]">Records</a>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Records]">
+      <span nz-icon [nzType]="IconEnum.Receipt"></span><span>Records</span>
+    </a>
   </li>
   <li nz-menu-item nzMatchRouter>
-    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Categories]">Categories</a>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Categories]">
+      <span nz-icon [nzType]="IconEnum.Category"></span><span>Categories</span>
+    </a>
   </li>
   <li nz-menu-item nzMatchRouter>
-    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Budgets]">Budgets</a>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Budgets]">
+      <span nz-icon [nzType]="IconEnum.PriceChange"></span><span>Budgets</span>
+    </a>
   </li>
 </ul>
