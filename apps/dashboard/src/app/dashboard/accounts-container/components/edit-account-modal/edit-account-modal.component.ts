@@ -16,7 +16,7 @@ import { AccountFormComponent } from '../account-form/account-form.component';
   standalone: true,
   imports: [CommonModule, AccountFormComponent, NzButtonModule, NzModalModule, NzSpinModule],
   templateUrl: './edit-account-modal.component.html',
-  styleUrls: ['./edit-account-modal.component.scss'],
+  styleUrls: ['./edit-account-modal.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditAccountModalComponent {

@@ -16,7 +16,7 @@ import { RecordFormComponent } from '../record-form/record-form.component';
   standalone: true,
   imports: [CommonModule, RecordFormComponent, NzButtonModule, NzModalModule, NzSpinModule],
   templateUrl: './edit-record-modal.component.html',
-  styleUrls: ['./edit-record-modal.component.scss'],
+  styleUrls: ['./edit-record-modal.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditRecordModalComponent {
@@ -35,7 +35,7 @@ export class EditRecordModalComponent {
     if (this.recordFormComponent.formGroup.valid) {
       this.isLoading$.next(true);
 
-      this.recordsFacadeService.updateRecord$(this.recordFormComponent.getUpdatedModel()).subscribe((d) => {
+      this.recordsFacadeService.updateRecord$(this.recordFormComponent.getUpdatedModel()).subscribe(() => {
         this.isLoading$.next(false);
 
         this.modalRef.destroy(true);

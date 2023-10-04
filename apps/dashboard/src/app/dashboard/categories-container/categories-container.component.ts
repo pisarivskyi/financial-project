@@ -21,7 +21,7 @@ import { CategoriesFacadeService } from './services/categories-facade.service';
   standalone: true,
   imports: [CommonModule, NzButtonModule, NzPopconfirmModule, NzTableModule, NzModalModule, NzMessageModule],
   templateUrl: './categories-container.component.html',
-  styleUrls: ['./categories-container.component.scss'],
+  styleUrls: ['./categories-container.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoriesContainerComponent implements OnInit {

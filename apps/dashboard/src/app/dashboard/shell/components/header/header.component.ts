@@ -10,7 +10,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
   standalone: true,
   imports: [CommonModule, NzAvatarModule, NzDropDownModule],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  styleUrls: ['./header.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {

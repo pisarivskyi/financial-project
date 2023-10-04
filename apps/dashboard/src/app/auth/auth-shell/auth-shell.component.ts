@@ -7,7 +7,7 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterOutlet],
   templateUrl: './auth-shell.component.html',
-  styleUrls: ['./auth-shell.component.scss'],
+  styleUrls: ['./auth-shell.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthShellComponent {}

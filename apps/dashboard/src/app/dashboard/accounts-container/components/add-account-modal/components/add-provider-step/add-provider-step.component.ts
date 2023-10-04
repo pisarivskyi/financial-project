@@ -15,7 +15,7 @@ import { PROVIDER_OPTIONS } from '../../../../../../shared/constants/provider-op
   standalone: true,
   imports: [CommonModule, NzSelectModule, FormsModule, NzButtonModule, NzModalModule],
   templateUrl: './add-provider-step.component.html',
-  styleUrls: ['./add-provider-step.component.scss'],
+  styleUrls: ['./add-provider-step.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddProviderStepComponent {

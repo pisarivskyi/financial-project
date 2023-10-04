@@ -9,7 +9,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
   standalone: true,
   imports: [CommonModule, NzButtonModule],
   templateUrl: './sign-in-container.component.html',
-  styleUrls: ['./sign-in-container.component.scss'],
+  styleUrls: ['./sign-in-container.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInContainerComponent {

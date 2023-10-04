@@ -13,7 +13,7 @@ import { ProviderModel } from '../../../../../../api/providers/models/provider.m
   standalone: true,
   imports: [CommonModule, NzButtonModule, NzModalModule, NzSelectModule, FormsModule],
   templateUrl: './select-provider-step.component.html',
-  styleUrls: ['./select-provider-step.component.scss'],
+  styleUrls: ['./select-provider-step.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectProviderStepComponent {

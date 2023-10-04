@@ -18,7 +18,7 @@ import { AccountsFacadeService } from '../../../../services/accounts-facade.serv
   standalone: true,
   imports: [CommonModule, NzButtonModule, NzModalModule, NzSpinModule, NzSelectModule, FormsModule],
   templateUrl: './select-provider-accounts-step.component.html',
-  styleUrls: ['./select-provider-accounts-step.component.scss'],
+  styleUrls: ['./select-provider-accounts-step.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectProviderAccountsStepComponent implements OnInit {

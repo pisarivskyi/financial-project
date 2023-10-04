@@ -29,7 +29,7 @@ import { AccountsFacadeService } from '../../../../services/accounts-facade.serv
     NzSpinModule,
   ],
   templateUrl: './save-provider-data-step.component.html',
-  styleUrls: ['./save-provider-data-step.component.scss'],
+  styleUrls: ['./save-provider-data-step.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SaveProviderDataStepComponent {

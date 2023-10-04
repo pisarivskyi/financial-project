@@ -38,7 +38,7 @@ import { RecordsFacadeService } from './services/records-facade.service';
     PageHeaderComponent,
   ],
   templateUrl: './records-container.component.html',
-  styleUrls: ['./records-container.component.scss'],
+  styleUrls: ['./records-container.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecordsContainerComponent implements OnInit {

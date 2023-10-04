@@ -43,7 +43,7 @@ export type CategoryFormGroup = CreateFormGroupFromData<CategoryFormData>;
     NzSpinModule,
   ],
   templateUrl: './category-form.component.html',
-  styleUrls: ['./category-form.component.scss'],
+  styleUrls: ['./category-form.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryFormComponent implements OnInit {

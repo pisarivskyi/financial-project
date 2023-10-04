@@ -16,7 +16,7 @@ import { CategoryFormComponent } from '../category-form/category-form.component'
   standalone: true,
   imports: [CommonModule, CategoryFormComponent, NzButtonModule, NzModalModule, NzSpinModule],
   templateUrl: './edit-category-modal.component.html',
-  styleUrls: ['./edit-category-modal.component.scss'],
+  styleUrls: ['./edit-category-modal.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditCategoryModalComponent {
