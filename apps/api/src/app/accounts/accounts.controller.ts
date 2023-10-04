@@ -54,10 +54,10 @@ export class AccountsController {
     return this.accountsService.remove(id, user);
   }
 
-  @Get(':id/sync-records')
+  @Get(':id/sync')
   @UseGuards(JwtAuthGuard)
-  syncRecords(@Param('id') id: string, @CurrentUser() user: UserInterface): Promise<Job<AccountJobPayloadInterface>> {
-    return this.accountsService.syncRecords(id, user);
+  sync(@Param('id') id: string, @CurrentUser() user: UserInterface): Promise<Job<AccountJobPayloadInterface>> {
+    return this.accountsService.sync(id, user);
   }
 
   @Get('jobs/:id')

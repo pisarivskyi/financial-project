@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { take } from 'rxjs';
+import { finalize, map, retry, switchMap, take, timer } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
@@ -62,6 +62,8 @@ export class AccountsContainerComponent implements OnInit {
     },
   ];
 
+  accountSynchronizationStatuses: Record<string, boolean> = {};
+
   readonly ISSUER_TO_LOGO = ISSUER_TO_LOGO;
 
   constructor(
@@ -69,7 +71,8 @@ export class AccountsContainerComponent implements OnInit {
     private modalService: NzModalService,
     private messageService: NzMessageService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -101,6 +104,34 @@ export class AccountsContainerComponent implements OnInit {
         this.messageService.success('Account was created');
       }
     });
+  }
+
+  onSyncAccount(account: AccountModel): void {
+    this.accountSynchronizationStatuses[account.id] = true;
+
+    this.accountsFacadeService
+      .triggerSynchronizationForAccount$(account.id)
+      .pipe(
+        switchMap((job) => {
+          return this.accountsFacadeService.getSynchronizationJob$(job.id).pipe(
+            map((job) => {
+              if (!job.finishedOn) {
+                throw new Error();
+              }
+
+              return job;
+            }),
+            retry({
+              delay: () => timer(5000),
+            })
+          );
+        }),
+        finalize(() => {
+          this.accountSynchronizationStatuses[account.id] = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe();
   }
 
   onEditAccount(account: AccountModel): void {

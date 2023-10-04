@@ -2,6 +2,7 @@ import { Process, Processor } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Job } from 'bull';
+import { plainToClassFromExist } from 'class-transformer';
 import { DateTime } from 'luxon';
 import { firstValueFrom, map } from 'rxjs';
 import { In, Repository } from 'typeorm';
@@ -50,6 +51,21 @@ export class AccountSynchronizationProcessorService {
       //
       // });
 
+      // updating account itself
+      const monoAccount = await firstValueFrom(
+        this.apiMonobankProviderService
+          .getClientInfo$(account.provider.data.token)
+          .pipe(map((r) => r.data.accounts.find((monoAccount) => monoAccount.id === account.bankAccountId)))
+      );
+
+      const updatedAccount = plainToClassFromExist(account, {
+        balance: monoAccount.balance,
+        creditLimit: monoAccount.creditLimit,
+      });
+
+      await this.accountsRepository.update(updatedAccount.id, updatedAccount);
+
+      // synchronizing records
       const statements = await firstValueFrom(
         this.apiMonobankProviderService
           .getStatement$(

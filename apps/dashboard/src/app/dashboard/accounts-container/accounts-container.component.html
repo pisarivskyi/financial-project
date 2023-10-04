@@ -32,6 +32,7 @@
       <td>{{ account.createdAt | date }}</td>
       <td>{{ account.updatedAt | date }}</td>
       <td>
+        <button nz-button [nzLoading]="accountSynchronizationStatuses[account.id]" nzSize="small" (click)="onSyncAccount(account)">Sync</button>
         <button nz-button nzSize="small" (click)="onEditAccount(account)">Edit</button>
 
         <button
