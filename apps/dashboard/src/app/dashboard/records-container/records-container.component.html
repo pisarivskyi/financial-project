@@ -1,3 +1,5 @@
+<fpd-page-header [title]="'Records'"></fpd-page-header>
+
 <div class="fpd-card">
   <nz-table
     #table
@@ -15,34 +17,26 @@
         <th>Category</th>
         <th>Amount</th>
         <th>Date</th>
-        <th>Updated</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let record of table.data">
         <td>
-          <span
-            *ngIf="record.type === RecordTypeEnum.Income"
-            class="income"
-            nz-icon
-            nzType="arrow-down"
-          ></span>
-          <span
-            *ngIf="record.type === RecordTypeEnum.Outcome"
-            class="outcome"
-            nz-icon
-            nzType="arrow-up"
-            nzTheme="outline"
-          ></span>
           {{ record.name }}
         </td>
         <td>{{ record.category?.name ?? 'none' }}</td>
-        <td>{{ record.amount | amountFormat | currencyFormat : record.currencyCode }}</td>
-        <td>{{ record.createdAt | date }}</td>
-        <td>{{ record.updatedAt | date : 'full' }}</td>
         <td>
-          <button nz-button (click)="onEditRecord(record)">edit</button>
+          <span
+            [class.income]="record.type === RecordTypeEnum.Income"
+            [class.outcome]="record.type === RecordTypeEnum.Outcome"
+            >{{ record.amount | amountFormat | currencyFormat : record.currencyCode }}</span>
+        </td>
+        <td>
+          <span *ngIf="record.bankCreatedAt">{{ record.bankCreatedAt | date:'medium' }}</span>
+        </td>
+        <td>
+          <button nz-button nzSize="small" (click)="onEditRecord(record)">Edit</button>
         </td>
       </tr>
     </tbody>

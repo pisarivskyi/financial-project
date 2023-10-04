@@ -11,13 +11,15 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
+import { RecordTypeEnum } from '@financial-project/common';
+
 import { RecordModel } from '../../api/records/models/record.model';
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { IconEnum } from '../../shared/enums/icon.enum';
 import { AmountFormatPipe } from '../../shared/pipes/amount-format/amount-format.pipe';
 import { CurrencyFormatPipe } from '../../shared/pipes/currency-format/currency-format.pipe';
 import { EditRecordModalComponent } from './components/edit-record-modal/edit-record-modal.component';
 import { RecordsFacadeService } from './services/records-facade.service';
-import { RecordTypeEnum } from '@financial-project/common';
-import { IconEnum } from '../../shared/enums/icon.enum';
 
 @UntilDestroy()
 @Component({
@@ -33,6 +35,7 @@ import { IconEnum } from '../../shared/enums/icon.enum';
     NzIconModule,
     AmountFormatPipe,
     CurrencyFormatPipe,
+    PageHeaderComponent,
   ],
   templateUrl: './records-container.component.html',
   styleUrls: ['./records-container.component.scss'],
