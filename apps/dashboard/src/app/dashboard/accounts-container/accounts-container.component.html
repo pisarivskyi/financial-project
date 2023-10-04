@@ -27,7 +27,7 @@
         <img [attr.src]="ISSUER_TO_LOGO[account.issuer]" alt="">
         {{ account.name }} {{ account.maskedPan }}
       </td>
-      <td>{{ account.balance | amountFormat | currencyFormat : account.currencyCode }}</td>
+      <td>{{ account | getCreditCardBalance | amountFormat | currencyFormat : account.currencyCode }}</td>
       <td>{{ CurrencyEnum[account.currencyCode] }}</td>
       <td>{{ account.createdAt | date }}</td>
       <td>{{ account.updatedAt | date }}</td>

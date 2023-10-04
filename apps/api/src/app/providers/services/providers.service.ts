@@ -144,6 +144,7 @@ export class ProvidersService {
         account.currencyCode = monobankAccount.currencyCode;
         account.maskedPan = monobankAccount.maskedPan[0];
         account.balance = monobankAccount.balance;
+        account.creditLimit = monobankAccount.creditLimit;
         account.metadata = monobankAccount;
         account.createdBy = user.sub;
 
@@ -193,7 +194,6 @@ export class ProvidersService {
             accountsData.providerId = provider.id;
             accountsData.clientId = data.clientId;
             accountsData.providerType = ProviderTypeEnum.Monobank;
-            // TODO: think if you really need this
             accountsData.originalData = data;
 
             accountsData.accounts = data.accounts.map(({ id, maskedPan, currencyCode, balance, creditLimit }) => ({
