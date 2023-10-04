@@ -17,7 +17,7 @@ import { ApiAccountsTransformService } from './api-accounts-transform.service';
 export class ApiAccountsService {
   readonly requests = {
     accounts: '/accounts',
-    synchronize: (id: string) => `/accounts/${id}/sync-records`,
+    synchronize: (id: string) => `/accounts/${id}/sync`,
     getSynchronizationJob: (id: string) => `/accounts/jobs/${id}`,
   };
 

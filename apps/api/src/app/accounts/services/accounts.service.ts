@@ -113,7 +113,7 @@ export class AccountsService {
     return this.accountsRepository.remove(targetAccount);
   }
 
-  async syncRecords(id: string, user: UserInterface): Promise<Job<AccountJobPayloadInterface>> {
+  async sync(id: string, user: UserInterface): Promise<Job<AccountJobPayloadInterface>> {
     try {
       const account = await this.accountsRepository.findOne({
         where: {
