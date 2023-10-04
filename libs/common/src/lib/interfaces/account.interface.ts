@@ -8,6 +8,7 @@ export interface AccountInterface {
   name: string;
   type: AccountTypeEnum;
   balance: number;
+  creditLimit: number;
   maskedPan?: string;
   bankSpecificType?: string;
   color?: string;

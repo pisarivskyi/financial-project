@@ -30,14 +30,14 @@ export class CurrencyFormatPipe implements PipeTransform {
   }
 
   private formatUAH(amount: string | number): string {
-    return `${CurrencySymbolsConst[CurrencyEnum.UAH]} ${amount}`;
+    return `${amount} ${CurrencySymbolsConst[CurrencyEnum.UAH]}`;
   }
 
   private formatEUR(amount: string | number): string {
-    return `${CurrencySymbolsConst[CurrencyEnum.EUR]} ${amount}`;
+    return `${amount} ${CurrencySymbolsConst[CurrencyEnum.EUR]}`;
   }
 
   private formatUSD(amount: string | number): string {
-    return `${CurrencySymbolsConst[CurrencyEnum.USD]} ${amount}`;
+    return `${amount} ${CurrencySymbolsConst[CurrencyEnum.USD]}`;
   }
 }

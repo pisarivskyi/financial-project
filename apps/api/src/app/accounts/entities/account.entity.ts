@@ -43,6 +43,12 @@ export class AccountEntity extends BaseEntity implements AccountInterface {
   @ApiProperty()
   balance: number;
 
+  @Column({ default: 0 })
+  @IsNotEmpty()
+  @IsNumber()
+  @ApiProperty()
+  creditLimit: number;
+
   @Column({ nullable: true })
   @IsOptional()
   @IsString()

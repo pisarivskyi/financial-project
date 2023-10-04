@@ -18,6 +18,7 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
 import { ISSUER_TO_LOGO } from '../../shared/constants/issuer-to-logo.const';
 import { AmountFormatPipe } from '../../shared/pipes/amount-format/amount-format.pipe';
 import { CurrencyFormatPipe } from '../../shared/pipes/currency-format/currency-format.pipe';
+import { GetCreditCardBalancePipe } from '../../shared/pipes/get-credit-card-balance/get-credit-card-balance.pipe';
 import { AddAccountModalComponent } from './components/add-account-modal/add-account-modal.component';
 import { EditAccountModalComponent } from './components/edit-account-modal/edit-account-modal.component';
 import { AccountsFacadeService } from './services/accounts-facade.service';
@@ -35,6 +36,7 @@ import { AccountsFacadeService } from './services/accounts-facade.service';
     NzMessageModule,
     AmountFormatPipe,
     CurrencyFormatPipe,
+    GetCreditCardBalancePipe,
     PageHeaderComponent,
   ],
   templateUrl: './accounts-container.component.html',

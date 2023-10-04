@@ -19,6 +19,9 @@ export class AccountModel extends BaseModel implements AccountInterface {
   balance!: number;
 
   @Expose()
+  creditLimit!: number;
+
+  @Expose()
   createdBy!: string;
 
   @Expose()
