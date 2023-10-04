@@ -44,7 +44,7 @@ export type RecordFormGroup = CreateFormGroupFromData<RecordFormData>;
     NzSpinModule,
   ],
   templateUrl: './record-form.component.html',
-  styleUrls: ['./record-form.component.scss'],
+  styleUrls: ['./record-form.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecordFormComponent implements OnInit {

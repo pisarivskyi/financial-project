@@ -34,7 +34,7 @@ export type AccountFormGroup = CreateFormGroupFromData<AccountFormData>;
     NzModalModule,
   ],
   templateUrl: './account-form.component.html',
-  styleUrls: ['./account-form.component.scss'],
+  styleUrls: ['./account-form.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountFormComponent implements OnInit {

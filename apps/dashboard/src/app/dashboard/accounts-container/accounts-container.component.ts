@@ -38,7 +38,7 @@ import { AccountsFacadeService } from './services/accounts-facade.service';
     PageHeaderComponent,
   ],
   templateUrl: './accounts-container.component.html',
-  styleUrls: ['./accounts-container.component.scss'],
+  styleUrls: ['./accounts-container.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountsContainerComponent implements OnInit {

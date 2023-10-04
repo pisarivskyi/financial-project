@@ -13,7 +13,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
   standalone: true,
   imports: [CommonModule, RouterOutlet, HeaderComponent, SidebarComponent, NzSpinModule],
   templateUrl: './shell.component.html',
-  styleUrls: ['./shell.component.scss'],
+  styleUrls: ['./shell.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShellComponent {

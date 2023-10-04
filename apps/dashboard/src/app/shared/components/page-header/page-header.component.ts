@@ -10,7 +10,7 @@ import { PageHeaderActionInterface } from './interfaces/page-header-action.inter
   standalone: true,
   imports: [CommonModule, NzButtonModule, NzBreadCrumbModule],
   templateUrl: './page-header.component.html',
-  styleUrls: ['./page-header.component.scss'],
+  styleUrls: ['./page-header.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageHeaderComponent {

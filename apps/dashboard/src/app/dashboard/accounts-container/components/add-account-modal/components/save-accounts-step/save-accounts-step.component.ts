@@ -18,7 +18,7 @@ import { AccountsFacadeService } from '../../../../services/accounts-facade.serv
   standalone: true,
   imports: [CommonModule, NzSpinModule, NzButtonModule, NzModalModule, AmountFormatPipe, CurrencyFormatPipe],
   templateUrl: './save-accounts-step.component.html',
-  styleUrls: ['./save-accounts-step.component.scss'],
+  styleUrls: ['./save-accounts-step.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SaveAccountsStepComponent implements OnInit {

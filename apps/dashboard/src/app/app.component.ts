@@ -11,7 +11,7 @@ import { ICON_DEFINITIONS } from './shared/constants/icon-definitions.const';
   imports: [CommonModule, RouterModule],
   selector: 'fpd-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrls: ['./app.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {

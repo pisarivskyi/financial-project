@@ -15,7 +15,7 @@ import { CategoryFormComponent } from '../category-form/category-form.component'
   standalone: true,
   imports: [CommonModule, CategoryFormComponent, NzButtonModule, NzModalModule, NzSpinModule],
   templateUrl: './add-category-modal.component.html',
-  styleUrls: ['./add-category-modal.component.scss'],
+  styleUrls: ['./add-category-modal.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddCategoryModalComponent {

@@ -16,7 +16,7 @@ import { AccountsFacadeService } from '../../../../services/accounts-facade.serv
   standalone: true,
   imports: [CommonModule, NzSpinModule, NzModalModule, NzButtonModule, NzCheckboxModule, FormsModule],
   templateUrl: './setup-initial-synchronization-step.component.html',
-  styleUrls: ['./setup-initial-synchronization-step.component.scss'],
+  styleUrls: ['./setup-initial-synchronization-step.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SetupInitialSynchronizationStepComponent implements OnInit {

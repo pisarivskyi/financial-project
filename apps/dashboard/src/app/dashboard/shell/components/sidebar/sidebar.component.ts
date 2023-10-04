@@ -14,7 +14,7 @@ import { IconEnum } from '../../../../shared/enums/icon.enum';
   standalone: true,
   imports: [CommonModule, RouterLink, NzMenuModule, NzButtonModule, NzIconModule],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss'],
+  styleUrls: ['./sidebar.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {

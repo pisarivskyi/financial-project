@@ -36,7 +36,7 @@ import { AddAccountStepEnum } from './enums/add-account-step.enum';
     AddProviderStepComponent,
   ],
   templateUrl: './add-account-modal.component.html',
-  styleUrls: ['./add-account-modal.component.scss'],
+  styleUrls: ['./add-account-modal.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddAccountModalComponent implements OnInit {
