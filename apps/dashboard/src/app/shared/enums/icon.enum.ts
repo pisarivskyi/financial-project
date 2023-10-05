@@ -5,4 +5,5 @@ export enum IconEnum {
   AccountBalance = 'account_balance',
   PriceChange = 'price_change',
   Category = 'category',
+  CreditCard = 'credit_card',
 }

@@ -1,0 +1,31 @@
+<nz-spin [nzSpinning]="isLoading$ | async">
+  <h3>Add Monobank provider information</h3>
+
+  <p>
+    Get API token on <a href="https://api.monobank.ua/" target="_blank">that</a> page and paste it in the input below.
+  </p>
+
+  <form nz-form [formGroup]="form" [nzLayout]="'vertical'">
+    <nz-form-item>
+      <nz-form-label>Name</nz-form-label>
+
+      <nz-form-control>
+        <input nz-input formControlName="name" type="text" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>API token</nz-form-label>
+
+      <nz-form-control>
+        <input nz-input formControlName="token" type="text" />
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-spin>
+
+<div *nzModalFooter>
+  <button nz-button nzType="primary" [disabled]="form.invalid" (click)="onNext()">Add</button>
+
+  <button nz-button nzType="default" (click)="onClose()">Cancel</button>
+</div>

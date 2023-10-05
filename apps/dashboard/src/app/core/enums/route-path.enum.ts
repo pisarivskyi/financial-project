@@ -10,4 +10,7 @@ export enum RoutePathEnum {
   Categories = 'categories',
   Budgets = 'budgets',
   Accounts = 'accounts',
+  Providers = 'providers',
+  Settings = 'settings',
+  Profile = 'profile',
 }

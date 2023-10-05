@@ -7,3 +7,5 @@ export type SaveProviderAccountsType = {
 };
 
 export type InsertProviderType = OmitFields<Omit<ProviderModel, 'providerType'>>;
+
+export type UpdateProviderType = Pick<ProviderModel, 'name'>;

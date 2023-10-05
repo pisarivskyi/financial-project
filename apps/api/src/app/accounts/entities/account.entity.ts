@@ -76,7 +76,7 @@ export class AccountEntity extends BaseEntity implements AccountInterface {
   @ApiPropertyOptional()
   metadata?: object;
 
-  @ManyToOne(() => ProviderEntity, { nullable: true, onDelete: 'SET NULL' })
+  @ManyToOne(() => ProviderEntity, { nullable: true, onDelete: 'CASCADE' })
   @JoinColumn()
   @ApiProperty()
   provider?: ProviderEntity;

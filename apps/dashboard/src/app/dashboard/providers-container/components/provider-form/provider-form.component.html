@@ -1,0 +1,11 @@
+<nz-spin [nzSpinning]="isLoading$ | async">
+  <form nz-form [formGroup]="formGroup" [nzLayout]="'vertical'">
+    <nz-form-item>
+      <nz-form-label>Name</nz-form-label>
+
+      <nz-form-control>
+        <input nz-input formControlName="name" type="text" />
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-spin>

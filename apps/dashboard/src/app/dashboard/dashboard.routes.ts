@@ -14,6 +14,11 @@ export const dashboardRoutes: Route[] = [
         redirectTo: RoutePathEnum.Records,
       },
       {
+        path: RoutePathEnum.Providers,
+        loadComponent: () =>
+          import('./providers-container/providers-container.component').then((mod) => mod.ProvidersContainerComponent),
+      },
+      {
         path: RoutePathEnum.Accounts,
         loadComponent: () =>
           import('./accounts-container/accounts-container.component').then((mod) => mod.AccountsContainerComponent),
