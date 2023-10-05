@@ -7,6 +7,7 @@ import { BehaviorSubject, finalize } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -14,6 +15,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { CategoryModel } from '../../../../api/categories/models/category.model';
+import { CATEGORY_ICON_OPTIONS } from '../../../../shared/constants/category-icon-options.const';
+import { COLOR_OPTIONS } from '../../../../shared/constants/color-options.const';
 import { CreateFormGroupFromData } from '../../../../shared/types/create-form-group-from-data.type';
 import { CategoriesFacadeService } from '../../services/categories-facade.service';
 
@@ -41,6 +44,7 @@ export type CategoryFormGroup = CreateFormGroupFromData<CategoryFormData>;
     NzInputNumberModule,
     NzModalModule,
     NzSpinModule,
+    NzIconModule,
   ],
   templateUrl: './category-form.component.html',
   styleUrls: ['./category-form.component.less'],
@@ -55,6 +59,9 @@ export class CategoryFormComponent implements OnInit {
   isLoading$ = new BehaviorSubject<boolean>(false);
 
   categoriesOptions$ = new BehaviorSubject<{ label: string; value: CategoryModel }[]>([]);
+
+  readonly COLOR_OPTIONS = COLOR_OPTIONS;
+  readonly CATEGORY_ICON_OPTIONS = CATEGORY_ICON_OPTIONS;
 
   constructor(private categoriesFacadeService: CategoriesFacadeService) {}
 
@@ -77,6 +84,22 @@ export class CategoryFormComponent implements OnInit {
       }),
     });
 
+    this.formGroup.controls['parentCategory'].valueChanges
+      .pipe(untilDestroyed(this))
+      .subscribe((parentCategory: CategoryModel) => {
+        if (parentCategory) {
+          this.formGroup.patchValue({
+            color: parentCategory.color,
+          });
+          this.formGroup.controls['color'].disable();
+        } else {
+          this.formGroup.patchValue({
+            color: '',
+          });
+          this.formGroup.controls['color'].enable();
+        }
+      });
+
     this.loadParentCategories();
   }
 
@@ -91,16 +114,22 @@ export class CategoryFormComponent implements OnInit {
       )
       .subscribe((categories) =>
         this.categoriesOptions$.next(
-          categories.map((category) => ({
-            label: category.name,
-            value: category,
-          }))
+          categories
+            .filter(
+              (category) =>
+                !this.category.id ||
+                (category.id !== this.category.id && category.parentCategory?.id !== this.category.id)
+            )
+            .map((category) => ({
+              label: category.name,
+              value: category,
+            }))
         )
       );
   }
 
   getUpdatedModel(): CategoryModel {
-    const { name, color, icon, parentCategory } = this.formGroup.value;
+    const { name, color, icon, parentCategory } = this.formGroup.getRawValue();
 
     const category = instanceToInstance(this.category, { ignoreDecorators: true })!;
     category.name = name;

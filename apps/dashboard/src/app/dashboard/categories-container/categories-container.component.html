@@ -1,5 +1,30 @@
+<fpd-page-header [title]="'Categories'" [actions]="actions"></fpd-page-header>
+
 <div class="fpd-card">
-  <button nz-button (click)="onAddCategory()">Add new category</button>
+  <!--
+  <div class="tree">
+    <ng-container *ngFor="let node of roots">
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node }"></ng-container>
+    </ng-container>
+    <ng-template #nodeTemplate let-node>
+      <div class="node" [style.border-color]="node.current.color">
+        <div class="node-current">
+          <div class="node-icon" [style.background-color]="node.current.color">
+            <span nz-icon [nzType]="node.current.icon"></span>
+          </div>
+
+          <p>{{ node.current.name }}</p>
+        </div>
+
+        <div *ngIf="node.children.length" class="node-children">
+          <ng-container *ngFor="let childNode of node.children">
+            <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: childNode }"></ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  -->
 
   <nz-table
     #table
@@ -13,31 +38,36 @@
   >
     <thead>
     <tr>
+      <th></th>
       <th>Name</th>
       <th>Parent</th>
-      <th>Date</th>
-      <th>Updated</th>
+      <th>Created</th>
       <th>Actions</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let category of table.data">
+      <td style="width: 0;">
+        <div class="icon" [style.background-color]="category.color">
+          <span nz-icon [nzType]="category.icon"></span>
+        </div>
+      </td>
       <td>{{ category.name }}</td>
-      <td>{{ category.parentCategory?.name }}</td>
+      <td>{{ category.parentCategory?.name ?? '-' }}</td>
       <td>{{ category.createdAt | date }}</td>
-      <td>{{ category.updatedAt | date }}</td>
       <td>
-        <button nz-button (click)="onEditCategory(category)">edit</button>
+        <button nz-button nzSize="small" (click)="onEditCategory(category)">Edit</button>
 
         <button
           nz-button
+          nzSize="small"
           nz-popconfirm
           nzPopconfirmTitle="Are you sure?"
           nzOkText="ok"
           nzCancelText="cancel"
           (nzOnConfirm)="onDeleteCategory(category)"
         >
-          delete
+          Delete
         </button>
       </td>
     </tr>
