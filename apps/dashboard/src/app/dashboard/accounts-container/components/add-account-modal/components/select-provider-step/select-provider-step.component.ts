@@ -23,9 +23,6 @@ export class SelectProviderStepComponent {
   @Output()
   selectProvider = new EventEmitter<ProviderModel>();
 
-  // @Output()
-  // selectProviderStep = new EventEmitter<void>();
-
   @Output()
   selectProviderAccountsStep = new EventEmitter<void>();
 

@@ -16,7 +16,7 @@ import { toPaginationQueryParams } from '../../../core/pagination/utils/paginati
 import { AccountModel } from '../../accounts/models/account.model';
 import { ProviderAccountsModel } from '../models/provider-accounts.model';
 import { ProviderModel } from '../models/provider.model';
-import { InsertProviderType, SaveProviderAccountsType } from '../types/api-providers.types';
+import { InsertProviderType, SaveProviderAccountsType, UpdateProviderType } from '../types/api-providers.types';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +58,20 @@ export class ApiProvidersTransformService {
 
   fromSaveProviderAccounts(accounts: AccountInterface[]): AccountModel[] {
     return accounts.map((account) => this.toAccountModel(account));
+  }
+
+  fromDeleteProvider(response: ProviderInterface): ProviderModel {
+    return this.toProviderModel(response);
+  }
+
+  toUpdateProvider({ name }: ProviderModel): UpdateProviderType {
+    return {
+      name,
+    };
+  }
+
+  fromUpdateProvider(response: ProviderInterface): ProviderModel {
+    return this.toProviderModel(response);
   }
 
   private toProviderModel(plain: ProviderInterface): ProviderModel {

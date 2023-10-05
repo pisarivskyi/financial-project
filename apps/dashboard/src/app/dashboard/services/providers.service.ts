@@ -28,6 +28,14 @@ export class ProvidersService {
     return this.apiProvidersService.insertProvider$(provider);
   }
 
+  updateProvider$(provider: ProviderModel): Observable<ProviderModel> {
+    return this.apiProvidersService.updateProvider$(provider);
+  }
+
+  deleteProvider$(id: string): Observable<ProviderModel> {
+    return this.apiProvidersService.deleteProvider$(id);
+  }
+
   saveProviderAccounts$(providerId: string, accounts: ProviderAccountDataInterface[]): Observable<AccountModel[]> {
     return this.apiProvidersService.saveProviderAccounts$(providerId, accounts);
   }

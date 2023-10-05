@@ -128,6 +128,7 @@ export class AccountsContainerComponent implements OnInit {
         }),
         finalize(() => {
           this.accountSynchronizationStatuses[account.id] = false;
+          this.accountsFacadeService.loadAccounts();
           this.cdr.markForCheck();
         })
       )

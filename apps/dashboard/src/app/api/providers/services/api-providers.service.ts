@@ -24,6 +24,8 @@ import { ApiProvidersTransformService } from './api-providers-transform.service'
 export class ApiProvidersService {
   readonly requests = {
     providers: '/providers',
+    updateProvider: (id: string) => `/providers/${id}`,
+    deleteProvider: (id: string) => `/providers/${id}`,
     providerAccounts: (id: string) => `/providers/${id}/get-accounts`,
     providerSaveAccounts: (id: string) => `/providers/${id}/save-accounts`,
   };
@@ -60,6 +62,25 @@ export class ApiProvidersService {
         payload: this.apiProvidersTransformService.toInsertProvider(provider),
       })
       .pipe(map((response) => this.apiProvidersTransformService.fromInsertProvider(response)));
+  }
+
+  updateProvider$(provider: ProviderModel): Observable<ProviderModel> {
+    return this.communicationService
+      .makeRequest<ProviderInterface>({
+        method: HttpMethodEnum.Patch,
+        path: this.requests.updateProvider(provider.id),
+        payload: this.apiProvidersTransformService.toUpdateProvider(provider),
+      })
+      .pipe(map((response) => this.apiProvidersTransformService.fromUpdateProvider(response)));
+  }
+
+  deleteProvider$(id: string): Observable<ProviderModel> {
+    return this.communicationService
+      .makeRequest<ProviderInterface>({
+        method: HttpMethodEnum.Delete,
+        path: this.requests.deleteProvider(id),
+      })
+      .pipe(map((response) => this.apiProvidersTransformService.fromDeleteProvider(response)));
   }
 
   saveProviderAccounts$(providerId: string, accounts: ProviderAccountDataInterface[]): Observable<AccountModel[]> {
