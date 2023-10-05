@@ -47,7 +47,7 @@
       "unitTestRunner": "jest"
     },
     "@nrwl/angular:component": {
-      "style": "scss",
+      "style": "less",
       "changeDetection": "OnPush",
       "skipTests": true,
       "standalone": true
@@ -57,7 +57,7 @@
         "flat": true
       },
       "component": {
-        "style": "scss",
+        "style": "less",
         "changeDetection": "OnPush",
         "skipTests": true,
         "standalone": true

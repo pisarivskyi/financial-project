@@ -5,21 +5,38 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { take } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
 import { CategoryModel } from '../../api/categories/models/category.model';
+import { PageHeaderActionInterface } from '../../shared/components/page-header/interfaces/page-header-action.interface';
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { AddCategoryModalComponent } from './components/add-category-modal/add-category-modal.component';
 import { EditCategoryModalComponent } from './components/edit-category-modal/edit-category-modal.component';
 import { CategoriesFacadeService } from './services/categories-facade.service';
+
+export interface CategoryNodeInterface {
+  current: CategoryModel;
+  children: CategoryNodeInterface[];
+}
 
 @UntilDestroy()
 @Component({
   selector: 'fpd-categories-container',
   standalone: true,
-  imports: [CommonModule, NzButtonModule, NzPopconfirmModule, NzTableModule, NzModalModule, NzMessageModule],
+  imports: [
+    CommonModule,
+    NzButtonModule,
+    NzPopconfirmModule,
+    NzTableModule,
+    NzModalModule,
+    NzMessageModule,
+    NzIconModule,
+    PageHeaderComponent,
+  ],
   templateUrl: './categories-container.component.html',
   styleUrls: ['./categories-container.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +47,16 @@ export class CategoriesContainerComponent implements OnInit {
   isLoading$ = this.categoriesFacadeService.isLoading$;
 
   pagination$ = this.categoriesFacadeService.pagination$;
+
+  actions: PageHeaderActionInterface[] = [
+    {
+      label: 'Add category',
+      type: 'primary',
+      action: () => {
+        this.onAddCategory();
+      },
+    },
+  ];
 
   constructor(
     private categoriesFacadeService: CategoriesFacadeService,
@@ -52,6 +79,40 @@ export class CategoriesContainerComponent implements OnInit {
         this.categoriesFacadeService.loadCategories();
       }
     });
+  }
+
+  getCategoriesTree(categories: CategoryModel[]): CategoryNodeInterface[] {
+    const map = new Map<string, CategoryNodeInterface>();
+    const roots: CategoryNodeInterface[] = [];
+
+    for (const category of categories) {
+      map.set(category.id, {
+        current: category,
+        children: [],
+      });
+    }
+
+    for (const category of categories) {
+      const node = map.get(category.id);
+
+      if (category.parentCategory) {
+        const parent = map.get(category.parentCategory.id);
+
+        if (parent && node) {
+          parent.children.push(node);
+        }
+      }
+
+      if (!category.parentCategory) {
+        const node = map.get(category.id);
+
+        if (node) {
+          roots.push(node);
+        }
+      }
+    }
+
+    return roots;
   }
 
   onAddCategory(): void {
