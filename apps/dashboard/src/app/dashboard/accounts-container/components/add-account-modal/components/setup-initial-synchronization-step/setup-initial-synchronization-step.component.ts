@@ -44,9 +44,11 @@ export class SetupInitialSynchronizationStepComponent implements OnInit {
     )
       .pipe(
         switchMap((jobs) => {
-          return forkJoin(jobs.map((job) => this.accountsFacadeService.getSynchronizationJob$(job.id))).pipe(
+          return forkJoin(
+            jobs.map((jobNode) => this.accountsFacadeService.getSynchronizationJob$(jobNode.job.id!))
+          ).pipe(
             map((jobs) => {
-              if (!jobs.every((job) => job.finishedOn)) {
+              if (!jobs.every((jobNode) => jobNode.job.finishedOn)) {
                 throw new Error();
               }
 

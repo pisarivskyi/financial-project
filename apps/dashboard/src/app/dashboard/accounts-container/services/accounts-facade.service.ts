@@ -7,12 +7,13 @@ import { Observable, map, switchMap, take, tap } from 'rxjs';
 import { ProviderAccountDataInterface } from '@financial-project/common';
 
 import { AccountModel } from '../../../api/accounts/models/account.model';
-import { SynchronizationJobModel } from '../../../api/accounts/models/synchronization-job.model';
+import { SynchronizationJobModel } from '../../../api/jobs/models/synchronization-job.model';
 import { ProviderAccountsModel } from '../../../api/providers/models/provider-accounts.model';
 import { ProviderModel } from '../../../api/providers/models/provider.model';
 import { PaginatedResponse } from '../../../core/pagination/classes/paginated-response.class';
 import { updatePaginationData, withPaginationData } from '../../../core/pagination/utils/pagination-utils';
 import { AccountsService } from '../../services/accounts.service';
+import { JobsService } from '../../services/jobs.service';
 import { ProvidersService } from '../../services/providers.service';
 
 @Injectable({
@@ -33,7 +34,11 @@ export class AccountsFacadeService {
 
   pagination$ = this.store.pipe(map((s) => s.pagination));
 
-  constructor(private accountsService: AccountsService, private providersService: ProvidersService) {}
+  constructor(
+    private accountsService: AccountsService,
+    private providersService: ProvidersService,
+    private jobsService: JobsService
+  ) {}
 
   loadAccounts(): void {
     this.store
@@ -86,10 +91,10 @@ export class AccountsFacadeService {
   }
 
   triggerSynchronizationForAccount$(id: string): Observable<SynchronizationJobModel> {
-    return this.accountsService.triggerSynchronizationForAccount$(id);
+    return this.jobsService.triggerSynchronizationForAccount$(id, new Date(), new Date());
   }
 
   getSynchronizationJob$(id: string): Observable<SynchronizationJobModel> {
-    return this.accountsService.getSynchronizationJob$(id);
+    return this.jobsService.getSynchronizationJob$(id);
   }
 }

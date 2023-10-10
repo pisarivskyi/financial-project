@@ -112,14 +112,14 @@ export class AccountsContainerComponent implements OnInit {
     this.accountsFacadeService
       .triggerSynchronizationForAccount$(account.id)
       .pipe(
-        switchMap((job) => {
-          return this.accountsFacadeService.getSynchronizationJob$(job.id).pipe(
-            map((job) => {
-              if (!job.finishedOn) {
+        switchMap((jobNode) => {
+          return this.accountsFacadeService.getSynchronizationJob$(jobNode.job.id!).pipe(
+            map((jobNode) => {
+              if (!jobNode.job.finishedOn) {
                 throw new Error();
               }
 
-              return job;
+              return jobNode;
             }),
             retry({
               delay: () => timer(5000),
