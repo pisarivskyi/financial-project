@@ -1,8 +1,7 @@
-import { Process, Processor } from '@nestjs/bull';
+import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Job } from 'bull';
-import { plainToClassFromExist } from 'class-transformer';
+import { Job } from 'bullmq';
 import { DateTime } from 'luxon';
 import { firstValueFrom, map } from 'rxjs';
 import { In, Repository } from 'typeorm';
@@ -10,77 +9,44 @@ import { In, Repository } from 'typeorm';
 import { RecordCreationTypeEnum, RecordTypeEnum } from '@financial-project/common';
 import { ApiMonobank, ApiMonobankProviderService } from '@financial-project/providers';
 
+import { AccountEntity } from '../../accounts/entities/account.entity';
 import { CategoriesService } from '../../categories/categories.service';
 import { RecordEntity } from '../../records/entities/record.entity';
-import { ACCOUNT_JOB_QUEUE_NAME } from '../constants/account-job-queue-name.const';
-import { AccountEntity } from '../entities/account.entity';
-import { AccountJobTypeEnum } from '../enums/account-job-type.enum';
-import { AccountJobPayloadInterface } from '../interfaces/account-job-payload.interface';
+import { RECORDS_SYNC_QUEUE_NAME } from '../constants/records-sync-queue-name.const';
+import { JobPayloadInterface } from '../interfaces/job-payload.interface';
 
-@Processor(ACCOUNT_JOB_QUEUE_NAME)
-export class AccountSynchronizationProcessorService {
-  private readonly logger = new Logger(AccountSynchronizationProcessorService.name);
+@Processor(RECORDS_SYNC_QUEUE_NAME)
+export class RecordsSynchronizationProcessorService extends WorkerHost {
+  private readonly logger = new Logger(RecordsSynchronizationProcessorService.name);
 
   constructor(
     @InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>,
     @InjectRepository(RecordEntity) private recordsRepository: Repository<RecordEntity>,
     private categoriesService: CategoriesService,
     private apiMonobankProviderService: ApiMonobankProviderService
-  ) {}
+  ) {
+    super();
+  }
 
-  @Process(AccountJobTypeEnum.RegularSync)
-  async regularSyncProcess(job: Job<AccountJobPayloadInterface>): Promise<void> {
+  async process(job: Job<JobPayloadInterface>): Promise<void> {
     this.logger.debug(`received job for account '${job.data.accountId}'`);
+    this.logger.debug(`records will be synced in the period: ${job.data.fromDate} - ${job.data.toDate}`);
 
     try {
-      const account = await this.accountsRepository.findOne({
-        where: {
-          id: job.data.accountId,
-        },
-        relations: {
-          provider: true,
-        },
-      });
+      const account = await this.getAccount(job.data.accountId);
 
       if (!account) {
         throw new Error(`No account with such id ('${job.data.accountId}') was found`);
       }
 
-      // TODO: assign proper category
-      // const categories = await this.categoriesService.findAll({
-      //
-      // });
-
-      // updating account itself
-      const monoAccount = await firstValueFrom(
-        this.apiMonobankProviderService
-          .getClientInfo$(account.provider.data.token)
-          .pipe(map((r) => r.data.accounts.find((monoAccount) => monoAccount.id === account.bankAccountId)))
+      // load records from provider account
+      const records = await this.getRecordsFromMonobankAccount(
+        account,
+        DateTime.fromISO(job.data.fromDate),
+        DateTime.fromISO(job.data.toDate)
       );
 
-      const updatedAccount = plainToClassFromExist(account, {
-        balance: monoAccount.balance,
-        creditLimit: monoAccount.creditLimit,
-      });
-
-      await this.accountsRepository.update(updatedAccount.id, updatedAccount);
-
-      // synchronizing records
-      const statements = await firstValueFrom(
-        this.apiMonobankProviderService
-          .getStatement$(
-            account.provider.data.token,
-            account.bankAccountId,
-            DateTime.now().minus({ days: 31 }),
-            DateTime.now()
-          )
-          .pipe(map((r) => r.data))
-      );
-
-      const records = statements.map((statement) => {
-        return this.toRecordEntity(statement, account);
-      });
-
+      // filter already existing records
       const recordBankIds = records.map((record) => record.bankRecordId);
 
       const existingRecords = await this.recordsRepository.find({
@@ -90,14 +56,11 @@ export class AccountSynchronizationProcessorService {
       });
       const existingRecordBankIds = existingRecords.map((record) => record.bankRecordId);
 
+      // find records to save
       const recordsToSave = records.filter((record) => !existingRecordBankIds.includes(record.bankRecordId));
 
       if (recordsToSave.length) {
         const savedRecords = await this.recordsRepository.save(recordsToSave);
-
-        account.lastSyncDate = new Date();
-
-        await this.accountsRepository.update(account.id, account);
 
         this.logger.debug(`saved ${savedRecords.length} records for account '${job.data.accountId}'`);
       } else {
@@ -108,6 +71,29 @@ export class AccountSynchronizationProcessorService {
 
       throw error;
     }
+  }
+
+  private async getAccount(accountId: string): Promise<AccountEntity> {
+    return this.accountsRepository.findOne({
+      where: {
+        id: accountId,
+      },
+      relations: {
+        provider: true,
+      },
+    });
+  }
+
+  private async getRecordsFromMonobankAccount(account: AccountEntity, fromDate: DateTime, toDate: DateTime) {
+    const statements = await firstValueFrom(
+      this.apiMonobankProviderService
+        .getStatement$(account.provider.data.token, account.bankAccountId, fromDate, toDate)
+        .pipe(map((r) => r.data))
+    );
+
+    return statements.map((statement) => {
+      return this.toRecordEntity(statement, account);
+    });
   }
 
   private toRecordEntity(statement: ApiMonobank.Statement.StatementInterface, account: AccountEntity): RecordEntity {

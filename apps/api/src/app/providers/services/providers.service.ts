@@ -8,7 +8,7 @@ import { AccountTypeEnum, ProviderTypeEnum, UserInterface } from '@financial-pro
 import { ApiMonobankProviderService } from '@financial-project/providers';
 
 import { AccountEntity } from '../../accounts/entities/account.entity';
-import { AccountsService } from '../../accounts/services/accounts.service';
+import { AccountsService } from '../../accounts/accounts.service';
 import { PageOptionsDto } from '../../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../../core/pagination/dtos/page.dto';
 import { paginate } from '../../core/pagination/utils/paginate.utils';

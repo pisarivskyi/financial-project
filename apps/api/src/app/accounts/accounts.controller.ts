@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Job } from 'bull';
 
 import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
@@ -11,8 +10,7 @@ import { PageDto } from '../core/pagination/dtos/page.dto';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { AccountEntity } from './entities/account.entity';
-import { AccountJobPayloadInterface } from './interfaces/account-job-payload.interface';
-import { AccountsService } from './services/accounts.service';
+import { AccountsService } from './accounts.service';
 
 @Controller(ApiPathEnum.Accounts)
 @ApiTags('accounts')
@@ -52,17 +50,5 @@ export class AccountsController {
   @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string, @CurrentUser() user: UserInterface): Promise<AccountEntity> {
     return this.accountsService.remove(id, user);
-  }
-
-  @Get(':id/sync')
-  @UseGuards(JwtAuthGuard)
-  sync(@Param('id') id: string, @CurrentUser() user: UserInterface): Promise<Job<AccountJobPayloadInterface>> {
-    return this.accountsService.sync(id, user);
-  }
-
-  @Get('jobs/:id')
-  @UseGuards(JwtAuthGuard)
-  getJobById(@Param('id') id: string): Promise<Job<AccountJobPayloadInterface>> {
-    return this.accountsService.getJobById(id);
   }
 }

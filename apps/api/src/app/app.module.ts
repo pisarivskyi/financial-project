@@ -1,4 +1,4 @@
-import { BullModule } from '@nestjs/bull';
+import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -8,6 +8,7 @@ import { AccountsModule } from './accounts/accounts.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { BudgetsModule } from './budgets/budgets.module';
 import { CategoriesModule } from './categories/categories.module';
+import { JobsModule } from './jobs/jobs.module';
 import { ProvidersModule } from './providers/providers.module';
 import { RecordsModule } from './records/records.module';
 import { SettingsModule } from './settings/settings.module';
@@ -33,7 +34,7 @@ import { SettingsModule } from './settings/settings.module';
     BullModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        redis: {
+        connection: {
           host: configService.get('REDIS_HOST'),
           port: configService.get('REDIS_PORT'),
         },
@@ -48,6 +49,7 @@ import { SettingsModule } from './settings/settings.module';
     RecordsModule,
     SettingsModule,
     ProvidersModule,
+    JobsModule,
   ],
 })
 export class AppModule {}
