@@ -12,35 +12,41 @@
     (nzPageIndexChange)="onPageIndexChanged($event)"
   >
     <thead>
-    <tr>
-      <th>Name</th>
-      <th>Updated</th>
-      <th>Actions</th>
-    </tr>
+      <tr>
+        <th>Name</th>
+        <th>Updated</th>
+        <th>Actions</th>
+      </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let provider of table.data">
-      <td>
-        <img class="bank-logo" [width]="25" [height]="25" [ngSrc]="'assets/bank logos/monobank-small-ukraine.svg'" alt="">
-        <span>{{ provider.name }}</span>
-      </td>
-      <td>{{ provider.createdAt | date }}</td>
-      <td>
-        <button nz-button nzSize="small" (click)="onEditProvider(provider)">Edit</button>
+      <tr *ngFor="let provider of table.data">
+        <td>
+          <img
+            class="bank-logo"
+            [width]="25"
+            [height]="25"
+            [ngSrc]="'assets/bank logos/monobank-small-ukraine.svg'"
+            alt=""
+          />
+          <span>{{ provider.name }}</span>
+        </td>
+        <td>{{ provider.createdAt | date }}</td>
+        <td>
+          <button nz-button nzSize="small" (click)="onEditProvider(provider)">Edit</button>
 
-        <button
-          nz-button
-          nzSize="small"
-          nz-popconfirm
-          nzPopconfirmTitle="Are you sure?"
-          nzOkText="ok"
-          nzCancelText="cancel"
-          (nzOnConfirm)="onDeleteProvider(provider)"
-        >
-          Delete
-        </button>
-      </td>
-    </tr>
+          <button
+            nz-button
+            nzSize="small"
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure?"
+            nzOkText="ok"
+            nzCancelText="cancel"
+            (nzOnConfirm)="onDeleteProvider(provider)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
     </tbody>
   </nz-table>
 </div>

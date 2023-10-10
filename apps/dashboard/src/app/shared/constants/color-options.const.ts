@@ -27,7 +27,7 @@ const colors = [
   '#857239',
 ];
 
-export const COLOR_OPTIONS: { label: string; value: string }[] = colors.map(color => ({
+export const COLOR_OPTIONS: { label: string; value: string }[] = colors.map((color) => ({
   label: color,
   value: color,
 }));

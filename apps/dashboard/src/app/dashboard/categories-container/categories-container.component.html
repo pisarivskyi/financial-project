@@ -37,40 +37,40 @@
     (nzPageIndexChange)="onPageIndexChanged($event)"
   >
     <thead>
-    <tr>
-      <th></th>
-      <th>Name</th>
-      <th>Parent</th>
-      <th>Created</th>
-      <th>Actions</th>
-    </tr>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Parent</th>
+        <th>Created</th>
+        <th>Actions</th>
+      </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let category of table.data">
-      <td style="width: 0;">
-        <div class="icon" [style.background-color]="category.color">
-          <span nz-icon [nzType]="category.icon"></span>
-        </div>
-      </td>
-      <td>{{ category.name }}</td>
-      <td>{{ category.parentCategory?.name ?? '-' }}</td>
-      <td>{{ category.createdAt | date }}</td>
-      <td>
-        <button nz-button nzSize="small" (click)="onEditCategory(category)">Edit</button>
+      <tr *ngFor="let category of table.data">
+        <td style="width: 0">
+          <div class="icon" [style.background-color]="category.color">
+            <span nz-icon [nzType]="category.icon"></span>
+          </div>
+        </td>
+        <td>{{ category.name }}</td>
+        <td>{{ category.parentCategory?.name ?? '-' }}</td>
+        <td>{{ category.createdAt | date }}</td>
+        <td>
+          <button nz-button nzSize="small" (click)="onEditCategory(category)">Edit</button>
 
-        <button
-          nz-button
-          nzSize="small"
-          nz-popconfirm
-          nzPopconfirmTitle="Are you sure?"
-          nzOkText="ok"
-          nzCancelText="cancel"
-          (nzOnConfirm)="onDeleteCategory(category)"
-        >
-          Delete
-        </button>
-      </td>
-    </tr>
+          <button
+            nz-button
+            nzSize="small"
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure?"
+            nzOkText="ok"
+            nzCancelText="cancel"
+            (nzOnConfirm)="onDeleteCategory(category)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
     </tbody>
   </nz-table>
 </div>

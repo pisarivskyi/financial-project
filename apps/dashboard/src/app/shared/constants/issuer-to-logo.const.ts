@@ -6,4 +6,4 @@ export const ISSUER_TO_LOGO = {
   [IssuerEnum.MasterCard]: '/assets/issuer logos/mastercard.svg',
   [IssuerEnum.AmericanExpress]: '/assets/issuer logos/amex.svg',
   [IssuerEnum.Unknown]: '/assets/issuer logos/unknown.svg',
-}
+};

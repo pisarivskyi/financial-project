@@ -1,6 +1,5 @@
-import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { instanceToPlain } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -14,8 +13,4 @@ export abstract class BaseEntity {
   @UpdateDateColumn()
   @ApiProperty()
   updatedAt: Date;
-
-  toJSON() {
-    return instanceToPlain(this);
-  }
 }

@@ -10,8 +10,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
-import { CreateFormGroupFromData } from '../../../../shared/types/create-form-group-from-data.type';
 import { ProviderModel } from '../../../../api/providers/models/provider.model';
+import { CreateFormGroupFromData } from '../../../../shared/types/create-form-group-from-data.type';
 
 export interface ProviderFormData {
   name: string;
