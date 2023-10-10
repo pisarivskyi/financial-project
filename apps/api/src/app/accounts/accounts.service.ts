@@ -1,30 +1,20 @@
-import { InjectQueue } from '@nestjs/bull';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Job, Queue } from 'bull';
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { In, Repository } from 'typeorm';
 
 import { UserInterface } from '@financial-project/common';
 
-import { PageOptionsDto } from '../../core/pagination/dtos/page-options.dto';
-import { PageDto } from '../../core/pagination/dtos/page.dto';
-import { paginate } from '../../core/pagination/utils/paginate.utils';
-import { RecordEntity } from '../../records/entities/record.entity';
-import { ACCOUNT_JOB_QUEUE_NAME } from '../constants/account-job-queue-name.const';
-import { CreateAccountDto } from '../dto/create-account.dto';
-import { UpdateAccountDto } from '../dto/update-account.dto';
-import { AccountEntity } from '../entities/account.entity';
-import { AccountJobTypeEnum } from '../enums/account-job-type.enum';
-import { AccountJobPayloadInterface } from '../interfaces/account-job-payload.interface';
+import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
+import { PageDto } from '../core/pagination/dtos/page.dto';
+import { paginate } from '../core/pagination/utils/paginate.utils';
+import { CreateAccountDto } from './dto/create-account.dto';
+import { UpdateAccountDto } from './dto/update-account.dto';
+import { AccountEntity } from './entities/account.entity';
 
 @Injectable()
 export class AccountsService {
-  constructor(
-    @InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>,
-    @InjectRepository(RecordEntity) private recordsRepository: Repository<RecordEntity>,
-    @InjectQueue(ACCOUNT_JOB_QUEUE_NAME) private accountSyncQueue: Queue
-  ) {}
+  constructor(@InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>) {}
 
   saveAll(accounts: AccountEntity[]): Promise<AccountEntity[]> {
     return this.accountsRepository.save(accounts);
@@ -111,39 +101,5 @@ export class AccountsService {
     }
 
     return this.accountsRepository.remove(targetAccount);
-  }
-
-  async sync(id: string, user: UserInterface): Promise<Job<AccountJobPayloadInterface>> {
-    try {
-      const account = await this.accountsRepository.findOne({
-        where: {
-          id,
-          createdBy: user.sub,
-        },
-        relations: {
-          provider: true,
-        },
-      });
-
-      if (!account || !account.provider) {
-        throw new Error();
-      }
-
-      return await this.accountSyncQueue.add(AccountJobTypeEnum.RegularSync, {
-        accountId: account.id,
-      });
-    } catch {
-      throw new BadRequestException();
-    }
-  }
-
-  async getJobById(id: string): Promise<Job<any>> {
-    const job = await this.accountSyncQueue.getJob(id);
-
-    if (!job) {
-      throw new NotFoundException('Job not found');
-    }
-
-    return job;
   }
 }

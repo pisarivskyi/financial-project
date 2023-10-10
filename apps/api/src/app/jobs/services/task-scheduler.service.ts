@@ -1,23 +1,21 @@
-import { InjectQueue } from '@nestjs/bull';
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Queue } from 'bull';
+import { DateTime } from 'luxon';
 import { IsNull, Not, Repository } from 'typeorm';
 
 import { ProviderTypeEnum } from '@financial-project/common';
 
-import { ACCOUNT_JOB_QUEUE_NAME } from '../constants/account-job-queue-name.const';
-import { AccountEntity } from '../entities/account.entity';
-import { AccountJobTypeEnum } from '../enums/account-job-type.enum';
+import { AccountEntity } from '../../accounts/entities/account.entity';
+import { JobsService } from './jobs.service';
 
 @Injectable()
-export class AccountTaskSchedulerService {
-  private readonly logger = new Logger(AccountTaskSchedulerService.name);
+export class TaskSchedulerService {
+  private readonly logger = new Logger(TaskSchedulerService.name);
 
   constructor(
-    @InjectQueue(ACCOUNT_JOB_QUEUE_NAME) private accountSyncQueue: Queue,
-    @InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>
+    @InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>,
+    private jobsService: JobsService
   ) {}
 
   @Cron('5 * * * * *', { disabled: true })
@@ -33,9 +31,16 @@ export class AccountTaskSchedulerService {
     });
 
     for (const account of accounts) {
-      await this.accountSyncQueue.add(AccountJobTypeEnum.RegularSync, {
-        accountId: account.id,
-      });
+      await this.jobsService.create(
+        {
+          accountId: account.id,
+          fromDate: DateTime.now().minus({ days: 31 }).toJSDate(),
+          toDate: DateTime.now().toJSDate(),
+        },
+        {
+          sub: account.createdBy,
+        }
+      );
 
       this.logger.debug(`sync job is scheduled for '${account.id}'`);
     }

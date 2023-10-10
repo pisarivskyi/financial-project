@@ -8,4 +8,5 @@ export enum ApiPathEnum {
   Categories = 'categories',
   Records = 'records',
   Settings = 'settings',
+  Jobs = 'jobs',
 }
