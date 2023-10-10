@@ -1,5 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
+import { OmitType } from '@nestjs/swagger';
 
-import { CreateSettingDto } from './create-setting.dto';
+import { SettingsEntity } from '../entities/settings.entity';
 
-export class UpdateSettingDto extends PartialType(CreateSettingDto) {}
+export class UpdateSettingDto extends PartialType(
+  OmitType(SettingsEntity, ['id', 'createdAt', 'updatedAt', 'createdBy'])
+) {}
