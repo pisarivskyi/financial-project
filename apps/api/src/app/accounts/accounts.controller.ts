@@ -7,10 +7,10 @@ import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
+import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { AccountEntity } from './entities/account.entity';
-import { AccountsService } from './accounts.service';
 
 @Controller(ApiPathEnum.Accounts)
 @ApiTags('accounts')
