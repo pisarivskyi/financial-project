@@ -2,7 +2,12 @@
   "name": "@financial-project/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "typeorm": "ts-node --project ./apps/api/tsconfig.app.json ./node_modules/typeorm/cli.js",
+    "migration:create": "npm run typeorm migration:create ./migrations/qweqwe",
+    "migration:run": "npm run typeorm -- migration:run -d ./apps/api/src/app/configs/typeorm.config.ts",
+    "migration:generate": "npm run typeorm -- -d ./apps/api/src/app/configs/typeorm.config.ts migration:generate ./migrations/$npm_config_name"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "16.1.7",
@@ -91,7 +96,7 @@
     "nx": "16.5.5",
     "prettier": "^2.6.2",
     "ts-jest": "^29.1.0",
-    "ts-node": "10.9.1",
+    "ts-node": "^10.9.1",
     "typescript": "5.1.6"
   }
 }
