@@ -26,4 +26,9 @@
       <span nz-icon [nzType]="IconEnum.PriceChange"></span><span>Budgets</span>
     </a>
   </li>
+  <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Settings]">
+      <span nz-icon [nzType]="IconEnum.Settings"></span><span>Settings</span>
+    </a>
+  </li>
 </ul>
