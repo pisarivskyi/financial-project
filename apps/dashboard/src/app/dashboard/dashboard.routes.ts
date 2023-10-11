@@ -35,6 +35,11 @@ export const dashboardRoutes: Route[] = [
             (mod) => mod.CategoriesContainerComponent
           ),
       },
+      {
+        path: RoutePathEnum.Settings,
+        loadComponent: () =>
+          import('./settings-container/settings-container.component').then((mod) => mod.SettingsContainerComponent),
+      },
     ],
   },
 ];
