@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
-import { UserInterface } from '@financial-project/common';
+import { PeriodEnum, UserInterface } from '@financial-project/common';
 
 import { CategoriesService } from '../categories/categories.service';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
@@ -84,6 +84,11 @@ export class BudgetsService {
     }
 
     const updatedBudget = plainToClassFromExist(targetBudget, updateBudgetDto, { excludeExtraneousValues: true });
+
+    if (updateBudgetDto.period === PeriodEnum.OneTime) {
+      updatedBudget.fromDate = updateBudgetDto.fromDate;
+      updatedBudget.toDate = updateBudgetDto.toDate;
+    }
 
     if (updateBudgetDto.categoryIds?.length) {
       try {

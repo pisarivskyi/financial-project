@@ -36,6 +36,11 @@ export const dashboardRoutes: Route[] = [
           ),
       },
       {
+        path: RoutePathEnum.Budgets,
+        loadComponent: () =>
+          import('./budgets-container/budgets-container.component').then((mod) => mod.BudgetsContainerComponent),
+      },
+      {
         path: RoutePathEnum.Settings,
         loadComponent: () =>
           import('./settings-container/settings-container.component').then((mod) => mod.SettingsContainerComponent),
