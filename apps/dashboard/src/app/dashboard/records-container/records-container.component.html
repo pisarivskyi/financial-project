@@ -30,10 +30,11 @@
           <span
             [class.income]="record.type === RecordTypeEnum.Income"
             [class.outcome]="record.type === RecordTypeEnum.Outcome"
-            >{{ record.amount | amountFormat | currencyFormat : record.currencyCode }}</span>
+            >{{ record.amount | amountFormat | currencyFormat : record.currencyCode }}</span
+          >
         </td>
         <td>
-          <span *ngIf="record.bankCreatedAt">{{ record.bankCreatedAt | date:'medium' }}</span>
+          <span *ngIf="record.bankCreatedAt">{{ record.bankCreatedAt | date : 'medium' }}</span>
         </td>
         <td>
           <button nz-button nzSize="small" (click)="onEditRecord(record)">Edit</button>

@@ -6,7 +6,17 @@
     "typeorm": "ts-node --project ./apps/api/tsconfig.app.json ./node_modules/typeorm/cli.js",
     "migration:create": "npm run typeorm migration:create ./migrations/qweqwe",
     "migration:run": "npm run typeorm -- migration:run -d ./apps/api/src/app/configs/typeorm.config.ts",
-    "migration:generate": "npm run typeorm -- -d ./apps/api/src/app/configs/typeorm.config.ts migration:generate ./migrations/$npm_config_name"
+    "migration:generate": "npm run typeorm -- -d ./apps/api/src/app/configs/typeorm.config.ts migration:generate ./migrations/$npm_config_name",
+    "prepare": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*{.js,.ts,.html}": "nx affected:lint --fix=true",
+    "*": "nx format:write"
   },
   "private": true,
   "dependencies": {
@@ -93,6 +103,7 @@
     "jest-environment-jsdom": "^29.4.1",
     "jest-environment-node": "^29.4.1",
     "jest-preset-angular": "~13.1.0",
+    "lint-staged": "^14.0.1",
     "nx": "16.5.5",
     "prettier": "^2.6.2",
     "ts-jest": "^29.1.0",

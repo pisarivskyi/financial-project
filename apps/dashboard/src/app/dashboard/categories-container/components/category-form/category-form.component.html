@@ -12,11 +12,7 @@
       <nz-form-label>Color</nz-form-label>
 
       <nz-form-control>
-        <nz-select
-          formControlName="color"
-          nzPlaceHolder="Choose color"
-          [nzCustomTemplate]="defaultColorTemplate"
-        >
+        <nz-select formControlName="color" nzPlaceHolder="Choose color" [nzCustomTemplate]="defaultColorTemplate">
           <nz-option *ngFor="let color of COLOR_OPTIONS" nzCustomContent [nzValue]="color.value">
             <span class="color-option" [style.background-color]="color.value"></span>
           </nz-option>
@@ -32,11 +28,7 @@
       <nz-form-label>Icon</nz-form-label>
 
       <nz-form-control>
-        <nz-select
-          formControlName="icon"
-          nzPlaceHolder="Choose icon"
-          [nzCustomTemplate]="defaultIconTemplate"
-        >
+        <nz-select formControlName="icon" nzPlaceHolder="Choose icon" [nzCustomTemplate]="defaultIconTemplate">
           <nz-option *ngFor="let icon of CATEGORY_ICON_OPTIONS" nzCustomContent [nzValue]="icon.value">
             <span nz-icon [nzType]="icon.value"></span>
           </nz-option>

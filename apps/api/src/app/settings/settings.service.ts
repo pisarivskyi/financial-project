@@ -1,26 +1,51 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSettingDto } from './dto/create-setting.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { plainToClassFromExist } from 'class-transformer';
+import { Repository } from 'typeorm';
+
+import { UserInterface } from '@financial-project/common';
+
 import { UpdateSettingDto } from './dto/update-setting.dto';
+import { SettingsEntity } from './entities/settings.entity';
 
 @Injectable()
 export class SettingsService {
-  create(createSettingDto: CreateSettingDto) {
-    return 'This action adds a new setting';
+  constructor(@InjectRepository(SettingsEntity) private settingsRepository: Repository<SettingsEntity>) {}
+
+  async find(user: UserInterface): Promise<SettingsEntity> {
+    try {
+      const settings = await this.settingsRepository.findOne({
+        where: {
+          createdBy: user.sub,
+        },
+      });
+
+      if (!settings) {
+        const newSettings = this.settingsRepository.create({
+          createdBy: user.sub,
+        });
+
+        return this.settingsRepository.save(newSettings);
+      }
+
+      return settings;
+    } catch {
+      throw new NotFoundException();
+    }
   }
 
-  findAll() {
-    return `This action returns all settings`;
-  }
+  async update(id: string, updateSettingDto: UpdateSettingDto, user: UserInterface): Promise<SettingsEntity> {
+    try {
+      const existingSettings = await this.find(user);
 
-  findOne(id: number) {
-    return `This action returns a #${id} setting`;
-  }
+      const settings = plainToClassFromExist(existingSettings, {
+        ...updateSettingDto,
+        createdBy: user.sub,
+      });
 
-  update(id: number, updateSettingDto: UpdateSettingDto) {
-    return `This action updates a #${id} setting`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} setting`;
+      return this.settingsRepository.save(settings);
+    } catch {
+      throw new NotFoundException();
+    }
   }
 }

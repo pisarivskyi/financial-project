@@ -1,0 +1,11 @@
+<fpd-page-header [title]="'Settings'"></fpd-page-header>
+
+<div class="fpd-card">
+  <nz-spin [nzSpinning]="isLoading$ | async">
+    <ng-container *ngIf="settings$ | async as settings">
+      <fpd-settings-form #form [settings]="settings"></fpd-settings-form>
+
+      <button class="save-button" nz-button nzType="primary" (click)="onSave()">Save</button>
+    </ng-container>
+  </nz-spin>
+</div>

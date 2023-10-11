@@ -7,8 +7,8 @@ import { Repository } from 'typeorm';
 import { AccountTypeEnum, ProviderTypeEnum, UserInterface } from '@financial-project/common';
 import { ApiMonobankProviderService } from '@financial-project/providers';
 
-import { AccountEntity } from '../../accounts/entities/account.entity';
 import { AccountsService } from '../../accounts/accounts.service';
+import { AccountEntity } from '../../accounts/entities/account.entity';
 import { PageOptionsDto } from '../../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../../core/pagination/dtos/page.dto';
 import { paginate } from '../../core/pagination/utils/paginate.utils';

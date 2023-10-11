@@ -6,11 +6,11 @@ import { In, Repository } from 'typeorm';
 import { UserInterface } from '@financial-project/common';
 
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
+import { PageDto } from '../core/pagination/dtos/page.dto';
 import { paginate } from '../core/pagination/utils/paginate.utils';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryEntity } from './entities/category.entity';
-import { PageDto } from '../core/pagination/dtos/page.dto';
 
 @Injectable()
 export class CategoriesService {

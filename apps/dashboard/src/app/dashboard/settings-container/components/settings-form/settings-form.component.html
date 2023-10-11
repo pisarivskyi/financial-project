@@ -1,0 +1,23 @@
+<form nz-form [formGroup]="formGroup" [nzLayout]="'vertical'">
+  <nz-form-item>
+    <nz-form-label>First day number of billing period</nz-form-label>
+
+    <nz-form-control>
+      <nz-input-number formControlName="billingPeriodStartDayNumber" [nzMax]="31" [nzMin]="1"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label>Default currency</nz-form-label>
+
+    <nz-form-control>
+      <nz-select formControlName="defaultCurrencyCode" nzPlaceHolder="Choose currency">
+        <nz-option
+          *ngFor="let currency of CURRENCY_OPTIONS"
+          [nzValue]="currency.value"
+          [nzLabel]="currency.label"
+        ></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</form>

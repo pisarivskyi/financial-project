@@ -1,37 +1,30 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
 
-import { ApiPathEnum } from '@financial-project/common';
+import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
-import { CreateSettingDto } from './dto/create-setting.dto';
+import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
+import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { UpdateSettingDto } from './dto/update-setting.dto';
+import { SettingsEntity } from './entities/settings.entity';
 import { SettingsService } from './settings.service';
 
 @Controller(ApiPathEnum.Settings)
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
 
-  @Post()
-  create(@Body() createSettingDto: CreateSettingDto) {
-    return this.settingsService.create(createSettingDto);
-  }
-
   @Get()
-  findAll() {
-    return this.settingsService.findAll();
+  @UseGuards(JwtAuthGuard)
+  find(@CurrentUser() user: UserInterface): Promise<SettingsEntity> {
+    return this.settingsService.find(user);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.settingsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSettingDto: UpdateSettingDto) {
-    return this.settingsService.update(+id, updateSettingDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.settingsService.remove(+id);
+  @Patch()
+  @UseGuards(JwtAuthGuard)
+  update(
+    @Param('id') id: string,
+    @Body() updateSettingDto: UpdateSettingDto,
+    @CurrentUser() user: UserInterface
+  ): Promise<SettingsEntity> {
+    return this.settingsService.update(id, updateSettingDto, user);
   }
 }
