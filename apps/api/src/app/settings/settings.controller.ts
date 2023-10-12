@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
 
 import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
@@ -20,11 +20,7 @@ export class SettingsController {
 
   @Patch()
   @UseGuards(JwtAuthGuard)
-  update(
-    @Param('id') id: string,
-    @Body() updateSettingDto: UpdateSettingDto,
-    @CurrentUser() user: UserInterface
-  ): Promise<SettingsEntity> {
-    return this.settingsService.update(id, updateSettingDto, user);
+  update(@Body() updateSettingDto: UpdateSettingDto, @CurrentUser() user: UserInterface): Promise<SettingsEntity> {
+    return this.settingsService.update(updateSettingDto, user);
   }
 }

@@ -5,6 +5,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AccountsModule } from './accounts/accounts.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { BudgetsModule } from './budgets/budgets.module';
 import { CategoriesModule } from './categories/categories.module';
@@ -50,6 +51,7 @@ import { SettingsModule } from './settings/settings.module';
     SettingsModule,
     ProvidersModule,
     JobsModule,
+    AnalyticsModule,
   ],
 })
 export class AppModule {}
