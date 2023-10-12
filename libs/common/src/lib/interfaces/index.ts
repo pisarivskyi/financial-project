@@ -8,3 +8,4 @@ export * from './provider.interface';
 export * from './monobank-provider-data.interface';
 export * from './provider-accounts.interface';
 export * from './synchronization-job.interface';
+export * from './summary.interface';
