@@ -1,0 +1,45 @@
+<fpd-page-header [title]="'Analytics'"></fpd-page-header>
+
+<ng-container *ngIf="accounts$ | async as accounts">
+  <form nz-form [formGroup]="filterForm" [nzLayout]="'vertical'" (ngSubmit)="onFilter()">
+    <nz-form-item>
+      <nz-form-label>Month</nz-form-label>
+
+      <nz-form-control>
+        <nz-date-picker formControlName="month" nzMode="month"></nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Accounts</nz-form-label>
+
+      <nz-form-control>
+        <nz-select formControlName="accounts" nzMode="multiple">
+          <nz-option
+            *ngFor="let account of accounts"
+            [nzLabel]="account.name + account.maskedPan"
+            [nzValue]="account"
+          ></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <button nz-button type="submit">Filter</button>
+  </form>
+</ng-container>
+
+<ng-container *ngIf="summary$ | async as summary">
+  <div class="fpd-card">
+    <h2>Current billing period</h2>
+    <p>Income: {{ summary.income / 100 }}</p>
+    <p>Outcome: {{ summary.outcome / 100 }}</p>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="prevSummary$ | async as summary">
+  <div class="fpd-card">
+    <h2>Previous billing period</h2>
+    <p>Income: {{ summary.income / 100 }}</p>
+    <p>Outcome: {{ summary.outcome / 100 }}</p>
+  </div>
+</ng-container>

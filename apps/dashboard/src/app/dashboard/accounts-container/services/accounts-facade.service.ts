@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { createStore } from '@ngneat/elf';
 import { selectAllEntities, setEntities, withEntities } from '@ngneat/elf-entities';
 import { getRequestResult, trackRequestResult } from '@ngneat/elf-requests';
+import { DateTime } from 'luxon';
 import { Observable, map, switchMap, take, tap } from 'rxjs';
 
 import { ProviderAccountDataInterface } from '@financial-project/common';
@@ -91,7 +92,11 @@ export class AccountsFacadeService {
   }
 
   triggerSynchronizationForAccount$(id: string): Observable<SynchronizationJobModel> {
-    return this.jobsService.triggerSynchronizationForAccount$(id, new Date(), new Date());
+    return this.jobsService.triggerSynchronizationForAccount$(
+      id,
+      DateTime.now().minus({ month: 1 }).toJSDate(),
+      new Date()
+    );
   }
 
   getSynchronizationJob$(id: string): Observable<SynchronizationJobModel> {
