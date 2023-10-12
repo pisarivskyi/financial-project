@@ -19,4 +19,4 @@ jobs:
         with:
           node-version: 18.x
       - run: npm i
-      - run: npx nx build
+      - run: npx nx run-many --all -t build
