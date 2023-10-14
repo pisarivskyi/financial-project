@@ -35,9 +35,9 @@ jobs:
             npx nx run-many --all -t build
             rm -rf /var/www/budget/*
             rm -rf /var/www/api-budget/*
-            mv ./dist/apps/dashboard /var/www/budget
-            mv ./dist/apps/api /var/www/api-budget
-            mv ./node_modules /var/www/api-budget/node_modules
+            mv ./dist/apps/dashboard/* /var/www/budget
+            mv ./dist/apps/api/* /var/www/api-budget
+            mv ./node_modules /var/www/api-budget
             cd /var/www/api-budget
             touch .env
             echo DB_HOST=$DB_HOST >> .env
