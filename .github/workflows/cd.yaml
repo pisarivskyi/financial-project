@@ -1,8 +1,7 @@
 name: Deploy on server
 
 on:
-  # TODO: change it to main branch updated
-  pull_request:
+  push:
     branches: [main]
 
 jobs:
