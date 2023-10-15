@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
   apiHost: 'https://api-budget.devhub.me',
-  auth0Domain: 'dev-ykxhygep516pvs5l.uk.auth0.com',
-  auth0ClientId: 'K2zecLslX2T8tcDTKaAiEkm07QcWxw2C',
+  auth0Domain: 'budget.uk.auth0.com',
+  auth0ClientId: 'x6CusJRLOKUuiHOg5ovNvTwd9W77OLC3',
   auth0Audience: 'https://api-budget.devhub.me',
   auth0HttpInterceptorConfig: [
     {
