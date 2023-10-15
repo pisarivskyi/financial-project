@@ -9,6 +9,7 @@ import { AnalyticsModule } from './analytics/analytics.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { BudgetsModule } from './budgets/budgets.module';
 import { CategoriesModule } from './categories/categories.module';
+import typeorm from './configs/typeorm.config';
 import { JobsModule } from './jobs/jobs.module';
 import { ProvidersModule } from './providers/providers.module';
 import { RecordsModule } from './records/records.module';
@@ -16,20 +17,10 @@ import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, load: [typeorm] }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: Number(configService.get<number>('DB_PORT')),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
-        entities: [],
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
+      useFactory: async (configService: ConfigService) => configService.get('typeorm'),
       inject: [ConfigService],
     }),
     BullModule.forRootAsync({

@@ -40,7 +40,7 @@ export class CategoriesService {
   async findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<CategoryEntity>> {
     return paginate(this.categoriesRepository, params, {
       where: {
-        createdBy: user.sub,
+        createdBy: In([user.sub, 'SYSTEM']),
       },
       order: {
         createdAt: 'DESC',
