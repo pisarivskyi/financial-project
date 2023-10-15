@@ -34,7 +34,7 @@ export class SettingsService {
     }
   }
 
-  async update(id: string, updateSettingDto: UpdateSettingDto, user: UserInterface): Promise<SettingsEntity> {
+  async update(updateSettingDto: UpdateSettingDto, user: UserInterface): Promise<SettingsEntity> {
     try {
       const existingSettings = await this.find(user);
 

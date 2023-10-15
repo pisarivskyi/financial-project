@@ -11,7 +11,7 @@ import { Observable, filter, take } from 'rxjs';
 import { NZ_CONFIG } from 'ng-zorro-antd/core/config';
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 
-import { environment } from '../../../../environments/environment';
+import { environment } from '../environments/environment';
 import { appRoutes } from './app.routes';
 import { ENVIRONMENT_CONFIG_TOKEN } from './core/configuration/tokens/environment-config.token';
 import { nzConfigFactory } from './core/nz-config/nz-config.factory';
