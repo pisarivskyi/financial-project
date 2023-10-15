@@ -32,6 +32,7 @@ jobs:
             cd financial-project
             npm ci
             npx nx run-many --all -t build
+            npm run migration:run
             rm -rf /var/www/budget/*
             rm -rf /var/www/api-budget/{*,.env}
             mv ./dist/apps/dashboard/* /var/www/budget
