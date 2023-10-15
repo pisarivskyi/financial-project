@@ -34,7 +34,7 @@ jobs:
             npm ci
             npx nx run-many --all -t build
             rm -rf /var/www/budget/*
-            rm -rf /var/www/api-budget/*
+            rm -rf /var/www/api-budget/{*,.env}
             mv ./dist/apps/dashboard/* /var/www/budget
             mv ./dist/apps/api/* /var/www/api-budget
             mv ./node_modules /var/www/api-budget
