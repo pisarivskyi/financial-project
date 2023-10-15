@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "typeorm": "ts-node --project ./apps/api/tsconfig.app.json ./node_modules/typeorm/cli.js",
-    "migration:create": "npm run typeorm migration:create ./migrations/qweqwe",
-    "migration:run": "npm run typeorm -- migration:run -d ./apps/api/src/app/configs/typeorm.config.ts",
-    "migration:generate": "npm run typeorm -- -d ./apps/api/src/app/configs/typeorm.config.ts migration:generate ./migrations/$npm_config_name",
+    "typeorm": "ts-node --project apps/api/tsconfig.app.json node_modules/typeorm/cli.js",
+    "migration:create": "npm run typeorm migration:create apps/api/src/migrations/$npm_config_name",
+    "migration:run": "npm run typeorm -- migration:run -d apps/api/src/app/configs/typeorm.config.ts",
+    "migration:initial": "npm run typeorm -- -d apps/api/src/app/configs/typeorm.config.ts migration:generate -n ./initial",
+    "migration:generate": "npm run typeorm -- -d apps/api/src/app/configs/typeorm.config.ts migration:generate apps/api/src/migrations/$npm_config_name",
     "prepare": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\""
   },
   "husky": {
