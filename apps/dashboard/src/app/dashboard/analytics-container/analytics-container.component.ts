@@ -11,6 +11,11 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { LatestRecordsWidgetComponent } from './components/latest-records-widget/latest-records-widget.component';
+import {
+  SummaryCardWidgetComponent,
+  SummaryCardWidgetTypeEnum,
+} from './components/summary-card-widget/summary-card-widget.component';
 import { AnalyticsFacadeService } from './services/analytics-facade.service';
 
 @Component({
@@ -26,6 +31,8 @@ import { AnalyticsFacadeService } from './services/analytics-facade.service';
     NzInputModule,
     NzButtonModule,
     NzDatePickerModule,
+    LatestRecordsWidgetComponent,
+    SummaryCardWidgetComponent,
   ],
   templateUrl: './analytics-container.component.html',
   styleUrls: ['./analytics-container.component.less'],
@@ -43,6 +50,8 @@ export class AnalyticsContainerComponent implements OnInit {
   summary$ = this.analyticsFacadeService.summary$;
   prevSummary$ = this.analyticsFacadeService.prevSummary$;
   settings$ = this.analyticsFacadeService.settings$;
+
+  protected readonly SummaryCardWidgetTypeEnum = SummaryCardWidgetTypeEnum;
 
   ngOnInit(): void {
     this.analyticsFacadeService.initialize();
