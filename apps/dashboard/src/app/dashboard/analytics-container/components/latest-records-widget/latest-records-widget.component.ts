@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -15,7 +16,15 @@ import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format/cur
 @Component({
   selector: 'fpd-latest-records-widget',
   standalone: true,
-  imports: [CommonModule, NzTableModule, NzSpinModule, NzSkeletonModule, AmountFormatPipe, CurrencyFormatPipe],
+  imports: [
+    CommonModule,
+    NzTableModule,
+    NzSpinModule,
+    NzSkeletonModule,
+    AmountFormatPipe,
+    CurrencyFormatPipe,
+    NzIconModule,
+  ],
   templateUrl: './latest-records-widget.component.html',
   styleUrls: ['./latest-records-widget.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,

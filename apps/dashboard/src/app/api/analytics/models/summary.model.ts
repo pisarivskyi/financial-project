@@ -6,9 +6,11 @@ import { RecordModel } from '../../records/models/record.model';
 
 export class SummaryModel implements SummaryInterface {
   @Expose()
+  @Type(() => Date)
   fromDate!: Date;
 
   @Expose()
+  @Type(() => Date)
   toDate!: Date;
 
   @Expose()

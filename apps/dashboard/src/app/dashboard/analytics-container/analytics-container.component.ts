@@ -1,22 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DateTime } from 'luxon';
-import { take } from 'rxjs';
-
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { BudgetsWidgetComponent } from './components/budgets-widget/budgets-widget.component';
+import { FiltersComponent } from './components/filters/filters.component';
 import { LatestRecordsWidgetComponent } from './components/latest-records-widget/latest-records-widget.component';
+import { OutcomeByCategoriesWidgetComponent } from './components/outcome-by-categories-widget/outcome-by-categories-widget.component';
 import {
   SummaryCardWidgetComponent,
   SummaryCardWidgetTypeEnum,
 } from './components/summary-card-widget/summary-card-widget.component';
-import { AnalyticsFacadeService } from './services/analytics-facade.service';
+import { YearStatWidgetComponent } from './components/year-stat-widget/year-stat-widget.component';
+import { AnalyticsFacadeService, AnalyticsFiltersInterface } from './services/analytics-facade.service';
 
 @Component({
   selector: 'fpd-analytics-container',
@@ -24,32 +19,28 @@ import { AnalyticsFacadeService } from './services/analytics-facade.service';
   imports: [
     CommonModule,
     PageHeaderComponent,
-    NzFormModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NzSelectModule,
-    NzInputModule,
-    NzButtonModule,
-    NzDatePickerModule,
     LatestRecordsWidgetComponent,
     SummaryCardWidgetComponent,
+    FiltersComponent,
+    OutcomeByCategoriesWidgetComponent,
+    BudgetsWidgetComponent,
+    YearStatWidgetComponent,
   ],
   templateUrl: './analytics-container.component.html',
   styleUrls: ['./analytics-container.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnalyticsContainerComponent implements OnInit {
-  filterForm = new FormGroup({
-    accounts: new FormControl(),
-    month: new FormControl(),
-  });
-
   analyticsFacadeService = inject(AnalyticsFacadeService);
 
   accounts$ = this.analyticsFacadeService.accounts$;
+  categories$ = this.analyticsFacadeService.categories$;
+  budgets$ = this.analyticsFacadeService.budgets$;
   summary$ = this.analyticsFacadeService.summary$;
   prevSummary$ = this.analyticsFacadeService.prevSummary$;
   settings$ = this.analyticsFacadeService.settings$;
+  yearSummaries$ = this.analyticsFacadeService.yearSummaries$;
+  filters$ = this.analyticsFacadeService.filters$;
 
   protected readonly SummaryCardWidgetTypeEnum = SummaryCardWidgetTypeEnum;
 
@@ -57,35 +48,16 @@ export class AnalyticsContainerComponent implements OnInit {
     this.analyticsFacadeService.initialize();
   }
 
-  onFilter(): void {
-    this.settings$.pipe(take(1)).subscribe((settings) => {
-      if (settings) {
-        const fromDate = DateTime.fromJSDate(this.filterForm.value.month)
-          .setZone('utc')
-          .set({
-            day: settings.billingPeriodStartDayNumber,
-          })
-          .startOf('day');
-
-        const toDate = fromDate
-          .plus({ month: 1 })
-          .set({
-            day: settings.billingPeriodStartDayNumber - 1,
-          })
-          .endOf('day');
-
-        const prevFromDate = fromDate.minus({ month: 1 });
-        const prevToDate = toDate.minus({ month: 1 });
-
-        this.analyticsFacadeService.setSelectedAccounts(this.filterForm.value.accounts);
-        this.analyticsFacadeService.setDateRange(
-          fromDate.toJSDate(),
-          toDate.toJSDate(),
-          prevFromDate.toJSDate(),
-          prevToDate.toJSDate()
-        );
-        this.analyticsFacadeService.loadSummary();
-      }
-    });
+  onFilter(filters: AnalyticsFiltersInterface): void {
+    if (filters) {
+      this.analyticsFacadeService.setSelectedAccounts(filters.selectedAccounts);
+      this.analyticsFacadeService.setDateRange(
+        filters.fromDate,
+        filters.toDate,
+        filters.prevFromDate,
+        filters.prevToDate
+      );
+      this.analyticsFacadeService.loadFullYearSummary();
+    }
   }
 }

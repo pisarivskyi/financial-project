@@ -41,16 +41,17 @@ export class SummaryCardWidgetComponent implements OnChanges {
   percentageSign = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['summary']?.currentValue && changes['prevSummary']?.currentValue) {
-      const summary = changes['summary']?.currentValue as SummaryModel;
-      const prevSummary = changes['prevSummary']?.currentValue as SummaryModel;
+    this.initData();
+  }
 
+  private initData(): void {
+    if (this.summary && this.prevSummary) {
       if (this.type === SummaryCardWidgetTypeEnum.Income) {
-        this.currentPeriodSum = summary.income;
-        this.prevPeriodSum = prevSummary.income;
+        this.currentPeriodSum = this.summary.income;
+        this.prevPeriodSum = this.prevSummary.income;
       } else if (this.type === SummaryCardWidgetTypeEnum.Outcome) {
-        this.currentPeriodSum = summary.outcome;
-        this.prevPeriodSum = prevSummary.outcome;
+        this.currentPeriodSum = this.summary.outcome;
+        this.prevPeriodSum = this.prevSummary.outcome;
       }
 
       const tempPercentage = (this.currentPeriodSum - this.prevPeriodSum) / this.prevPeriodSum;

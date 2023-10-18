@@ -4,15 +4,26 @@
   <nz-table #table [nzData]="records">
     <thead>
       <tr>
+        <th></th>
         <th>Name</th>
         <th>Category</th>
         <th>Amount</th>
         <th>Date</th>
-        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let record of table.data">
+        <td style="width: 0">
+          <ng-container *ngIf="record.category; else withoutCategoryTemplate">
+            <div class="icon" [style.background-color]="record.category.color">
+              <span nz-icon [nzType]="record.category.icon"></span>
+            </div>
+          </ng-container>
+
+          <ng-template #withoutCategoryTemplate>
+            <div class="icon icon-no-category">-</div>
+          </ng-template>
+        </td>
         <td>
           {{ record.name }}
         </td>
@@ -26,9 +37,6 @@
         </td>
         <td>
           <span *ngIf="record.bankCreatedAt">{{ record.bankCreatedAt | date : 'medium' }}</span>
-        </td>
-        <td>
-          <!--      <button nz-button nzSize="small" (click)="onEditRecord(record)">Edit</button>-->
         </td>
       </tr>
     </tbody>

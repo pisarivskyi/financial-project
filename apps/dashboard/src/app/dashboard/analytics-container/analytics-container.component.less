@@ -1,7 +1,18 @@
 .layout {
   display: flex;
+  gap: 32px;
+}
+
+.widgets-container {
+  width: 100%;
+  display: flex;
   flex-direction: column;
   gap: 32px;
+}
+
+.filters-container {
+  width: 300px;
+  flex-shrink: 0;
 }
 
 .row {
@@ -9,6 +20,7 @@
   gap: 32px;
 }
 
-.summary-card {
+.col {
+  width: 100%;
   flex-grow: 1;
 }

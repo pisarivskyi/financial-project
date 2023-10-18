@@ -1,56 +1,58 @@
 <fpd-page-header [title]="'Analytics'"></fpd-page-header>
 
 <div class="layout">
-  <div class="fpd-card">
-    <ng-container *ngIf="accounts$ | async as accounts">
-      <form nz-form [formGroup]="filterForm" [nzLayout]="'vertical'" (ngSubmit)="onFilter()">
-        <nz-form-item>
-          <nz-form-label>Month</nz-form-label>
+  <div class="widgets-container">
+    <div class="row">
+      <fpd-summary-card-widget
+        class="col"
+        [label]="'Incomes'"
+        [summary]="summary$ | async"
+        [prevSummary]="prevSummary$ | async"
+        [type]="SummaryCardWidgetTypeEnum.Income"
+      ></fpd-summary-card-widget>
 
-          <nz-form-control>
-            <nz-date-picker formControlName="month" nzMode="month"></nz-date-picker>
-          </nz-form-control>
-        </nz-form-item>
+      <fpd-summary-card-widget
+        class="col"
+        [label]="'Outcome'"
+        [summary]="summary$ | async"
+        [prevSummary]="prevSummary$ | async"
+        [type]="SummaryCardWidgetTypeEnum.Outcome"
+      ></fpd-summary-card-widget>
+    </div>
 
-        <nz-form-item>
-          <nz-form-label>Accounts</nz-form-label>
+    <div class="row">
+      <fpd-outcome-by-categories-widget
+        class="col"
+        [label]="'Outcome by categories'"
+        [summary]="summary$ | async"
+        [categories]="categories$ | async"
+      ></fpd-outcome-by-categories-widget>
 
-          <nz-form-control>
-            <nz-select formControlName="accounts" nzMode="multiple">
-              <nz-option
-                *ngFor="let account of accounts"
-                [nzLabel]="account.name + account.maskedPan"
-                [nzValue]="account"
-              ></nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
+      <fpd-budgets-widget
+        class="col"
+        [label]="'Budgets'"
+        [summary]="summary$ | async"
+        [budgets]="budgets$ | async"
+      ></fpd-budgets-widget>
+    </div>
 
-        <button nz-button type="submit">Filter</button>
-      </form>
-    </ng-container>
+    <fpd-year-stat-widget
+      [label]="'Year stat'"
+      [summaries]="yearSummaries$ | async"
+      [filters]="filters$ | async"
+    ></fpd-year-stat-widget>
+
+    <fpd-latest-records-widget
+      [label]="'Current period records'"
+      [summary]="summary$ | async"
+    ></fpd-latest-records-widget>
   </div>
 
-  <div class="row">
-    <fpd-summary-card-widget
-      class="summary-card"
-      [label]="'Incomes'"
-      [summary]="summary$ | async"
-      [prevSummary]="prevSummary$ | async"
-      [type]="SummaryCardWidgetTypeEnum.Income"
-    ></fpd-summary-card-widget>
-
-    <fpd-summary-card-widget
-      class="summary-card"
-      [label]="'Outcome'"
-      [summary]="summary$ | async"
-      [prevSummary]="prevSummary$ | async"
-      [type]="SummaryCardWidgetTypeEnum.Outcome"
-    ></fpd-summary-card-widget>
+  <div class="filters-container">
+    <fpd-filters
+      [accounts]="accounts$ | async"
+      [settings]="settings$ | async"
+      (filter)="onFilter($event)"
+    ></fpd-filters>
   </div>
-
-  <fpd-latest-records-widget
-    [label]="'Current period records'"
-    [summary]="summary$ | async"
-  ></fpd-latest-records-widget>
 </div>
