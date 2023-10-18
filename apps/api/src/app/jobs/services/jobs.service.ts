@@ -81,7 +81,7 @@ export class JobsService {
             fromDate: fromDate.toISODate(),
             toDate: toDate.toISODate(),
           },
-          children: jobs,
+          children: this.getFlowChildJobsTree(jobs),
         });
       }
     } catch {
@@ -120,13 +120,32 @@ export class JobsService {
         fromDate: fromDate.toISODate(),
         toDate: toDate.toISODate(),
       },
+      children: [],
       opts: {
         attempts: 4,
         backoff: {
           type: 'fixed',
-          delay: 60000,
+          delay: 65000,
         },
       },
     };
+  }
+
+  private getFlowChildJobsTree(jobs: FlowChildJob[]): FlowChildJob[] {
+    const tree: FlowChildJob = jobs[0];
+    tree.opts.delay = 61000;
+
+    let ref: FlowChildJob = tree;
+
+    for (let i = 1; i < jobs.length; i++) {
+      if (i < jobs.length - 1) {
+        jobs[i].opts.delay = 61000;
+      }
+      ref.children.push(jobs[i]);
+
+      ref = jobs[i];
+    }
+
+    return [tree];
   }
 }
