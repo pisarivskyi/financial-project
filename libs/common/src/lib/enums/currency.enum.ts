@@ -5,4 +5,5 @@ export enum CurrencyEnum {
   EUR = 978,
   CZK = 203,
   HRK = 191,
+  PLN = 985,
 }

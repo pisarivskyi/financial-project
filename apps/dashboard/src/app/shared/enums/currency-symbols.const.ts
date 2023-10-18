@@ -7,4 +7,5 @@ export const CurrencySymbolsConst: Record<CurrencyEnum, string> = {
   [CurrencyEnum.EUR]: '€',
   [CurrencyEnum.HRK]: 'kn',
   [CurrencyEnum.CZK]: 'Kč',
+  [CurrencyEnum.PLN]: 'zł',
 };
