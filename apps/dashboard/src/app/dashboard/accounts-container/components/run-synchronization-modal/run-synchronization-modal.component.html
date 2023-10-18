@@ -1,17 +1,10 @@
 <nz-spin [nzSpinning]="isLoading$ | async">
-  <p>Select accounts you want to synchronize and click Synchronize button</p>
+  <p>
+    Select date range and click Synchronize button. It can take a couple of minutes depending on the date range you
+    choose
+  </p>
 
   <form nz-form [formGroup]="form" nzLayout="vertical">
-    <nz-form-item>
-      <nz-form-label>Select accounts ofr synchronization</nz-form-label>
-
-      <nz-form-control>
-        <nz-select formControlName="accounts" [nzMode]="'multiple'">
-          <nz-option *ngFor="let option of options" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-
     <nz-form-item>
       <nz-form-label>Select date range</nz-form-label>
 
@@ -27,5 +20,5 @@
     Synchronize
   </button>
 
-  <button nz-button nzType="default" (click)="onClose()">Later</button>
+  <button nz-button nzType="default" [disabled]="isLoading$ | async" (click)="onClose()">Cancel</button>
 </div>
