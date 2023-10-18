@@ -29,8 +29,8 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
   }
 
   async process(job: Job<JobPayloadInterface>): Promise<void> {
-    this.logger.debug(`received job for account '${job.data.accountId}'`);
-    this.logger.debug(`records will be synced in the period: ${job.data.fromDate} - ${job.data.toDate}`);
+    this.debug(job, `received job for account '${job.data.accountId}'`);
+    this.debug(job, `records will be synced in the period: ${job.data.fromDate} - ${job.data.toDate}`);
 
     try {
       const account = await this.getAccount(job.data.accountId);
@@ -46,6 +46,8 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
         DateTime.fromISO(job.data.toDate)
       );
 
+      this.debug(job, `received ${records.length} records`);
+
       // filter already existing records
       const recordBankIds = records.map((record) => record.bankRecordId);
 
@@ -56,18 +58,20 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
       });
       const existingRecordBankIds = existingRecords.map((record) => record.bankRecordId);
 
+      this.debug(job, `${existingRecordBankIds.length} of ${records.length} records already exist`);
+
       // find records to save
       const recordsToSave = records.filter((record) => !existingRecordBankIds.includes(record.bankRecordId));
 
       if (recordsToSave.length) {
         const savedRecords = await this.recordsRepository.save(recordsToSave);
 
-        this.logger.debug(`saved ${savedRecords.length} records for account '${job.data.accountId}'`);
+        this.debug(job, `saved ${savedRecords.length} records for account '${job.data.accountId}'`);
       } else {
-        this.logger.debug(`records for account '${job.data.accountId}' are up to date`);
+        this.debug(job, `records for account '${job.data.accountId}' are up to date`);
       }
     } catch (error) {
-      this.logger.error(`failed to process job for account '${job.data.accountId}'`);
+      this.error(job, `failed to process job for account '${job.data.accountId}'`);
 
       throw error;
     }
@@ -118,5 +122,13 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
     record.createdBy = account.createdBy;
 
     return record;
+  }
+
+  private debug(job: Job, message: string, ...other): void {
+    this.logger.debug(`${job.id}: ${message}`, ...other);
+  }
+
+  private error(job: Job, message: string, ...other): void {
+    this.logger.error(`${job.id}: ${message}`, ...other);
   }
 }
