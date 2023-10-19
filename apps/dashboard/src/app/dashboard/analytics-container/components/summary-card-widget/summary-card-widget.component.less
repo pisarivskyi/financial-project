@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.current-period-sum {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.percentage {
+  margin-left: 5px;
+  margin-bottom: 0;
+
+  &-income&-increased {
+    color: var(--ant-success-color);
+  }
+
+  &-income&-decreased {
+    color: var(--ant-error-color);
+  }
+
+  &-outcome&-increased {
+    color: var(--ant-error-color);
+  }
+
+  &-outcome&-decreased {
+    color: var(--ant-success-color);
+  }
+}
+
+.prev-period-sum {
+  color: #858585;
+  margin-bottom: 0;
+}

@@ -1,0 +1,22 @@
+<div class="fpd-card">
+  <h3>{{ label }}</h3>
+
+  <div class="row">
+    <p class="current-period-sum">{{ currentPeriodSum | amountFormat }}</p>
+
+    <p
+      class="percentage"
+      [class.percentage-income]="type === SummaryCardWidgetTypeEnum.Income"
+      [class.percentage-outcome]="type === SummaryCardWidgetTypeEnum.Outcome"
+      [class.percentage-increased]="percentageSign === 1"
+      [class.percentage-decreased]="percentageSign === -1"
+    >
+      <span
+        ><ng-container *ngIf="percentageSign === 1">+</ng-container
+        ><ng-container *ngIf="percentageSign === -1">-</ng-container>{{ percentage | percent }}</span
+      >
+    </p>
+  </div>
+
+  <p class="prev-period-sum">{{ prevPeriodSum | amountFormat }}</p>
+</div>

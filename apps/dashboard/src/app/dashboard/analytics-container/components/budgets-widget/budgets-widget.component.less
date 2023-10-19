@@ -1,0 +1,61 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.fpd-card {
+  flex-grow: 1;
+}
+
+.name {
+  margin-bottom: 0;
+}
+
+.amount {
+  color: #000;
+  margin: 0;
+  font-size: 18px;
+}
+
+.budget-stats {
+  gap: 16px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+}
+
+.budget-name {
+  color: #858585;
+}
+
+.budget-progress {
+}
+
+.budget-progress-bar {
+  background: #ccc;
+  height: 30px;
+  position: relative;
+  border-radius: 8px;
+}
+
+.budget-progress-bar-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: #000;
+  border-radius: 8px;
+}
+
+.budget-progress-bar-percentage {
+  margin: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

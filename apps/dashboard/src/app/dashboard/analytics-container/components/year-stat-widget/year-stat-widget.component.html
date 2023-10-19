@@ -1,0 +1,15 @@
+<div class="fpd-card">
+  <h3>{{ label }}</h3>
+
+  <div class="chart-container">
+    <canvas
+      baseChart
+      class="chart"
+      [data]="barChartData"
+      [options]="barChartOptions"
+      [plugins]="barChartPlugins"
+      [type]="barChartType"
+    >
+    </canvas>
+  </div>
+</div>
