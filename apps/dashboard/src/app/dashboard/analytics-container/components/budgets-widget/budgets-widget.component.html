@@ -4,9 +4,11 @@
   <div class="budget-stats">
     <ng-container *ngFor="let budgetStat of budgetStats">
       <div class="budget-name">
-        <p>{{ budgetStat.budget.name }}</p>
+        <p class="name">{{ budgetStat.budget.name }}</p>
 
-        <p>{{ budgetStat.budget.amount | amountFormat | currencyFormat : budgetStat.budget.currencyCode }}</p>
+        <p class="amount">
+          {{ budgetStat.budget.amount | amountFormat | currencyFormat : budgetStat.budget.currencyCode }}
+        </p>
       </div>
 
       <div class="budget-progress">

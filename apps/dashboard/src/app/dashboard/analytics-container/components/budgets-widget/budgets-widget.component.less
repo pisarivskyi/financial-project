@@ -1,27 +1,34 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
-.income {
-  color: var(--ant-success-color);
+.fpd-card {
+  flex-grow: 1;
 }
 
-.outcome {
-  color: var(--ant-warning-color);
+.name {
+  margin-bottom: 0;
+}
+
+.amount {
+  color: #000;
+  margin: 0;
+  font-size: 18px;
 }
 
 .budget-stats {
-  display: flex;
   gap: 16px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
 }
 
 .budget-name {
-  width: 30%;
   color: #858585;
 }
 
 .budget-progress {
-  width: 70%;
 }
 
 .budget-progress-bar {

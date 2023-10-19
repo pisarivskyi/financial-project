@@ -67,25 +67,28 @@ export class OutcomeByCategoriesWidgetComponent implements OnChanges {
   }
 
   private initData(): void {
-    if (this.summary) {
-      const categoryIdToAmountMap = new Map<CategoryModel, number>();
+    if (this.summary && this.categories) {
+      const categoryIdToAmountMap = new Map<string, number>();
+      const categoryIdToCategoryMap = new Map<string, CategoryModel>(
+        this.categories.map((category) => [category.id, category])
+      );
       let withoutCategoryAmount = 0;
 
       for (const record of this.summary.outcomeRecords) {
         if (record.category) {
-          const existingCategoryAmount = categoryIdToAmountMap.get(record.category);
+          const existingCategoryAmount = categoryIdToAmountMap.get(record.category.id);
 
           if (existingCategoryAmount) {
-            categoryIdToAmountMap.set(record.category, existingCategoryAmount + record.amount);
+            categoryIdToAmountMap.set(record.category.id, existingCategoryAmount + record.amount);
           } else {
-            categoryIdToAmountMap.set(record.category, record.amount);
+            categoryIdToAmountMap.set(record.category.id, record.amount);
           }
         } else {
           withoutCategoryAmount += record.amount;
         }
       }
 
-      const pieCategories = Array.from(categoryIdToAmountMap.keys());
+      const pieCategories = Array.from(categoryIdToAmountMap.keys()).map((id) => categoryIdToCategoryMap.get(id)!);
 
       this.pieChartData = {
         labels: [this.withoutCategoryName, ...pieCategories.map((category) => category.name)],
