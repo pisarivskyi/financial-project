@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { createStore } from '@ngneat/elf';
 import { selectAllEntities, setEntities, withEntities } from '@ngneat/elf-entities';
 import { getRequestResult, trackRequestResult } from '@ngneat/elf-requests';
-import { Observable, map, switchMap, take, tap } from 'rxjs';
+import { Observable, forkJoin, map, retry, switchMap, take, tap, timer } from 'rxjs';
 
 import { ProviderAccountDataInterface } from '@financial-project/common';
 
@@ -90,8 +90,39 @@ export class AccountsFacadeService {
     return this.providersService.saveProviderAccounts$(providerId, accounts);
   }
 
-  triggerSynchronizationForAccount$(id: string): Observable<SynchronizationJobModel> {
-    return this.jobsService.triggerSynchronizationForAccount$(id, new Date(), new Date());
+  createSynchronizationJobsForAccounts$(
+    accounts: AccountModel[],
+    fromDate: Date,
+    toDate: Date
+  ): Observable<SynchronizationJobModel[]> {
+    return forkJoin(accounts.map((account) => this.triggerSynchronizationForAccount$(account.id, fromDate, toDate)));
+  }
+
+  createSynchronizationJobsForAccountsAndWait$(
+    accounts: AccountModel[],
+    fromDate: Date,
+    toDate: Date
+  ): Observable<SynchronizationJobModel[]> {
+    return this.createSynchronizationJobsForAccounts$(accounts, fromDate, toDate).pipe(
+      switchMap((jobs) => {
+        return forkJoin(jobs.map((jobNode) => this.getSynchronizationJob$(jobNode.job.id!))).pipe(
+          map((jobs) => {
+            if (!jobs.every((jobNode) => jobNode.job.finishedOn)) {
+              throw new Error();
+            }
+
+            return jobs;
+          }),
+          retry({
+            delay: () => timer(5000),
+          })
+        );
+      })
+    );
+  }
+
+  triggerSynchronizationForAccount$(id: string, fromDate: Date, toDate: Date): Observable<SynchronizationJobModel> {
+    return this.jobsService.triggerSynchronizationForAccount$(id, fromDate, toDate);
   }
 
   getSynchronizationJob$(id: string): Observable<SynchronizationJobModel> {

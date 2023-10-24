@@ -2,6 +2,11 @@
 
 <ul nz-menu nzMode="inline">
   <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Analytics]">
+      <span nz-icon [nzType]="IconEnum.BarChart"></span><span>Analytics</span>
+    </a>
+  </li>
+  <li nz-menu-item nzMatchRouter>
     <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Providers]">
       <span nz-icon [nzType]="IconEnum.AccountBalance"></span><span>Banks</span>
     </a>

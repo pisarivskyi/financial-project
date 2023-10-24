@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { finalize, map, retry, switchMap, take, timer } from 'rxjs';
+import { take } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
@@ -21,6 +21,7 @@ import { CurrencyFormatPipe } from '../../shared/pipes/currency-format/currency-
 import { GetCreditCardBalancePipe } from '../../shared/pipes/get-credit-card-balance/get-credit-card-balance.pipe';
 import { AddAccountModalComponent } from './components/add-account-modal/add-account-modal.component';
 import { EditAccountModalComponent } from './components/edit-account-modal/edit-account-modal.component';
+import { RunSynchronizationModalComponent } from './components/run-synchronization-modal/run-synchronization-modal.component';
 import { AccountsFacadeService } from './services/accounts-facade.service';
 
 @UntilDestroy()
@@ -109,30 +110,23 @@ export class AccountsContainerComponent implements OnInit {
   onSyncAccount(account: AccountModel): void {
     this.accountSynchronizationStatuses[account.id] = true;
 
-    this.accountsFacadeService
-      .triggerSynchronizationForAccount$(account.id)
-      .pipe(
-        switchMap((jobNode) => {
-          return this.accountsFacadeService.getSynchronizationJob$(jobNode.job.id!).pipe(
-            map((jobNode) => {
-              if (!jobNode.job.finishedOn) {
-                throw new Error();
-              }
+    const modalRef = this.modalService.create({
+      nzTitle: `Run synchronization for ${account.maskedPan}`,
+      nzContent: RunSynchronizationModalComponent,
+      nzCentered: true,
+      nzData: account,
+    });
 
-              return jobNode;
-            }),
-            retry({
-              delay: () => timer(5000),
-            })
-          );
-        }),
-        finalize(() => {
-          this.accountSynchronizationStatuses[account.id] = false;
-          this.accountsFacadeService.loadAccounts();
-          this.cdr.markForCheck();
-        })
-      )
-      .subscribe();
+    modalRef.afterClose.subscribe((created: boolean) => {
+      if (created) {
+        this.accountsFacadeService.loadAccounts();
+
+        this.messageService.success('Account was synchronized');
+      }
+
+      this.accountSynchronizationStatuses[account.id] = false;
+      this.cdr.markForCheck();
+    });
   }
 
   onEditAccount(account: AccountModel): void {

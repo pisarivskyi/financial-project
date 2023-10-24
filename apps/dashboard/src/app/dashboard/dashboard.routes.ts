@@ -11,7 +11,12 @@ export const dashboardRoutes: Route[] = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: RoutePathEnum.Records,
+        redirectTo: RoutePathEnum.Analytics,
+      },
+      {
+        path: RoutePathEnum.Analytics,
+        loadComponent: () =>
+          import('./analytics-container/analytics-container.component').then((mod) => mod.AnalyticsContainerComponent),
       },
       {
         path: RoutePathEnum.Providers,

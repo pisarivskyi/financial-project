@@ -7,4 +7,5 @@ export enum IconEnum {
   Category = 'category',
   CreditCard = 'credit_card',
   Settings = 'settings',
+  BarChart = 'bar_chart',
 }
