@@ -43,6 +43,7 @@ jobs:
             echo AUTH0_ISSUER_URL=$AUTH0_ISSUER_URL >> .env
             echo AUTH0_AUDIENCE=$AUTH0_AUDIENCE >> .env
             npm run migration:run
+            npm run seeds:run
             rm -rf /var/www/budget/*
             rm -rf /var/www/api-budget/{*,.env}
             mv ./dist/apps/dashboard/* /var/www/budget
