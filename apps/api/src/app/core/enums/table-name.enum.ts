@@ -6,4 +6,5 @@ export enum TableNameEnum {
   Settings = 'settings',
   Users = 'users',
   Providers = 'providers',
+  MerchantCategoryCodes = 'merchant-category-codes',
 }
