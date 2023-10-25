@@ -56,19 +56,21 @@
         <td>{{ category.parentCategory?.name ?? '-' }}</td>
         <td>{{ category.createdAt | date }}</td>
         <td>
-          <button nz-button nzSize="small" (click)="onEditCategory(category)">Edit</button>
+          <ng-container *ngIf="category.createdBy !== 'SYSTEM'">
+            <button nz-button nzSize="small" (click)="onEditCategory(category)">Edit</button>
 
-          <button
-            nz-button
-            nzSize="small"
-            nz-popconfirm
-            nzPopconfirmTitle="Are you sure?"
-            nzOkText="ok"
-            nzCancelText="cancel"
-            (nzOnConfirm)="onDeleteCategory(category)"
-          >
-            Delete
-          </button>
+            <button
+              nz-button
+              nzSize="small"
+              nz-popconfirm
+              nzPopconfirmTitle="Are you sure?"
+              nzOkText="ok"
+              nzCancelText="cancel"
+              (nzOnConfirm)="onDeleteCategory(category)"
+            >
+              Delete
+            </button>
+          </ng-container>
         </td>
       </tr>
     </tbody>
