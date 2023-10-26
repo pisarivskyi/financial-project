@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import fs from 'fs/promises';
 import { QueryRunner } from 'typeorm';
 
-import { connectionSource } from '../../../app/configs/typeorm.config';
+import { connectionSource } from '../../app/configs/typeorm.config';
 import { ALLOWED_CODES } from './codes';
 import mccJsonData from './mcc_codes.json';
 
