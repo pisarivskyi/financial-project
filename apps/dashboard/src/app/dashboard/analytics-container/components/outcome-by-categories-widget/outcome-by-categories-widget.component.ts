@@ -68,20 +68,32 @@ export class OutcomeByCategoriesWidgetComponent implements OnChanges {
 
   private initData(): void {
     if (this.summary && this.categories) {
+      // find root categories
+      const rootCategories = this.categories.filter((category) => !category.parentCategory);
+      // get child categories
+      const childrenCategories = this.categories.filter((category) => category.parentCategory);
+
+      // prepare some maps data
       const categoryIdToAmountMap = new Map<string, number>();
       const categoryIdToCategoryMap = new Map<string, CategoryModel>(
-        this.categories.map((category) => [category.id, category])
+        rootCategories.map((category) => [category.id, category])
+      );
+      const childCategoryIdToParentCategoryIdMap = new Map<string, string>(
+        childrenCategories.map((category) => [category.id, category.parentCategory.id])
       );
       let withoutCategoryAmount = 0;
 
       for (const record of this.summary.outcomeRecords) {
         if (record.category) {
-          const existingCategoryAmount = categoryIdToAmountMap.get(record.category.id);
+          // check if category of the record is child category, then get its parent category value, otherwise it's parent category
+          const categoryId = childCategoryIdToParentCategoryIdMap.get(record.category.id) ?? record.category.id;
+
+          const existingCategoryAmount = categoryIdToAmountMap.get(categoryId);
 
           if (existingCategoryAmount) {
-            categoryIdToAmountMap.set(record.category.id, existingCategoryAmount + record.amount);
+            categoryIdToAmountMap.set(categoryId, existingCategoryAmount + record.amount);
           } else {
-            categoryIdToAmountMap.set(record.category.id, record.amount);
+            categoryIdToAmountMap.set(categoryId, record.amount);
           }
         } else {
           withoutCategoryAmount += record.amount;
@@ -91,11 +103,20 @@ export class OutcomeByCategoriesWidgetComponent implements OnChanges {
       const pieCategories = Array.from(categoryIdToAmountMap.keys()).map((id) => categoryIdToCategoryMap.get(id)!);
 
       this.pieChartData = {
-        labels: [this.withoutCategoryName, ...pieCategories.map((category) => category.name)],
+        labels: [
+          ...(withoutCategoryAmount ? [this.withoutCategoryName] : []),
+          ...pieCategories.map((category) => category.name),
+        ],
         datasets: [
           {
-            data: [withoutCategoryAmount, ...Array.from(categoryIdToAmountMap.values())],
-            backgroundColor: [this.withoutCategoryColor, ...pieCategories.map((category) => category.color)],
+            data: [
+              ...(withoutCategoryAmount ? [withoutCategoryAmount / 100] : []),
+              ...Array.from(categoryIdToAmountMap.values()).map((amount) => amount / 100),
+            ],
+            backgroundColor: [
+              ...(withoutCategoryAmount ? [this.withoutCategoryColor] : []),
+              ...pieCategories.map((category) => category.color),
+            ],
           },
         ],
       };
