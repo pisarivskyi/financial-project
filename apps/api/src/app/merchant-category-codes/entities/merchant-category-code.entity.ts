@@ -23,7 +23,7 @@ export class MerchantCategoryCodeEntity extends BaseEntity implements MerchantCa
   @ApiProperty()
   createdBy: string;
 
-  @ManyToMany(() => CategoryEntity, { onDelete: 'SET NULL' })
+  @ManyToMany(() => CategoryEntity, (category) => category.merchantCategoryCodes, { onDelete: 'SET NULL' })
   @JoinTable()
   @Expose()
   @ApiProperty({ isArray: true, type: CategoryEntity })

@@ -1,8 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Trim } from 'class-sanitizer';
 import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
 
 import { CategoryInterface } from '@financial-project/common';
 
@@ -35,7 +35,9 @@ export class CategoryEntity extends BaseEntity implements CategoryInterface {
   @ApiProperty()
   createdBy: string;
 
-  @ManyToMany(() => MerchantCategoryCodeEntity, { onDelete: 'SET NULL' })
+  @ManyToMany(() => MerchantCategoryCodeEntity, (merchantCategoryCode) => merchantCategoryCode.categories, {
+    onDelete: 'SET NULL',
+  })
   @Expose()
   @ApiProperty({ isArray: true, type: MerchantCategoryCodeEntity })
   merchantCategoryCodes: MerchantCategoryCodeEntity[];
