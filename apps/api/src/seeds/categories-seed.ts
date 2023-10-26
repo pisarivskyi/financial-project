@@ -7,7 +7,7 @@ import { CategoryNodeInterface, INITIAL_CATEGORIES } from './data/categories-dat
 
 const logger = new Logger('Seed generator');
 
-async function seed() {
+export async function seed() {
   await connectionSource.initialize();
 
   logger.log('Connected');
@@ -43,4 +43,4 @@ async function createCategoryTree(
   }
 }
 
-seed().then(() => logger.log('Done'));
+// seed().then(() => logger.log('Done'));

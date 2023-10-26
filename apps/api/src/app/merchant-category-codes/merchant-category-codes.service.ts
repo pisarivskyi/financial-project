@@ -24,6 +24,9 @@ export class MerchantCategoryCodesService {
       order: {
         createdAt: 'DESC',
       },
+      relations: {
+        categories: true,
+      },
     });
   }
 

@@ -185,6 +185,24 @@ export const INITIAL_CATEGORIES: CategoryNodeInterface[] = [
       },
       {
         node: {
+          id: '085b400d-d7be-4849-a5c5-289fcc4e356e',
+          name: 'Tolls/Bridge fees',
+          color: '#e05426',
+          icon: CategoryIconEnum.Toll,
+          createdBy: 'SYSTEM',
+        },
+      },
+      {
+        node: {
+          id: '56970bbf-41ec-4b5f-822f-7de6cdea2c45',
+          name: 'Car rental/Leasing',
+          color: '#e05426',
+          icon: CategoryIconEnum.CarRental,
+          createdBy: 'SYSTEM',
+        },
+      },
+      {
+        node: {
           id: 'ad70b5c9-2760-4f5c-8fd0-6ccbe4561517',
           name: 'Parking fees',
           color: '#e05426',
@@ -333,6 +351,15 @@ export const INITIAL_CATEGORIES: CategoryNodeInterface[] = [
           createdBy: 'SYSTEM',
         },
       },
+      {
+        node: {
+          id: '77461b75-4066-4a7c-833d-d6cfcde11d47',
+          name: 'Food delivery/Takeaways',
+          color: '#c73f42',
+          icon: CategoryIconEnum.TakeoutDining,
+          createdBy: 'SYSTEM',
+        },
+      },
     ],
   },
   {
@@ -469,6 +496,82 @@ export const INITIAL_CATEGORIES: CategoryNodeInterface[] = [
           name: 'Clothing',
           color: '#6a6dd0',
           icon: CategoryIconEnum.Styler,
+          createdBy: 'SYSTEM',
+        },
+      },
+    ],
+  },
+  {
+    node: {
+      id: '4a3d8d1a-3374-4e9b-8fa0-797ebb4cbe86',
+      name: 'Financial operations',
+      color: '#679ece',
+      icon: CategoryIconEnum.FinanceChip,
+      createdBy: 'SYSTEM',
+    },
+    children: [
+      {
+        node: {
+          id: '21651994-d418-4806-b50e-8499c8f18cc0',
+          name: 'Cash withdrawal',
+          color: '#679ece',
+          icon: CategoryIconEnum.Atm,
+          createdBy: 'SYSTEM',
+        },
+      },
+      {
+        node: {
+          id: '4c5b4d02-5500-4ad4-9ea4-ea1ce9ab7e8c',
+          name: 'Credit percentage payments',
+          color: '#679ece',
+          icon: CategoryIconEnum.AccountBalance,
+          createdBy: 'SYSTEM',
+        },
+      },
+      {
+        node: {
+          id: 'd5514ddb-02fb-488f-90b0-7848d90f6544',
+          name: 'Insurance',
+          color: '#679ece',
+          icon: CategoryIconEnum.CreditScore,
+          createdBy: 'SYSTEM',
+        },
+      },
+      {
+        node: {
+          id: '70681d01-6a81-4854-b021-827387b67bd5',
+          name: 'Money transfer',
+          color: '#679ece',
+          icon: CategoryIconEnum.SendMoney,
+          createdBy: 'SYSTEM',
+        },
+      },
+    ],
+  },
+  {
+    node: {
+      id: 'e28e5564-14db-4781-bdde-7c98a13a1420',
+      name: 'Services',
+      color: '#c38384',
+      icon: CategoryIconEnum.PartnerExchange,
+      createdBy: 'SYSTEM',
+    },
+    children: [
+      {
+        node: {
+          id: '515b2890-450c-404e-96af-b6a5a03a1fcf',
+          name: 'Courier services',
+          color: '#c38384',
+          icon: CategoryIconEnum.LocalShipping,
+          createdBy: 'SYSTEM',
+        },
+      },
+      {
+        node: {
+          id: '86bac649-bb34-400a-98d3-8516eb5c9615',
+          name: 'Government services',
+          color: '#c38384',
+          icon: CategoryIconEnum.AssuredWorkload,
           createdBy: 'SYSTEM',
         },
       },
