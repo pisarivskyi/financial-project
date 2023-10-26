@@ -1,12 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Trim } from 'class-sanitizer';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Expose } from 'class-transformer';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
 
 import { CategoryInterface } from '@financial-project/common';
 
 import { TableNameEnum } from '../../core/enums/table-name.enum';
 import { BaseEntity } from '../../core/models/base-entity.abstract';
+import { MerchantCategoryCodeEntity } from '../../merchant-category-codes/entities/merchant-category-code.entity';
 
 @Entity(TableNameEnum.Categories)
 export class CategoryEntity extends BaseEntity implements CategoryInterface {
@@ -33,17 +35,12 @@ export class CategoryEntity extends BaseEntity implements CategoryInterface {
   @ApiProperty()
   createdBy: string;
 
-  @Column({ type: 'smallint', nullable: true })
-  @IsOptional()
-  @IsNumber()
-  @ApiPropertyOptional()
-  mccRangeStart?: number;
-
-  @Column({ type: 'smallint', nullable: true })
-  @IsOptional()
-  @IsNumber()
-  @ApiPropertyOptional()
-  mccRangeEnd?: number;
+  @ManyToMany(() => MerchantCategoryCodeEntity, (merchantCategoryCode) => merchantCategoryCode.categories, {
+    onDelete: 'SET NULL',
+  })
+  @Expose()
+  @ApiProperty({ isArray: true, type: MerchantCategoryCodeEntity })
+  merchantCategoryCodes: MerchantCategoryCodeEntity[];
 
   @ManyToOne(() => CategoryEntity, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn()

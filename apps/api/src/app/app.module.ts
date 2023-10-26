@@ -11,6 +11,7 @@ import { BudgetsModule } from './budgets/budgets.module';
 import { CategoriesModule } from './categories/categories.module';
 import typeorm from './configs/typeorm.config';
 import { JobsModule } from './jobs/jobs.module';
+import { MerchantCategoryCodesModule } from './merchant-category-codes/merchant-category-codes.module';
 import { ProvidersModule } from './providers/providers.module';
 import { RecordsModule } from './records/records.module';
 import { SettingsModule } from './settings/settings.module';
@@ -43,6 +44,7 @@ import { SettingsModule } from './settings/settings.module';
     ProvidersModule,
     JobsModule,
     AnalyticsModule,
+    MerchantCategoryCodesModule,
   ],
 })
 export class AppModule {}
