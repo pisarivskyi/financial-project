@@ -10,10 +10,11 @@ import { RecordCreationTypeEnum, RecordTypeEnum } from '@financial-project/commo
 import { ApiMonobank, ApiMonobankProviderService } from '@financial-project/providers';
 
 import { AccountEntity } from '../../accounts/entities/account.entity';
-import { CategoriesService } from '../../categories/categories.service';
+import { CategoryEntity } from '../../categories/entities/category.entity';
 import { RecordEntity } from '../../records/entities/record.entity';
 import { RECORDS_SYNC_QUEUE_NAME } from '../constants/records-sync-queue-name.const';
 import { JobPayloadInterface } from '../interfaces/job-payload.interface';
+import { CategoryAssignerService } from './category-assigner.service';
 
 @Processor(RECORDS_SYNC_QUEUE_NAME)
 export class RecordsSynchronizationProcessorService extends WorkerHost {
@@ -22,7 +23,8 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
   constructor(
     @InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>,
     @InjectRepository(RecordEntity) private recordsRepository: Repository<RecordEntity>,
-    private categoriesService: CategoriesService,
+    @InjectRepository(CategoryEntity) private categoriesRepository: Repository<CategoryEntity>,
+    private categoryAssignerService: CategoryAssignerService,
     private apiMonobankProviderService: ApiMonobankProviderService
   ) {
     super();
@@ -61,9 +63,13 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
       this.debug(job, `${existingRecordBankIds.length} of ${records.length} records already exist`);
 
       // find records to save
-      const recordsToSave = records.filter((record) => !existingRecordBankIds.includes(record.bankRecordId));
+      let recordsToSave = records.filter((record) => !existingRecordBankIds.includes(record.bankRecordId));
 
       if (recordsToSave.length) {
+        // assign categories
+        const categories = await this.getCategories(account.createdBy);
+        recordsToSave = this.categoryAssignerService.assignCategories(recordsToSave, categories);
+
         const savedRecords = await this.recordsRepository.save(recordsToSave);
 
         this.debug(job, `saved ${savedRecords.length} records for account '${job.data.accountId}'`);
@@ -112,7 +118,6 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
     record.type = Math.sign(statement.amount) === 1 ? RecordTypeEnum.Income : RecordTypeEnum.Outcome;
     record.account = account;
     record.balance = statement.balance;
-    // record.category?: CategoryInterface;
     record.creationType = RecordCreationTypeEnum.Synced;
     record.currencyCode = account.currencyCode;
     record.operationCurrencyCode = statement.currencyCode;
@@ -122,6 +127,18 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
     record.createdBy = account.createdBy;
 
     return record;
+  }
+
+  private getCategories(userId: string): Promise<CategoryEntity[]> {
+    return this.categoriesRepository.find({
+      where: {
+        createdBy: In([userId, 'SYSTEM']),
+      },
+      relations: {
+        parentCategory: true,
+        merchantCategoryCodes: true,
+      },
+    });
   }
 
   private debug(job: Job, message: string, ...other): void {
