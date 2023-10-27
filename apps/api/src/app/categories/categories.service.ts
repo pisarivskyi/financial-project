@@ -45,7 +45,7 @@ export class CategoriesService {
       order: {
         createdAt: 'DESC',
       },
-      relations: { parentCategory: true },
+      relations: { parentCategory: true, merchantCategoryCodes: true },
     });
   }
 

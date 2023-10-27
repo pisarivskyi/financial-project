@@ -5,12 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MonobankModule } from '@financial-project/providers';
 
 import { AccountEntity } from '../accounts/entities/account.entity';
-import { CategoriesModule } from '../categories/categories.module';
+import { CategoryEntity } from '../categories/entities/category.entity';
 import { RecordEntity } from '../records/entities/record.entity';
 import { ACCOUNT_SYNC_QUEUE_NAME } from './constants/account-sync-queue-name.const';
 import { RECORDS_SYNC_QUEUE_NAME } from './constants/records-sync-queue-name.const';
 import { JobsController } from './jobs.controller';
 import { AccountSynchronizationProcessorService } from './services/account-synchronization-processor.service';
+import { CategoryAssignerService } from './services/category-assigner.service';
 import { JobsService } from './services/jobs.service';
 import { RecordsSynchronizationProcessorService } from './services/records-synchronization-processor.service';
 import { TaskSchedulerService } from './services/task-scheduler.service';
@@ -21,11 +22,11 @@ import { TaskSchedulerService } from './services/task-scheduler.service';
     AccountSynchronizationProcessorService,
     RecordsSynchronizationProcessorService,
     TaskSchedulerService,
+    CategoryAssignerService,
   ],
   controllers: [JobsController],
   imports: [
-    TypeOrmModule.forFeature([AccountEntity, RecordEntity]),
-    CategoriesModule,
+    TypeOrmModule.forFeature([AccountEntity, RecordEntity, CategoryEntity]),
     MonobankModule,
     BullModule.registerQueue({
       name: RECORDS_SYNC_QUEUE_NAME,
