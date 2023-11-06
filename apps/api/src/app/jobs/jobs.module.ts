@@ -12,6 +12,7 @@ import { RECORDS_SYNC_QUEUE_NAME } from './constants/records-sync-queue-name.con
 import { JobsController } from './jobs.controller';
 import { AccountSynchronizationProcessorService } from './services/account-synchronization-processor.service';
 import { CategoryAssignerService } from './services/category-assigner.service';
+import { CompanyAssignerService } from './services/company-assigner.service';
 import { JobsService } from './services/jobs.service';
 import { RecordsSynchronizationProcessorService } from './services/records-synchronization-processor.service';
 import { TaskSchedulerService } from './services/task-scheduler.service';
@@ -23,6 +24,7 @@ import { TaskSchedulerService } from './services/task-scheduler.service';
     RecordsSynchronizationProcessorService,
     TaskSchedulerService,
     CategoryAssignerService,
+    CompanyAssignerService,
   ],
   controllers: [JobsController],
   imports: [

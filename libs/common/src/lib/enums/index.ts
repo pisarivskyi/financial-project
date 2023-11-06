@@ -7,3 +7,4 @@ export * from './record-creation-type.enum';
 export * from './record-type.enum';
 export * from './issuer.enum';
 export * from './category-icon.enum';
+export * from './company.enum';

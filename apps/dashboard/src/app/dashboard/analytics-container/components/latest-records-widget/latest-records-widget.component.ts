@@ -10,6 +10,8 @@ import { RecordTypeEnum } from '@financial-project/common';
 
 import { SummaryModel } from '../../../../api/analytics/models/summary.model';
 import { RecordModel } from '../../../../api/records/models/record.model';
+import { RecordIconComponent } from '../../../../shared/components/record-icon/record-icon.component';
+import { COMPANY_TO_LOGO } from '../../../../shared/constants/company-to-logo.const';
 import { AmountFormatPipe } from '../../../../shared/pipes/amount-format/amount-format.pipe';
 import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format/currency-format.pipe';
 
@@ -24,6 +26,7 @@ import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format/cur
     AmountFormatPipe,
     CurrencyFormatPipe,
     NzIconModule,
+    RecordIconComponent,
   ],
   templateUrl: './latest-records-widget.component.html',
   styleUrls: ['./latest-records-widget.component.less'],
@@ -39,6 +42,8 @@ export class LatestRecordsWidgetComponent implements OnChanges {
   records: RecordModel[] = [];
 
   protected readonly RecordTypeEnum = RecordTypeEnum;
+
+  protected readonly COMPANY_TO_LOGO = COMPANY_TO_LOGO;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['summary'].currentValue) {
