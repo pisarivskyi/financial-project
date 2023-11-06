@@ -2,6 +2,7 @@ import { Expose, Type } from 'class-transformer';
 
 import {
   AccountInterface,
+  CompanyEnum,
   CurrencyEnum,
   RecordCreationTypeEnum,
   RecordInterface,
@@ -61,6 +62,9 @@ export class RecordModel extends BaseModel implements RecordInterface {
 
   @Expose()
   metadata?: object;
+
+  @Expose()
+  company?: CompanyEnum;
 
   @Expose()
   type!: RecordTypeEnum;

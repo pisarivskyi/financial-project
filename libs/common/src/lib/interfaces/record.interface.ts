@@ -1,4 +1,4 @@
-import { CurrencyEnum, RecordCreationTypeEnum, RecordTypeEnum } from '../enums';
+import { CompanyEnum, CurrencyEnum, RecordCreationTypeEnum, RecordTypeEnum } from '../enums';
 import { AccountInterface } from './account.interface';
 import { CategoryInterface } from './category.interface';
 
@@ -20,4 +20,5 @@ export interface RecordInterface {
   mcc?: number;
   metadata?: object;
   createdBy: string;
+  company?: CompanyEnum;
 }

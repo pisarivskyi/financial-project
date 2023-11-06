@@ -15,6 +15,7 @@ import { RecordEntity } from '../../records/entities/record.entity';
 import { RECORDS_SYNC_QUEUE_NAME } from '../constants/records-sync-queue-name.const';
 import { JobPayloadInterface } from '../interfaces/job-payload.interface';
 import { CategoryAssignerService } from './category-assigner.service';
+import { CompanyAssignerService } from './company-assigner.service';
 
 @Processor(RECORDS_SYNC_QUEUE_NAME)
 export class RecordsSynchronizationProcessorService extends WorkerHost {
@@ -25,6 +26,7 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
     @InjectRepository(RecordEntity) private recordsRepository: Repository<RecordEntity>,
     @InjectRepository(CategoryEntity) private categoriesRepository: Repository<CategoryEntity>,
     private categoryAssignerService: CategoryAssignerService,
+    private companyAssignerService: CompanyAssignerService,
     private apiMonobankProviderService: ApiMonobankProviderService
   ) {
     super();
@@ -69,6 +71,8 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
         // assign categories
         const categories = await this.getCategories(account.createdBy);
         recordsToSave = this.categoryAssignerService.assignCategories(recordsToSave, categories);
+        // assign to company
+        recordsToSave = this.companyAssignerService.assignCompanies(recordsToSave);
 
         const savedRecords = await this.recordsRepository.save(recordsToSave);
 

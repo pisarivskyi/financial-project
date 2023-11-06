@@ -2,7 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-import { CurrencyEnum, RecordCreationTypeEnum, RecordInterface, RecordTypeEnum } from '@financial-project/common';
+import {
+  CompanyEnum,
+  CurrencyEnum,
+  RecordCreationTypeEnum,
+  RecordInterface,
+  RecordTypeEnum,
+} from '@financial-project/common';
 
 import { AccountEntity } from '../../accounts/entities/account.entity';
 import { CategoryEntity } from '../../categories/entities/category.entity';
@@ -61,6 +67,9 @@ export class RecordEntity extends BaseEntity implements RecordInterface {
   @ManyToOne(() => CategoryEntity, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn()
   category?: CategoryEntity;
+
+  @Column({ type: 'enum', enum: CompanyEnum, enumName: 'company_enum', nullable: true })
+  company?: CompanyEnum;
 
   @Column()
   @ApiProperty()
