@@ -51,6 +51,10 @@ export class CompanyAssignerService {
   }
 
   private checkForKeywords(target: string, keywords: string[]): boolean {
+    if (!target) {
+      return false;
+    }
+
     target = target.toLowerCase();
 
     return keywords.some((keyword) => target.includes(keyword));
