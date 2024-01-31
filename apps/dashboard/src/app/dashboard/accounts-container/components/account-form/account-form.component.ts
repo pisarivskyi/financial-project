@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { instanceToInstance } from 'class-transformer';
@@ -23,7 +22,6 @@ export type AccountFormGroup = CreateFormGroupFromData<AccountFormData>;
   selector: 'fpd-account-form',
   standalone: true,
   imports: [
-    CommonModule,
     NzSelectModule,
     FormsModule,
     NzButtonModule,

@@ -1,4 +1,4 @@
-<ng-container *ngIf="user">
+@if (user) {
   <div class="user-menu" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
     <p>{{ user.name }}</p>
     <nz-avatar [nzSrc]="user?.picture" [nzSize]="40"></nz-avatar>
@@ -12,4 +12,4 @@
       <li nz-menu-item (click)="logout.emit()">Logout</li>
     </ul>
   </nz-dropdown-menu>
-</ng-container>
+}

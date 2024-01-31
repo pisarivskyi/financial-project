@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { User } from '@auth0/auth0-angular';
 
@@ -8,7 +7,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 @Component({
   selector: 'fpd-header',
   standalone: true,
-  imports: [CommonModule, NzAvatarModule, NzDropDownModule],
+  imports: [NzAvatarModule, NzDropDownModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,7 +1,9 @@
 <p>Select existing bank provider</p>
 
 <nz-select class="providers-select" [(ngModel)]="selectedProvider" (ngModelChange)="onProviderChange($event)">
-  <nz-option *ngFor="let provider of providers" [nzValue]="provider" [nzLabel]="provider.name"></nz-option>
+  @for (provider of providers; track provider.id) {
+    <nz-option [nzValue]="provider" [nzLabel]="provider.name"></nz-option>
+  }
 </nz-select>
 
 <p>or</p>

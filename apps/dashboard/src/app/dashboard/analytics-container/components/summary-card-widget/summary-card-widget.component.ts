@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 
 import { SummaryModel } from '../../../../api/analytics/models/summary.model';
 import { AmountFormatPipe } from '../../../../shared/pipes/amount-format/amount-format.pipe';
@@ -40,7 +40,7 @@ export class SummaryCardWidgetComponent implements OnChanges {
   percentage = 0;
   percentageSign = 0;
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.initData();
   }
 

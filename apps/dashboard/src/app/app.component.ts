@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -9,7 +8,7 @@ import { ICON_DEFINITIONS } from './shared/constants/icon-definitions.const';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   selector: 'fpd-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less'],

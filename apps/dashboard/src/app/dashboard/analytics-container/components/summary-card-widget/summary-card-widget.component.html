@@ -11,9 +11,14 @@
       [class.percentage-increased]="percentageSign === 1"
       [class.percentage-decreased]="percentageSign === -1"
     >
-      <span
-        ><ng-container *ngIf="percentageSign === 1">+</ng-container
-        ><ng-container *ngIf="percentageSign === -1">-</ng-container>{{ percentage | percent }}</span
+      <span>
+        @if (percentageSign === 1) {
+          +
+        }
+        @if (percentageSign === -1) {
+          -
+        }
+        {{ percentage | percent }}</span
       >
     </p>
   </div>

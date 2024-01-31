@@ -7,7 +7,9 @@
 
       <nz-form-control>
         <nz-select formControlName="accounts" [nzMode]="'multiple'">
-          <nz-option *ngFor="let option of options" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+          @for (option of options; track option.value.id) {
+            <nz-option [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+          }
         </nz-select>
       </nz-form-control>
     </nz-form-item>

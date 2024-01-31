@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -35,7 +35,7 @@ export class BudgetsWidgetComponent implements OnChanges {
 
   budgetStats: BudgetStatInterface[] = [];
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.initData();
   }
 
@@ -48,7 +48,7 @@ export class BudgetsWidgetComponent implements OnChanges {
       }
 
       const records = this.summary.outcomeRecords.filter(
-        (record) => record.category?.id && budgetCategoryIds.includes(record.category.id)
+        (record) => record.category?.id && budgetCategoryIds.includes(record.category.id),
       );
 
       const budgetCategoryIdToAmount = new Map<string, number>();

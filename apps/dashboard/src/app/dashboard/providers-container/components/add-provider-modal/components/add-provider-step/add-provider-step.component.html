@@ -3,11 +3,9 @@
 <p>Please, choose what bank provider you would like to add:</p>
 
 <nz-select class="providers-select" [(ngModel)]="selectedProviderType" (ngModelChange)="onProviderChange($event)">
-  <nz-option
-    *ngFor="let provider of PROVIDER_OPTIONS"
-    [nzValue]="provider.value"
-    [nzLabel]="provider.label"
-  ></nz-option>
+  @for (provider of PROVIDER_OPTIONS; track provider.value) {
+    <nz-option [nzValue]="provider.value" [nzLabel]="provider.label"></nz-option>
+  }
 </nz-select>
 
 <div *nzModalFooter>

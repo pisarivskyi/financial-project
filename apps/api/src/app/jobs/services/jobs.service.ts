@@ -20,7 +20,7 @@ export class JobsService {
     @InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>,
     @InjectRepository(RecordEntity) private recordsRepository: Repository<RecordEntity>,
     @InjectFlowProducer(ACCOUNT_SYNC_QUEUE_NAME) private accountsSyncQueue: FlowProducer,
-    @InjectQueue(RECORDS_SYNC_QUEUE_NAME) private recordsSyncQueue: Queue
+    @InjectQueue(RECORDS_SYNC_QUEUE_NAME) private recordsSyncQueue: Queue,
   ) {}
 
   async create(createJobDto: CreateJobDto, user: UserInterface): Promise<JobNode> {
@@ -103,6 +103,7 @@ export class JobsService {
   }
 
   // TODO: think about implementing this method
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async findAll(user: UserInterface): Promise<Job<JobPayloadInterface>[]> {
     return [];
     // const jobs = await this.accountsSyncQueue.getFlow([]);

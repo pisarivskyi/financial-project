@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { instanceToInstance } from 'class-transformer';
@@ -23,7 +22,7 @@ export type SettingsFormGroup = CreateFormGroupFromData<SettingsFormData>;
 @Component({
   selector: 'fpd-settings-form',
   standalone: true,
-  imports: [CommonModule, NzSelectModule, FormsModule, NzFormModule, ReactiveFormsModule, NzInputNumberModule],
+  imports: [NzSelectModule, FormsModule, NzFormModule, ReactiveFormsModule, NzInputNumberModule],
   templateUrl: './settings-form.component.html',
   styleUrls: ['./settings-form.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,

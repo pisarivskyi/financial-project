@@ -1,15 +1,15 @@
-<ng-container [ngSwitch]="currentStep">
-  <fpd-add-provider-step
-    *ngSwitchCase="AddProviderStepEnum.AddProvider"
-    (selectedProviderTypeToAdd)="onSelectedProviderTypeToAdd($event)"
-    (saveProviderDataStep)="onSaveProviderDataStep()"
-  ></fpd-add-provider-step>
+@switch (currentStep) {
+  @case (AddProviderStepEnum.AddProvider) {
+    <fpd-add-provider-step
+      (selectedProviderTypeToAdd)="onSelectedProviderTypeToAdd($event)"
+      (saveProviderDataStep)="onSaveProviderDataStep()"
+    ></fpd-add-provider-step>
+  }
 
-  <fpd-save-provider-data-step
-    *ngSwitchCase="AddProviderStepEnum.SaveProviderData"
-    (selectProvider)="onSelectProvider($event)"
-  ></fpd-save-provider-data-step>
-</ng-container>
+  @case (AddProviderStepEnum.SaveProviderData) {
+    <fpd-save-provider-data-step (selectProvider)="onSelectProvider($event)"></fpd-save-provider-data-step>
+  }
+}
 
 <div *nzModalFooter>
   <button nz-button nzType="default" (click)="onDestroyModal()">Cancel</button>

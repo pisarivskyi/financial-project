@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { NgChartsModule } from 'ng2-charts';
 
@@ -15,15 +14,7 @@ import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format/cur
 @Component({
   selector: 'fpd-outcome-by-categories-widget',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzTableModule,
-    NzSpinModule,
-    NzSkeletonModule,
-    AmountFormatPipe,
-    CurrencyFormatPipe,
-    NgChartsModule,
-  ],
+  imports: [NzTableModule, NzSpinModule, NzSkeletonModule, AmountFormatPipe, CurrencyFormatPipe, NgChartsModule],
   templateUrl: './outcome-by-categories-widget.component.html',
   styleUrls: ['./outcome-by-categories-widget.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,7 +53,7 @@ export class OutcomeByCategoriesWidgetComponent implements OnChanges {
   private withoutCategoryName = 'Without category';
   private withoutCategoryColor = '#ccc';
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.initData();
   }
 
@@ -76,10 +67,10 @@ export class OutcomeByCategoriesWidgetComponent implements OnChanges {
       // prepare some maps data
       const categoryIdToAmountMap = new Map<string, number>();
       const categoryIdToCategoryMap = new Map<string, CategoryModel>(
-        rootCategories.map((category) => [category.id, category])
+        rootCategories.map((category) => [category.id, category]),
       );
       const childCategoryIdToParentCategoryIdMap = new Map<string, string>(
-        childrenCategories.map((category) => [category.id, category.parentCategory.id])
+        childrenCategories.map((category) => [category.id, category.parentCategory.id]),
       );
       let withoutCategoryAmount = 0;
 

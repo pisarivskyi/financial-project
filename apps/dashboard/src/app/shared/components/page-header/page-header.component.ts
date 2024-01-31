@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
@@ -9,7 +8,7 @@ import { PageHeaderActionInterface } from './interfaces/page-header-action.inter
 @Component({
   selector: 'fpd-page-header',
   standalone: true,
-  imports: [CommonModule, NzButtonModule, NzBreadCrumbModule],
+  imports: [NzButtonModule, NzBreadCrumbModule],
   templateUrl: './page-header.component.html',
   styleUrls: ['./page-header.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
