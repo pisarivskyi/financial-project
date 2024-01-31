@@ -24,42 +24,47 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let budget of table.data">
-        <td>{{ budget.name }}</td>
-        <td>{{ budget.period }}</td>
-        <td>
-          <ng-container *ngIf="budget.fromDate; else emptyCellTemplate">
-            {{ budget.fromDate | date }}
-          </ng-container>
-        </td>
-        <td>
-          <ng-container *ngIf="budget.toDate; else emptyCellTemplate">
-            {{ budget.toDate | date }}
-          </ng-container>
-        </td>
-        <td>
-          <ng-container *ngFor="let category of budget.categories"> {{ category.name }}, </ng-container>
-        </td>
-        <td>{{ budget.amount | amountFormat | currencyFormat : budget.currencyCode }}</td>
-        <td>{{ budget.createdAt | date }}</td>
-        <td>
-          <button nz-button nzSize="small" (click)="onEditBudget(budget)">Edit</button>
-
-          <button
-            nz-button
-            nzSize="small"
-            nz-popconfirm
-            nzPopconfirmTitle="Are you sure?"
-            nzOkText="ok"
-            nzCancelText="cancel"
-            (nzOnConfirm)="onDeleteBudget(budget)"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
+      @for (budget of table.data; track budget.id) {
+        <tr>
+          <td>{{ budget.name }}</td>
+          <td>{{ budget.period }}</td>
+          <td>
+            @if (budget.fromDate) {
+              {{ budget.fromDate | date }}
+            } @else {
+              -
+            }
+          </td>
+          <td>
+            @if (budget.toDate) {
+              {{ budget.toDate | date }}
+            } @else {
+              -
+            }
+          </td>
+          <td>
+            @for (category of budget.categories; track category) {
+              {{ category.name }},
+            }
+          </td>
+          <td>{{ budget.amount | amountFormat | currencyFormat: budget.currencyCode }}</td>
+          <td>{{ budget.createdAt | date }}</td>
+          <td>
+            <button nz-button nzSize="small" (click)="onEditBudget(budget)">Edit</button>
+            <button
+              nz-button
+              nzSize="small"
+              nz-popconfirm
+              nzPopconfirmTitle="Are you sure?"
+              nzOkText="ok"
+              nzCancelText="cancel"
+              (nzOnConfirm)="onDeleteBudget(budget)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      }
     </tbody>
   </nz-table>
 </div>
-
-<ng-template #emptyCellTemplate>-</ng-template>

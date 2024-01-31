@@ -21,25 +21,29 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let record of table.data">
-        <td>
-          {{ record.name }}
-        </td>
-        <td>{{ record.category?.name ?? 'none' }}</td>
-        <td>
-          <span
-            [class.income]="record.type === RecordTypeEnum.Income"
-            [class.outcome]="record.type === RecordTypeEnum.Outcome"
-            >{{ record.amount | amountFormat | currencyFormat : record.currencyCode }}</span
-          >
-        </td>
-        <td>
-          <span *ngIf="record.bankCreatedAt">{{ record.bankCreatedAt | date : 'medium' }}</span>
-        </td>
-        <td>
-          <button nz-button nzSize="small" (click)="onEditRecord(record)">Edit</button>
-        </td>
-      </tr>
+      @for (record of table.data; track record.id) {
+        <tr>
+          <td>
+            {{ record.name }}
+          </td>
+          <td>{{ record.category?.name ?? 'none' }}</td>
+          <td>
+            <span
+              [class.income]="record.type === RecordTypeEnum.Income"
+              [class.outcome]="record.type === RecordTypeEnum.Outcome"
+              >{{ record.amount | amountFormat | currencyFormat: record.currencyCode }}</span
+            >
+          </td>
+          <td>
+            @if (record.bankCreatedAt) {
+              <span>{{ record.bankCreatedAt | date: 'medium' }}</span>
+            }
+          </td>
+          <td>
+            <button nz-button nzSize="small" (click)="onEditRecord(record)">Edit</button>
+          </td>
+        </tr>
+      }
     </tbody>
   </nz-table>
 </div>

@@ -46,33 +46,34 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let category of table.data">
-        <td style="width: 0">
-          <div class="icon" [style.background-color]="category.color">
-            <span nz-icon [nzType]="category.icon"></span>
-          </div>
-        </td>
-        <td>{{ category.name }}</td>
-        <td>{{ category.parentCategory?.name ?? '-' }}</td>
-        <td>{{ category.createdAt | date }}</td>
-        <td>
-          <ng-container *ngIf="category.createdBy !== 'SYSTEM'">
-            <button nz-button nzSize="small" (click)="onEditCategory(category)">Edit</button>
-
-            <button
-              nz-button
-              nzSize="small"
-              nz-popconfirm
-              nzPopconfirmTitle="Are you sure?"
-              nzOkText="ok"
-              nzCancelText="cancel"
-              (nzOnConfirm)="onDeleteCategory(category)"
-            >
-              Delete
-            </button>
-          </ng-container>
-        </td>
-      </tr>
+      @for (category of table.data; track category.id) {
+        <tr>
+          <td style="width: 0">
+            <div class="icon" [style.background-color]="category.color">
+              <span nz-icon [nzType]="category.icon"></span>
+            </div>
+          </td>
+          <td>{{ category.name }}</td>
+          <td>{{ category.parentCategory?.name ?? '-' }}</td>
+          <td>{{ category.createdAt | date }}</td>
+          <td>
+            @if (category.createdBy !== 'SYSTEM') {
+              <button nz-button nzSize="small" (click)="onEditCategory(category)">Edit</button>
+              <button
+                nz-button
+                nzSize="small"
+                nz-popconfirm
+                nzPopconfirmTitle="Are you sure?"
+                nzOkText="ok"
+                nzCancelText="cancel"
+                (nzOnConfirm)="onDeleteCategory(category)"
+              >
+                Delete
+              </button>
+            }
+          </td>
+        </tr>
+      }
     </tbody>
   </nz-table>
 </div>

@@ -3,8 +3,12 @@
   <!--  <p class="description">Manage your accounts</p>-->
 </div>
 
-<div *ngIf="actions" class="actions">
-  <button *ngFor="let action of actions" nz-button [nzType]="action.type" (click)="action.action()">
-    {{ action.label }}
-  </button>
-</div>
+@if (actions) {
+  <div class="actions">
+    @for (action of actions; track action) {
+      <button nz-button [nzType]="action.type" (click)="action.action()">
+        {{ action.label }}
+      </button>
+    }
+  </div>
+}

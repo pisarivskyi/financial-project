@@ -1,16 +1,16 @@
 <nz-spin [nzSpinning]="isLoading$ | async">
-  <ng-container *ngIf="savedAccounts$ | async as accounts">
-    <ng-container *ngIf="accounts.length">
+  @if (savedAccounts$ | async; as accounts) {
+    @if (accounts.length) {
       <p>Accounts was saved:</p>
-
-      <p *ngFor="let account of accounts">
-        {{ account.name }} - {{ account.maskedPan }} -
-        {{ account.balance | amountFormat | currencyFormat : account.currencyCode }}
-      </p>
-
+      @for (account of accounts; track account) {
+        <p>
+          {{ account.name }} - {{ account.maskedPan }} -
+          {{ account.balance | amountFormat | currencyFormat: account.currencyCode }}
+        </p>
+      }
       <p>Next you could setup initial synchronization.</p>
-    </ng-container>
-  </ng-container>
+    }
+  }
 </nz-spin>
 
 <div *nzModalFooter>

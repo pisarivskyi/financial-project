@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -13,7 +12,7 @@ import { PROVIDER_OPTIONS } from '../../../../../../shared/constants/provider-op
 @Component({
   selector: 'fpd-add-provider-step',
   standalone: true,
-  imports: [CommonModule, NzSelectModule, FormsModule, NzButtonModule, NzModalModule],
+  imports: [NzSelectModule, FormsModule, NzButtonModule, NzModalModule],
   templateUrl: './add-provider-step.component.html',
   styleUrls: ['./add-provider-step.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,

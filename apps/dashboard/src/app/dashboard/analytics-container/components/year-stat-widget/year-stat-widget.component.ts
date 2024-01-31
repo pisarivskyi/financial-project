@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { DateTime } from 'luxon';
 import { NgChartsModule } from 'ng2-charts';
@@ -10,7 +9,7 @@ import { AnalyticsFiltersInterface } from '../../services/analytics-facade.servi
 @Component({
   selector: 'fpd-year-stat-widget',
   standalone: true,
-  imports: [CommonModule, NgChartsModule],
+  imports: [NgChartsModule],
   templateUrl: './year-stat-widget.component.html',
   styleUrls: ['./year-stat-widget.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,7 +46,7 @@ export class YearStatWidgetComponent implements OnChanges {
     datasets: [],
   };
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.initData();
   }
 
@@ -59,7 +58,7 @@ export class YearStatWidgetComponent implements OnChanges {
       const currentData = this.summaries.filter(
         (summary) =>
           summary.fromDate.getTime() > startOfYear.toJSDate().getTime() &&
-          summary.fromDate.getTime() < endOfYear.toJSDate().getTime()
+          summary.fromDate.getTime() < endOfYear.toJSDate().getTime(),
       );
 
       // const prevData = this.summaries.slice(0, this.summaries.length - 1)

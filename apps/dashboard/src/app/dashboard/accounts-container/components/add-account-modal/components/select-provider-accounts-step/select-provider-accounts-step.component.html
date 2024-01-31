@@ -1,20 +1,17 @@
 <nz-spin [nzSpinning]="isLoading$ | async">
-  <ng-container *ngIf="providerAccountsData$ | async as providerAccountsData">
+  @if (providerAccountsData$ | async; as providerAccountsData) {
     <p>Select accounts you want to save</p>
-
     <nz-select
       class="select"
       nzMode="multiple"
       [(ngModel)]="selectedAccounts"
       (ngModelChange)="onAccountsChange($event)"
     >
-      <nz-option
-        *ngFor="let account of providerAccountsData.accounts"
-        [nzValue]="account"
-        [nzLabel]="account.maskedPan"
-      ></nz-option>
+      @for (account of providerAccountsData.accounts; track account.id) {
+        <nz-option [nzValue]="account" [nzLabel]="account.maskedPan"></nz-option>
+      }
     </nz-select>
-  </ng-container>
+  }
 </nz-spin>
 
 <div *nzModalFooter>

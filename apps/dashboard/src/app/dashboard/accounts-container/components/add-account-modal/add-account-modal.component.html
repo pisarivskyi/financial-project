@@ -1,45 +1,44 @@
 <nz-spin [nzSpinning]="isLoading$ | async">
-  <ng-container [ngSwitch]="currentStep">
-    <fpd-add-provider-step
-      *ngSwitchCase="AddAccountStepEnum.AddProvider"
-      (selectedProviderTypeToAdd)="onSelectedProviderTypeToAdd($event)"
-      (saveProviderDataStep)="onSaveProviderDataStep()"
-    ></fpd-add-provider-step>
-
-    <fpd-save-provider-data-step
-      *ngSwitchCase="AddAccountStepEnum.SaveProviderData"
-      (selectProvider)="onSelectProvider($event)"
-      (selectProviderAccountsStep)="onSelectProviderAccountsStep()"
-    ></fpd-save-provider-data-step>
-
-    <fpd-select-provider-step
-      *ngSwitchCase="AddAccountStepEnum.SelectProvider"
-      [providers]="(providers$ | async) ?? []"
-      (selectProvider)="onSelectProvider($event)"
-      (addProviderStep)="onAddProviderStep()"
-      (selectProviderAccountsStep)="onSelectProviderAccountsStep()"
-    ></fpd-select-provider-step>
-
-    <fpd-select-provider-accounts-step
-      *ngSwitchCase="AddAccountStepEnum.SelectProviderAccounts"
-      [selectProvider]="selectedProvider"
-      (selectAccounts)="onSelectAccounts($event)"
-      (saveAccountsStep)="onSaveAccountsStep()"
-    ></fpd-select-provider-accounts-step>
-
-    <fpd-save-accounts-step
-      *ngSwitchCase="AddAccountStepEnum.SaveAccounts"
-      [selectProvider]="selectedProvider"
-      [selectedProviderAccounts]="selectedProviderAccounts"
-      (savedAccounts)="onSavedAccounts($event)"
-      (synchronizationStep)="onSynchronizationStep()"
-    ></fpd-save-accounts-step>
-
-    <fpd-setup-initial-synchronization-step
-      *ngSwitchCase="AddAccountStepEnum.Synchronization"
-      [accounts]="savedAccounts"
-    ></fpd-setup-initial-synchronization-step>
-  </ng-container>
+  @switch (currentStep) {
+    @case (AddAccountStepEnum.AddProvider) {
+      <fpd-add-provider-step
+        (selectedProviderTypeToAdd)="onSelectedProviderTypeToAdd($event)"
+        (saveProviderDataStep)="onSaveProviderDataStep()"
+      ></fpd-add-provider-step>
+    }
+    @case (AddAccountStepEnum.SaveProviderData) {
+      <fpd-save-provider-data-step
+        (selectProvider)="onSelectProvider($event)"
+        (selectProviderAccountsStep)="onSelectProviderAccountsStep()"
+      ></fpd-save-provider-data-step>
+    }
+    @case (AddAccountStepEnum.SelectProvider) {
+      <fpd-select-provider-step
+        [providers]="(providers$ | async) ?? []"
+        (selectProvider)="onSelectProvider($event)"
+        (addProviderStep)="onAddProviderStep()"
+        (selectProviderAccountsStep)="onSelectProviderAccountsStep()"
+      ></fpd-select-provider-step>
+    }
+    @case (AddAccountStepEnum.SelectProviderAccounts) {
+      <fpd-select-provider-accounts-step
+        [selectProvider]="selectedProvider"
+        (selectAccounts)="onSelectAccounts($event)"
+        (saveAccountsStep)="onSaveAccountsStep()"
+      ></fpd-select-provider-accounts-step>
+    }
+    @case (AddAccountStepEnum.SaveAccounts) {
+      <fpd-save-accounts-step
+        [selectProvider]="selectedProvider"
+        [selectedProviderAccounts]="selectedProviderAccounts"
+        (savedAccounts)="onSavedAccounts($event)"
+        (synchronizationStep)="onSynchronizationStep()"
+      ></fpd-save-accounts-step>
+    }
+    @case (AddAccountStepEnum.Synchronization) {
+      <fpd-setup-initial-synchronization-step [accounts]="savedAccounts"></fpd-setup-initial-synchronization-step>
+    }
+  }
 </nz-spin>
 
 <div *nzModalFooter>

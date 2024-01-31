@@ -21,11 +21,9 @@
 
       <nz-form-control>
         <nz-select formControlName="currencyCode" nzPlaceHolder="Choose currency">
-          <nz-option
-            *ngFor="let currency of CURRENCY_OPTIONS"
-            [nzValue]="currency.value"
-            [nzLabel]="currency.label"
-          ></nz-option>
+          @for (currency of CURRENCY_OPTIONS; track currency.value) {
+            <nz-option [nzValue]="currency.value" [nzLabel]="currency.label"></nz-option>
+          }
         </nz-select>
       </nz-form-control>
     </nz-form-item>
@@ -35,22 +33,21 @@
 
       <nz-form-control>
         <nz-select formControlName="period" nzPlaceHolder="Choose period">
-          <nz-option
-            *ngFor="let period of PERIOD_OPTIONS"
-            [nzValue]="period.value"
-            [nzLabel]="period.label"
-          ></nz-option>
+          @for (period of PERIOD_OPTIONS; track period) {
+            <nz-option [nzValue]="period.value" [nzLabel]="period.label"></nz-option>
+          }
         </nz-select>
       </nz-form-control>
     </nz-form-item>
 
-    <nz-form-item *ngIf="formGroup.controls['range'].enabled">
-      <nz-form-label>Range</nz-form-label>
-
-      <nz-form-control>
-        <nz-range-picker formControlName="range"></nz-range-picker>
-      </nz-form-control>
-    </nz-form-item>
+    @if (formGroup.controls['range'].enabled) {
+      <nz-form-item>
+        <nz-form-label>Range</nz-form-label>
+        <nz-form-control>
+          <nz-range-picker formControlName="range"></nz-range-picker>
+        </nz-form-control>
+      </nz-form-item>
+    }
 
     <nz-form-item>
       <nz-form-label>Categories</nz-form-label>

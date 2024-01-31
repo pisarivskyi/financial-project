@@ -1,17 +1,17 @@
-<ng-container *ngIf="record; else withoutCategoryTemplate">
-  <ng-container *ngIf="record.company && COMPANY_TO_LOGO[record.company]; else categoryIconTemplate">
-    <img class="company-icon" *ngIf="record.company" [src]="COMPANY_TO_LOGO[record.company]" alt="" />
-  </ng-container>
-
-  <ng-template #categoryIconTemplate>
-    <ng-container *ngIf="record.category; else withoutCategoryTemplate">
+@if (record) {
+  @if (record.company && COMPANY_TO_LOGO[record.company]) {
+    @if (record.company) {
+      <img class="company-icon" [src]="COMPANY_TO_LOGO[record.company]" alt="" />
+    }
+  } @else {
+    @if (record.category) {
       <div class="icon" [style.background-color]="record.category.color">
         <span nz-icon [nzType]="record.category.icon"></span>
       </div>
-    </ng-container>
-  </ng-template>
-</ng-container>
-
-<ng-template #withoutCategoryTemplate>
+    } @else {
+      <div class="icon icon-no-category">-</div>
+    }
+  }
+} @else {
   <div class="icon icon-no-category">-</div>
-</ng-template>
+}

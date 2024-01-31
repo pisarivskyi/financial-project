@@ -12,11 +12,9 @@
 
     <nz-form-control>
       <nz-select formControlName="defaultCurrencyCode" nzPlaceHolder="Choose currency">
-        <nz-option
-          *ngFor="let currency of CURRENCY_OPTIONS"
-          [nzValue]="currency.value"
-          [nzLabel]="currency.label"
-        ></nz-option>
+        @for (currency of CURRENCY_OPTIONS; track currency.value) {
+          <nz-option [nzValue]="currency.value" [nzLabel]="currency.label"></nz-option>
+        }
       </nz-select>
     </nz-form-control>
   </nz-form-item>

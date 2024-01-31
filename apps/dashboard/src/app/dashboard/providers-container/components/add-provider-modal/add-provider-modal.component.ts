@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -14,7 +13,7 @@ import { AddProviderStepEnum } from './enums/add-provider-step.enum';
 @Component({
   selector: 'fpd-add-provider-modal',
   standalone: true,
-  imports: [CommonModule, NzButtonModule, NzModalModule, SaveProviderDataStepComponent, AddProviderStepComponent],
+  imports: [NzButtonModule, NzModalModule, SaveProviderDataStepComponent, AddProviderStepComponent],
   templateUrl: './add-provider-modal.component.html',
   styleUrls: ['./add-provider-modal.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,

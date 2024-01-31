@@ -2,15 +2,13 @@
   <h3>{{ label }}</h3>
 
   <div class="budget-stats">
-    <ng-container *ngFor="let budgetStat of budgetStats">
+    @for (budgetStat of budgetStats; track budgetStat) {
       <div class="budget-name">
         <p class="name">{{ budgetStat.budget.name }}</p>
-
         <p class="amount">
-          {{ budgetStat.budget.amount | amountFormat | currencyFormat : budgetStat.budget.currencyCode }}
+          {{ budgetStat.budget.amount | amountFormat | currencyFormat: budgetStat.budget.currencyCode }}
         </p>
       </div>
-
       <div class="budget-progress">
         <div class="budget-progress-bar">
           <div
@@ -20,6 +18,6 @@
           <p class="budget-progress-bar-percentage">{{ budgetStat.amount / budgetStat.budget.amount | percent }}</p>
         </div>
       </div>
-    </ng-container>
+    }
   </div>
 </div>

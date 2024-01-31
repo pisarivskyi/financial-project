@@ -22,40 +22,41 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let account of table.data">
-        <td>
-          <img [attr.src]="ISSUER_TO_LOGO[account.issuer]" alt="" />
-          {{ account.name }} {{ account.maskedPan }}
-        </td>
-        <td>{{ account | getCreditCardBalance | amountFormat | currencyFormat : account.currencyCode }}</td>
-        <td>{{ CurrencyEnum[account.currencyCode] }}</td>
-        <td>{{ account.createdAt | date }}</td>
-        <td>{{ account.updatedAt | date }}</td>
-        <td>
-          <button
-            nz-button
-            [nzLoading]="accountSynchronizationStatuses[account.id]"
-            nzSize="small"
-            (click)="onSyncAccount(account)"
-          >
-            Sync
-          </button>
-          <button nz-button nzSize="small" (click)="onEditAccount(account)">Edit</button>
-
-          <button
-            nz-button
-            nzSize="small"
-            nz-popconfirm
-            nzPopconfirmTitle="Are you sure?"
-            nzOkText="Yes"
-            nzCancelText="Cancel"
-            nzIcon="edit"
-            (nzOnConfirm)="onDeleteAccount(account)"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
+      @for (account of table.data; track account.id) {
+        <tr>
+          <td>
+            <img [attr.src]="ISSUER_TO_LOGO[account.issuer]" alt="" />
+            {{ account.name }} {{ account.maskedPan }}
+          </td>
+          <td>{{ account | getCreditCardBalance | amountFormat | currencyFormat: account.currencyCode }}</td>
+          <td>{{ CurrencyEnum[account.currencyCode] }}</td>
+          <td>{{ account.createdAt | date }}</td>
+          <td>{{ account.updatedAt | date }}</td>
+          <td>
+            <button
+              nz-button
+              [nzLoading]="accountSynchronizationStatuses[account.id]"
+              nzSize="small"
+              (click)="onSyncAccount(account)"
+            >
+              Sync
+            </button>
+            <button nz-button nzSize="small" (click)="onEditAccount(account)">Edit</button>
+            <button
+              nz-button
+              nzSize="small"
+              nz-popconfirm
+              nzPopconfirmTitle="Are you sure?"
+              nzOkText="Yes"
+              nzCancelText="Cancel"
+              nzIcon="edit"
+              (nzOnConfirm)="onDeleteAccount(account)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      }
     </tbody>
   </nz-table>
 </div>

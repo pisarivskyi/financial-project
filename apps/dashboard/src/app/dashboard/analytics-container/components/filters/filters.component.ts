@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DateTime } from 'luxon';
@@ -17,7 +16,6 @@ import { AnalyticsFiltersInterface } from '../../services/analytics-facade.servi
   selector: 'fpd-filters',
   standalone: true,
   imports: [
-    CommonModule,
     NzButtonModule,
     NzDatePickerModule,
     NzFormModule,

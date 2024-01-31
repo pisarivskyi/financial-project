@@ -13,9 +13,11 @@
 
       <nz-form-control>
         <nz-select formControlName="color" nzPlaceHolder="Choose color" [nzCustomTemplate]="defaultColorTemplate">
-          <nz-option *ngFor="let color of COLOR_OPTIONS" nzCustomContent [nzValue]="color.value">
-            <span class="color-option" [style.background-color]="color.value"></span>
-          </nz-option>
+          @for (color of COLOR_OPTIONS; track color.value) {
+            <nz-option nzCustomContent [nzValue]="color.value">
+              <span class="color-option" [style.background-color]="color.value"></span>
+            </nz-option>
+          }
         </nz-select>
 
         <ng-template #defaultColorTemplate let-selected>
@@ -29,9 +31,11 @@
 
       <nz-form-control>
         <nz-select formControlName="icon" nzPlaceHolder="Choose icon" [nzCustomTemplate]="defaultIconTemplate">
-          <nz-option *ngFor="let icon of CATEGORY_ICON_OPTIONS" nzCustomContent [nzValue]="icon.value">
-            <span nz-icon [nzType]="icon.value"></span>
-          </nz-option>
+          @for (icon of CATEGORY_ICON_OPTIONS; track icon.value) {
+            <nz-option nzCustomContent [nzValue]="icon.value">
+              <span nz-icon [nzType]="icon.value"></span>
+            </nz-option>
+          }
         </nz-select>
 
         <ng-template #defaultIconTemplate let-selected>
