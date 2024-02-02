@@ -43,3 +43,4 @@ Thumbs.db
 .husky
 
 .nx/cache
+.data

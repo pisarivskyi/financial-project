@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  postgresql:
+    image: docker.io/library/postgres:15.5-alpine3.19
+    volumes:
+      - ./.data/postgresql:/var/lib/postgresql/data
+    env_file: .env
+    ports:
+      - '5455:5432'
+  redis:
+    image: docker.io/library/redis:7.2-alpine
+    volumes:
+      - ./.data/redis:/data
+  app:
+    image: budget-api
+    depends_on:
+      - postgresql
+      - redis
+    env_file: .env
+    ports:
+      - '3200:3200'
