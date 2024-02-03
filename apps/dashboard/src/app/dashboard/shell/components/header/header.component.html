@@ -1,7 +1,7 @@
 @if (user) {
   <div class="user-menu" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
-    <p>{{ user.name }}</p>
-    <nz-avatar [nzSrc]="user?.picture" [nzSize]="40"></nz-avatar>
+    <p>{{ user.firstName }} {{ user.lastName }}</p>
+    <nz-avatar [nzSrc]="''" [nzSize]="40"></nz-avatar>
   </div>
 
   <nz-dropdown-menu #menu="nzDropdownMenu">

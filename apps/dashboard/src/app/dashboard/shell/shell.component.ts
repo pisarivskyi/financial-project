@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AuthService } from '@auth0/auth0-angular';
 
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { AuthenticationService } from '../../core/authentication/services/authentication.service';
 
 @Component({
   selector: 'fpd-dashboard-shell',
@@ -17,11 +17,11 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShellComponent {
-  authService = inject(AuthService);
+  authenticationService = inject(AuthenticationService);
 
-  user$ = this.authService.user$;
+  user$ = this.authenticationService.getProfile$();
 
   onLogOut(): void {
-    this.authService.logout();
+    this.authenticationService.logout$().subscribe();
   }
 }

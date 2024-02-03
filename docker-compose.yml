@@ -8,10 +8,20 @@ services:
     env_file: .env
     ports:
       - '5455:5432'
+
   redis:
     image: docker.io/library/redis:7.2-alpine
     volumes:
       - ./.data/redis:/data
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.5
+    restart: unless-stopped
+    env_file: .env
+    command: start-dev
+    ports:
+      - '8080:8080'
+
   app:
     image: budget-api
     depends_on:

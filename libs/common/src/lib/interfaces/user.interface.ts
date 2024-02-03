@@ -1,3 +1,3 @@
-import { User } from '@auth0/auth0-angular';
+import { KeycloakProfile } from 'keycloak-js';
 
-export type UserInterface = User;
+export type UserInterface = KeycloakProfile;
