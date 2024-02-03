@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
-import { KeycloakService } from 'keycloak-angular';
 import { CanMatchFn, UrlTree } from '@angular/router';
+import { KeycloakService } from 'keycloak-angular';
 
 export const authorizedOnlyGuard: CanMatchFn = async (): Promise<boolean | UrlTree> => {
   const keycloakService = inject(KeycloakService);

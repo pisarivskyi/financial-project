@@ -73,7 +73,7 @@ export class AccountsContainerComponent implements OnInit {
     private messageService: NzMessageService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {

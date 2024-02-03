@@ -4,9 +4,9 @@ import { RouterOutlet } from '@angular/router';
 
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
+import { AuthenticationService } from '../../core/authentication/services/authentication.service';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { AuthenticationService } from '../../core/authentication/services/authentication.service';
 
 @Component({
   selector: 'fpd-dashboard-shell',

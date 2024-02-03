@@ -1,7 +1,7 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakConfig } from 'keycloak-js';
-import { from, Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 import { UserInterface } from '@financial-project/common';
 

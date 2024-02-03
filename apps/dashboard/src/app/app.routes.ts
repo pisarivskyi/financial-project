@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 
-import { RoutePathEnum } from './core/enums/route-path.enum';
 import { authorizedOnlyGuard } from './core/authentication/guards/authorized-only.guard';
+import { RoutePathEnum } from './core/enums/route-path.enum';
 
 export const appRoutes: Route[] = [
   {
