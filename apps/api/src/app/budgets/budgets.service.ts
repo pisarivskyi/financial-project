@@ -17,12 +17,12 @@ import { BudgetEntity } from './entities/budget.entity';
 export class BudgetsService {
   constructor(
     @InjectRepository(BudgetEntity) private budgetsRepository: Repository<BudgetEntity>,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
   ) {}
 
   async create(createBudgetDto: CreateBudgetDto, user: UserInterface): Promise<BudgetEntity> {
     const budget = plainToInstance(BudgetEntity, createBudgetDto, { excludeExtraneousValues: true });
-    budget.createdBy = user.sub;
+    budget.createdBy = user.id;
 
     try {
       const categories = await this.categoriesService.findByIds(createBudgetDto.categoryIds, user);
@@ -42,7 +42,7 @@ export class BudgetsService {
   findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<BudgetEntity>> {
     return paginate(this.budgetsRepository, params, {
       where: {
-        createdBy: user.sub,
+        createdBy: user.id,
       },
       order: {
         createdAt: 'DESC',
@@ -56,7 +56,7 @@ export class BudgetsService {
       const targetBudget = await this.budgetsRepository.findOne({
         where: {
           id,
-          createdBy: user.sub,
+          createdBy: user.id,
         },
         relations: { categories: true },
       });
@@ -75,7 +75,7 @@ export class BudgetsService {
     const targetBudget = await this.budgetsRepository.findOne({
       where: {
         id,
-        createdBy: user.sub,
+        createdBy: user.id,
       },
     });
 
@@ -113,7 +113,7 @@ export class BudgetsService {
     const targetBudget = await this.budgetsRepository.findOne({
       where: {
         id,
-        createdBy: user.sub,
+        createdBy: user.id,
       },
     });
 

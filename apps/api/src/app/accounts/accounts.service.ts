@@ -22,7 +22,7 @@ export class AccountsService {
 
   create(createAccountDto: CreateAccountDto, user: UserInterface): Promise<AccountEntity> {
     const account = plainToInstance(AccountEntity, createAccountDto);
-    account.createdBy = user.sub;
+    account.createdBy = user.id;
 
     return this.accountsRepository.save(account);
   }
@@ -30,7 +30,7 @@ export class AccountsService {
   findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<AccountEntity>> {
     return paginate(this.accountsRepository, params, {
       where: {
-        createdBy: user.sub,
+        createdBy: user.id,
       },
       order: {
         createdAt: 'DESC',
@@ -42,7 +42,7 @@ export class AccountsService {
     return this.accountsRepository.find({
       where: {
         bankAccountId: In(bankIds),
-        createdBy: user.sub,
+        createdBy: user.id,
       },
       order: {
         createdAt: 'DESC',
@@ -55,7 +55,7 @@ export class AccountsService {
       const account = await this.accountsRepository.findOne({
         where: {
           id,
-          createdBy: user.sub,
+          createdBy: user.id,
         },
       });
 
@@ -73,7 +73,7 @@ export class AccountsService {
     const targetAccount = await this.accountsRepository.findOne({
       where: {
         id,
-        createdBy: user.sub,
+        createdBy: user.id,
       },
     });
 
@@ -92,7 +92,7 @@ export class AccountsService {
     const targetAccount = await this.accountsRepository.findOne({
       where: {
         id,
-        createdBy: user.sub,
+        createdBy: user.id,
       },
     });
 

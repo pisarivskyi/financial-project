@@ -13,13 +13,13 @@ import { MerchantCategoryCodeEntity } from './entities/merchant-category-code.en
 export class MerchantCategoryCodesService {
   constructor(
     @InjectRepository(MerchantCategoryCodeEntity)
-    private merchantCategoryCodeRepository: Repository<MerchantCategoryCodeEntity>
+    private merchantCategoryCodeRepository: Repository<MerchantCategoryCodeEntity>,
   ) {}
 
   async findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<MerchantCategoryCodeEntity>> {
     return paginate(this.merchantCategoryCodeRepository, params, {
       where: {
-        createdBy: In([user.sub, 'SYSTEM']),
+        createdBy: In([user.id, 'SYSTEM']),
       },
       order: {
         createdAt: 'DESC',
@@ -35,7 +35,7 @@ export class MerchantCategoryCodesService {
       const category = await this.merchantCategoryCodeRepository.findOne({
         where: {
           id,
-          createdBy: In([user.sub, 'SYSTEM']),
+          createdBy: In([user.id, 'SYSTEM']),
         },
       });
 

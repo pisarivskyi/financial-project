@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'nest-keycloak-connect';
 
 import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
-import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
@@ -19,35 +19,35 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   create(@Body() createCategoryDto: CreateCategoryDto, @CurrentUser() user: UserInterface): Promise<CategoryEntity> {
     return this.categoriesService.create(createCategoryDto, user);
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   findAll(@Query() params: PageOptionsDto, @CurrentUser() user: UserInterface): Promise<PageDto<CategoryEntity>> {
     return this.categoriesService.findAll(params, user);
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   findOne(@Param('id') id: string, @CurrentUser() user: UserInterface): Promise<CategoryEntity> {
     return this.categoriesService.findOne(id, user);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
-    @CurrentUser() user: UserInterface
+    @CurrentUser() user: UserInterface,
   ): Promise<CategoryEntity> {
     return this.categoriesService.update(id, updateCategoryDto, user);
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   remove(@Param('id') id: string, @CurrentUser() user: UserInterface): Promise<CategoryEntity> {
     return this.categoriesService.remove(id, user);
   }

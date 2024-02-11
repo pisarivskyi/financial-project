@@ -1,9 +1,9 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'nest-keycloak-connect';
 
 import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
-import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
@@ -17,16 +17,16 @@ export class MerchantCategoryCodesController {
   constructor(private readonly merchantCategoryCodesService: MerchantCategoryCodesService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   findAll(
     @Query() params: PageOptionsDto,
-    @CurrentUser() user: UserInterface
+    @CurrentUser() user: UserInterface,
   ): Promise<PageDto<MerchantCategoryCodeEntity>> {
     return this.merchantCategoryCodesService.findAll(params, user);
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   findOne(@Param('id') id: string, @CurrentUser() user: UserInterface): Promise<MerchantCategoryCodeEntity> {
     return this.merchantCategoryCodesService.findOne(id, user);
   }

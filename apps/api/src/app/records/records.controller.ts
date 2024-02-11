@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Patch, Query, UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'nest-keycloak-connect';
 
 import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
-import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
@@ -15,23 +15,23 @@ export class RecordsController {
   constructor(private readonly recordsService: RecordsService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   findAll(@Query() params: PageOptionsDto, @CurrentUser() user: UserInterface): Promise<PageDto<RecordEntity>> {
     return this.recordsService.findAll(params, user);
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   findOne(@Param('id') id: string, @CurrentUser() user: UserInterface) {
     return this.recordsService.findOne(id, user);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   update(
     @Param('id') id: string,
     @Body() updateRecordDto: UpdateRecordDto,
-    @CurrentUser() user: UserInterface
+    @CurrentUser() user: UserInterface,
   ): Promise<RecordEntity> {
     return this.recordsService.update(id, updateRecordDto, user);
   }

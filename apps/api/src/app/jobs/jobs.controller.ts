@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { Job, JobNode } from 'bullmq';
+import { AuthGuard } from 'nest-keycloak-connect';
 
 import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
-import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { CreateJobDto } from './dtos/create-job.dto';
 import { JobPayloadInterface } from './interfaces/job-payload.interface';
@@ -14,19 +14,19 @@ export class JobsController {
   constructor(private jobsService: JobsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   create(@Body() createJobDto: CreateJobDto, @CurrentUser() user: UserInterface): Promise<JobNode> {
     return this.jobsService.create(createJobDto, user);
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   findOne(@Param('id') id: string, @CurrentUser() user: UserInterface): Promise<JobNode> {
     return this.jobsService.findOne(id, user);
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   findAll(@CurrentUser() user: UserInterface): Promise<Job<JobPayloadInterface>[]> {
     return this.jobsService.findAll(user);
   }

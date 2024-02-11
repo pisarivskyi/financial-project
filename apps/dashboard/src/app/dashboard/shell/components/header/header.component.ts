@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { User } from '@auth0/auth0-angular';
 
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+
+import { UserInterface } from '@financial-project/common';
 
 @Component({
   selector: 'fpd-header',
@@ -14,7 +15,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 })
 export class HeaderComponent {
   @Input()
-  user: User | null | undefined = null;
+  user: UserInterface | null | undefined = null;
 
   @Output()
   logout = new EventEmitter<void>();

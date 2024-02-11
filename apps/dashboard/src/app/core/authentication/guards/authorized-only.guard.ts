@@ -1,22 +1,17 @@
 import { inject } from '@angular/core';
-import { AuthService } from '@auth0/auth0-angular';
-import { Observable, filter, map, switchMap } from 'rxjs';
+import { CanMatchFn, UrlTree } from '@angular/router';
+import { KeycloakService } from 'keycloak-angular';
 
-import { RoutePathEnum } from '../../enums/route-path.enum';
+export const authorizedOnlyGuard: CanMatchFn = async (): Promise<boolean | UrlTree> => {
+  const keycloakService = inject(KeycloakService);
 
-export const authorizedOnlyGuard = (): Observable<boolean> => {
-  const authService = inject(AuthService);
-  return authService.isLoading$.pipe(
-    filter((isLoading) => !isLoading),
-    switchMap(() => authService.user$),
-    map((currentUser) => {
-      if (currentUser === null) {
-        location.href = `/${RoutePathEnum.Auth}/${RoutePathEnum.SignIn}?redirectTo=${encodeURIComponent(
-          `${location.pathname}${location.search}`
-        )}`;
-      }
+  const authenticated: boolean = await keycloakService.isLoggedIn();
 
-      return Boolean(currentUser);
-    })
-  );
+  if (!authenticated) {
+    await keycloakService.login({
+      redirectUri: window.location.origin,
+    });
+  }
+
+  return true;
 };

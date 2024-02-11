@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'nest-keycloak-connect';
 
 import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
-import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { UpdateSettingDto } from './dto/update-setting.dto';
 import { SettingsEntity } from './entities/settings.entity';
@@ -13,13 +13,13 @@ export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   find(@CurrentUser() user: UserInterface): Promise<SettingsEntity> {
     return this.settingsService.find(user);
   }
 
   @Patch()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   update(@Body() updateSettingDto: UpdateSettingDto, @CurrentUser() user: UserInterface): Promise<SettingsEntity> {
     return this.settingsService.update(updateSettingDto, user);
   }

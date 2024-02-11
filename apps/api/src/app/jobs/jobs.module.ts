@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MonobankModule } from '@financial-project/providers';
 
 import { AccountEntity } from '../accounts/entities/account.entity';
+import { AuthenticationModule } from '../authentication/authentication.module';
 import { CategoryEntity } from '../categories/entities/category.entity';
 import { RecordEntity } from '../records/entities/record.entity';
 import { ACCOUNT_SYNC_QUEUE_NAME } from './constants/account-sync-queue-name.const';
@@ -43,6 +44,7 @@ import { TaskSchedulerService } from './services/task-scheduler.service';
     BullModule.registerFlowProducer({
       name: ACCOUNT_SYNC_QUEUE_NAME,
     }),
+    AuthenticationModule,
   ],
 })
 export class JobsModule {}

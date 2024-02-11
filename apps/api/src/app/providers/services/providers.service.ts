@@ -27,13 +27,13 @@ export class ProvidersService {
     private readonly issuerService: IssuerService,
     private readonly accountsService: AccountsService,
     private readonly apiMonobankProviderService: ApiMonobankProviderService,
-    @InjectRepository(ProviderEntity) private readonly providersRepository: Repository<ProviderEntity>
+    @InjectRepository(ProviderEntity) private readonly providersRepository: Repository<ProviderEntity>,
   ) {}
 
   findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<ProviderEntity>> {
     return paginate(this.providersRepository, params, {
       where: {
-        createdBy: user.sub,
+        createdBy: user.id,
       },
       order: {
         createdAt: 'DESC',
@@ -46,7 +46,7 @@ export class ProvidersService {
       const provider = await this.providersRepository.findOne({
         where: {
           id,
-          createdBy: user.sub,
+          createdBy: user.id,
         },
       });
 
@@ -63,10 +63,10 @@ export class ProvidersService {
   create(
     createProviderDto: CreateProviderDto,
     providerType: ProviderTypeEnum,
-    user: UserInterface
+    user: UserInterface,
   ): Promise<ProviderEntity> {
     const provider = this.providerFactoryService.create(providerType, createProviderDto);
-    provider.createdBy = user.sub;
+    provider.createdBy = user.id;
 
     return this.providersRepository.save(provider);
   }
@@ -75,7 +75,7 @@ export class ProvidersService {
     const targetProvider = await this.providersRepository.findOne({
       where: {
         id,
-        createdBy: user.sub,
+        createdBy: user.id,
       },
     });
 
@@ -94,7 +94,7 @@ export class ProvidersService {
     const targetProvider = await this.providersRepository.findOne({
       where: {
         id,
-        createdBy: user.sub,
+        createdBy: user.id,
       },
     });
 
@@ -116,7 +116,7 @@ export class ProvidersService {
       const provider = await this.providersRepository.findOne({
         where: {
           id: providerId,
-          createdBy: user.sub,
+          createdBy: user.id,
         },
       });
 
@@ -125,11 +125,11 @@ export class ProvidersService {
       }
 
       const accountsResponse = await firstValueFrom(
-        this.apiMonobankProviderService.getClientInfo$(provider.data.token).pipe(map((r) => r.data))
+        this.apiMonobankProviderService.getClientInfo$(provider.data.token).pipe(map((r) => r.data)),
       );
 
       const selectedAccounts = accountsResponse.accounts.filter((account) =>
-        saveAccountsDto.accountIds.includes(account.id)
+        saveAccountsDto.accountIds.includes(account.id),
       );
 
       const accountEntities = selectedAccounts.map((monobankAccount) => {
@@ -146,7 +146,7 @@ export class ProvidersService {
         account.balance = monobankAccount.balance;
         account.creditLimit = monobankAccount.creditLimit;
         account.metadata = monobankAccount;
-        account.createdBy = user.sub;
+        account.createdBy = user.id;
 
         return account;
       });
@@ -166,7 +166,7 @@ export class ProvidersService {
       where: {
         id: providerId,
         providerType: ProviderTypeEnum.Monobank,
-        createdBy: user.sub,
+        createdBy: user.id,
       },
     });
 
@@ -205,8 +205,8 @@ export class ProvidersService {
             }));
 
             return accountsData;
-          })
-        )
+          }),
+        ),
       );
 
       return result;
