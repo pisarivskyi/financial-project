@@ -6,6 +6,6 @@ export const environment: ConfigurationInterface = {
   keycloak: {
     url: 'http://localhost:8080',
     realm: 'budget-app',
-    clientId: 'frontend',
+    clientId: 'dashboard',
   },
 };

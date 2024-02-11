@@ -5,18 +5,23 @@ import { Observable, from } from 'rxjs';
 
 import { UserInterface } from '@financial-project/common';
 
+import { ConfigurationService } from '../../configuration/services/configuration.service';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
   keycloakService = inject(KeycloakService);
+  configurationService = inject(ConfigurationService);
 
   init(config: KeycloakConfig): Promise<boolean> {
     return this.keycloakService.init({
       config,
       initOptions: {
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+        checkLoginIframe: false,
+        ...(this.configurationService.getConfiguration().production
+          ? { onLoad: 'check-sso', silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html' }
+          : {}),
       },
     });
   }
