@@ -18,7 +18,7 @@ export class CategoriesService {
 
   async create(createCategoryDto: CreateCategoryDto, user: UserInterface): Promise<CategoryEntity> {
     const category = plainToInstance(CategoryEntity, createCategoryDto);
-    category.createdBy = user.sub;
+    category.createdBy = user.id;
 
     let parentCategory: CategoryEntity;
 
@@ -40,7 +40,7 @@ export class CategoriesService {
   async findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<CategoryEntity>> {
     return paginate(this.categoriesRepository, params, {
       where: {
-        createdBy: In([user.sub, 'SYSTEM']),
+        createdBy: In([user.id, 'SYSTEM']),
       },
       order: {
         createdAt: 'DESC',
@@ -53,7 +53,7 @@ export class CategoriesService {
     return this.categoriesRepository.find({
       where: {
         id: In(ids),
-        createdBy: user.sub,
+        createdBy: user.id,
       },
       relations: { parentCategory: true },
     });
@@ -64,7 +64,7 @@ export class CategoriesService {
       const category = await this.categoriesRepository.findOne({
         where: {
           id,
-          createdBy: user.sub,
+          createdBy: user.id,
         },
         relations: { parentCategory: true },
       });
@@ -83,7 +83,7 @@ export class CategoriesService {
     const targetCategory = await this.categoriesRepository.findOne({
       where: {
         id,
-        createdBy: user.sub,
+        createdBy: user.id,
       },
     });
 
@@ -95,7 +95,7 @@ export class CategoriesService {
       const parentCategory = await this.categoriesRepository.findOne({
         where: {
           id: updateCategoryDto.parentCategory,
-          createdBy: user.sub,
+          createdBy: user.id,
         },
       });
 
@@ -115,7 +115,7 @@ export class CategoriesService {
     const targetCategory = await this.categoriesRepository.findOne({
       where: {
         id,
-        createdBy: user.sub,
+        createdBy: user.id,
       },
     });
 

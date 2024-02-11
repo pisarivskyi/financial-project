@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'nest-keycloak-connect';
 
 import { ApiPathEnum, UserInterface } from '@financial-project/common';
 
-import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
@@ -19,7 +19,7 @@ export class BudgetsController {
   constructor(private readonly budgetsService: BudgetsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @ApiResponse({
     status: 200,
     description: 'Creates a new budget',
@@ -30,7 +30,7 @@ export class BudgetsController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @ApiResponse({
     status: 200,
     description: 'Gets all budgets',
@@ -42,7 +42,7 @@ export class BudgetsController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @ApiResponse({
     status: 200,
     description: 'Gets a single budget by id',
@@ -53,7 +53,7 @@ export class BudgetsController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @ApiResponse({
     status: 200,
     description: 'Updates a single budget by id',
@@ -62,13 +62,13 @@ export class BudgetsController {
   update(
     @Param('id') id: string,
     @Body() updateBudgetDto: UpdateBudgetDto,
-    @CurrentUser() user: UserInterface
+    @CurrentUser() user: UserInterface,
   ): Promise<BudgetEntity> {
     return this.budgetsService.update(id, updateBudgetDto, user);
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @ApiResponse({
     status: 200,
     description: 'Removes a single budget by id',

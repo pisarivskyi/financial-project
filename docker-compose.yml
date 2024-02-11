@@ -11,6 +11,8 @@ services:
 
   redis:
     image: docker.io/library/redis:7.2-alpine
+    ports:
+      - '6379:6379'
     volumes:
       - ./.data/redis:/data
 
@@ -18,15 +20,27 @@ services:
     image: quay.io/keycloak/keycloak:23.0.5
     restart: unless-stopped
     env_file: .env
-    command: start-dev
+    command: start-dev --db=postgres --db-username=keycloak --db-password=keycloak --db-url=jdbc:postgresql://keycloak-postgresql:5432/keycloak
     ports:
       - '8080:8080'
 
-  app:
-    image: budget-api
-    depends_on:
-      - postgresql
-      - redis
-    env_file: .env
+  keycloak-postgresql:
+    image: docker.io/library/postgres:15.5-alpine3.19
+    volumes:
+      - ./.data/keycloak-postgresql:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_DB: keycloak
     ports:
-      - '3200:3200'
+      - '5432:5432'
+# If you need to run api app in container
+#  app:
+#    image: budget-api
+#    depends_on:
+#      - postgresql
+#      - redis
+#      - keycloak-postgresql
+#    env_file: .env
+#    ports:
+#      - '3200:3200'

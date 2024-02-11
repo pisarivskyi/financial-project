@@ -16,13 +16,13 @@ import { RecordEntity } from './entities/record.entity';
 export class RecordsService {
   constructor(
     @InjectRepository(RecordEntity) private recordsRepository: Repository<RecordEntity>,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
   ) {}
 
   findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<RecordEntity>> {
     return paginate(this.recordsRepository, params, {
       where: {
-        createdBy: user.sub,
+        createdBy: user.id,
       },
       relations: {
         account: true,
@@ -39,7 +39,7 @@ export class RecordsService {
       const record = await this.recordsRepository.findOne({
         where: {
           id,
-          createdBy: user.sub,
+          createdBy: user.id,
         },
         relations: {
           account: true,
@@ -61,7 +61,7 @@ export class RecordsService {
     const targetRecord = await this.recordsRepository.findOne({
       where: {
         id,
-        createdBy: user.sub,
+        createdBy: user.id,
       },
     });
 

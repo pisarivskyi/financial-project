@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'nest-keycloak-connect';
 
 import { ProviderTypeEnum, UserInterface } from '@financial-project/common';
 
-import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
@@ -20,58 +20,58 @@ export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   findAll(@Query() params: PageOptionsDto, @CurrentUser() user: UserInterface): Promise<PageDto<ProviderEntity>> {
     return this.providersService.findAll(params, user);
   }
 
   @Get(':providerId')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   findOne(@Param('providerId') providerId: string, @CurrentUser() user: UserInterface): Promise<ProviderEntity> {
     return this.providersService.findOne(providerId, user);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   update(
     @Param('id') id: string,
     @Body() updateProviderDto: UpdateProviderDto,
-    @CurrentUser() user: UserInterface
+    @CurrentUser() user: UserInterface,
   ): Promise<ProviderEntity> {
     return this.providersService.update(id, updateProviderDto, user);
   }
 
   @Delete(':providerId')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   remove(@Param('providerId') providerId: string, @CurrentUser() user: UserInterface): Promise<ProviderEntity> {
     return this.providersService.remove(providerId, user);
   }
 
   @Post(':providerType')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   create(
     @Body() createProviderDto: CreateProviderDto,
     @Param('providerType') providerType: ProviderTypeEnum,
-    @CurrentUser() user: UserInterface
+    @CurrentUser() user: UserInterface,
   ): Promise<ProviderEntity> {
     return this.providersService.create(createProviderDto, providerType, user);
   }
 
   @Get(':providerId/get-accounts')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   getAccounts(
     @Param('providerId') providerId: string,
-    @CurrentUser() user: UserInterface
+    @CurrentUser() user: UserInterface,
   ): Promise<ProviderAccountsDto> {
     return this.providersService.getAccounts(providerId, user);
   }
 
   @Post(':providerId/save-accounts')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   saveAccounts(
     @Param('providerId') providerId: string,
     @Body() saveAccountsDto: SaveAccountsDto,
-    @CurrentUser() user: UserInterface
+    @CurrentUser() user: UserInterface,
   ) {
     return this.providersService.saveAccounts(providerId, saveAccountsDto, user);
   }

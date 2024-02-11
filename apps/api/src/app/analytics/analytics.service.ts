@@ -16,7 +16,7 @@ export class AnalyticsService {
   constructor(
     @InjectRepository(SettingsEntity) private settingsRepository: Repository<SettingsEntity>,
     @InjectRepository(RecordEntity) private recordsRepository: Repository<RecordEntity>,
-    @InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>
+    @InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>,
   ) {}
 
   async getSummaryAnalytics(params: GetSummaryDto, user: UserInterface): Promise<SummaryDto> {
@@ -25,7 +25,7 @@ export class AnalyticsService {
     const accounts = await this.accountsRepository.find({
       where: {
         id: In(accountIds),
-        createdBy: user.sub,
+        createdBy: user.id,
       },
     });
 
@@ -34,7 +34,7 @@ export class AnalyticsService {
         account: {
           id: In(accounts.map((account) => account.id)),
         },
-        createdBy: user.sub,
+        createdBy: user.id,
         bankCreatedAt: Between(fromDate, toDate),
       },
       order: {

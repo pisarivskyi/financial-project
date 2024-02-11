@@ -16,13 +16,13 @@ export class SettingsService {
     try {
       const settings = await this.settingsRepository.findOne({
         where: {
-          createdBy: user.sub,
+          createdBy: user.id,
         },
       });
 
       if (!settings) {
         const newSettings = this.settingsRepository.create({
-          createdBy: user.sub,
+          createdBy: user.id,
         });
 
         return this.settingsRepository.save(newSettings);
@@ -40,7 +40,7 @@ export class SettingsService {
 
       const settings = plainToClassFromExist(existingSettings, {
         ...updateSettingDto,
-        createdBy: user.sub,
+        createdBy: user.id,
       });
 
       return this.settingsRepository.save(settings);

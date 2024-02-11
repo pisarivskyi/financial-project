@@ -15,7 +15,7 @@ export class TaskSchedulerService {
 
   constructor(
     @InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>,
-    private jobsService: JobsService
+    private jobsService: JobsService,
   ) {}
 
   @Cron('5 * * * * *', { disabled: true })
@@ -38,8 +38,8 @@ export class TaskSchedulerService {
           toDate: DateTime.now().toJSDate(),
         },
         {
-          sub: account.createdBy,
-        }
+          id: account.createdBy,
+        },
       );
 
       this.logger.debug(`sync job is scheduled for '${account.id}'`);

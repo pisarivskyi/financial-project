@@ -28,7 +28,7 @@ export class JobsService {
       const account = await this.accountsRepository.findOne({
         where: {
           id: createJobDto.accountId,
-          createdBy: user.sub,
+          createdBy: user.id,
         },
         relations: {
           provider: true,
@@ -50,11 +50,11 @@ export class JobsService {
           queueName: ACCOUNT_SYNC_QUEUE_NAME,
           data: {
             accountId: account.id,
-            userId: user.sub,
+            userId: user.id,
             fromDate: fromDate.toISODate(),
             toDate: toDate.toISODate(),
           },
-          children: [this.createFlowChildJob(account.id, user.sub, fromDate, toDate)],
+          children: [this.createFlowChildJob(account.id, user.id, fromDate, toDate)],
         });
       } else {
         const jobs: FlowChildJob[] = [];
@@ -62,7 +62,7 @@ export class JobsService {
         let cloneToDate = toDate;
 
         do {
-          jobs.push(this.createFlowChildJob(account.id, user.sub, cloneFromDate, cloneToDate));
+          jobs.push(this.createFlowChildJob(account.id, user.id, cloneFromDate, cloneToDate));
 
           cloneFromDate = cloneFromDate.minus({ days: 31 });
           cloneToDate = cloneToDate.minus({ days: 31 });
@@ -70,14 +70,14 @@ export class JobsService {
 
         cloneFromDate = cloneFromDate.plus({ days: 31 });
 
-        jobs.push(this.createFlowChildJob(account.id, user.sub, fromDate, cloneFromDate));
+        jobs.push(this.createFlowChildJob(account.id, user.id, fromDate, cloneFromDate));
 
         return await this.accountsSyncQueue.add({
           name: 'name',
           queueName: ACCOUNT_SYNC_QUEUE_NAME,
           data: {
             accountId: account.id,
-            userId: user.sub,
+            userId: user.id,
             fromDate: fromDate.toISODate(),
             toDate: toDate.toISODate(),
           },
@@ -95,7 +95,7 @@ export class JobsService {
       queueName: ACCOUNT_SYNC_QUEUE_NAME,
     });
 
-    if (!jobNode || jobNode.job.data.userId !== user.sub) {
+    if (!jobNode || jobNode.job.data.userId !== user.id) {
       throw new NotFoundException('Job not found');
     }
 
