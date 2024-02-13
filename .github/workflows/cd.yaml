@@ -71,9 +71,9 @@ jobs:
             cd financial-project
             git checkout feature/change-deployment-process
             cd ..
-            mv financial-project/docker-compose.production.yml budget-app
+            mv financial-project/docker-compose.production.yml budget-app/docker-compose.yml
             rm -rf financial-project
             cd budget-app
             docker login ${DOCKER_REGISTRY} --username ${DOCKER_REGISTRY_USERNAME} --password ${DOCKER_REGISTRY_PASSWORD}
-            docker compose -f docker-compose.production.yml up -d
+            docker compose up -d
             ls -la
