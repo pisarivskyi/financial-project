@@ -23,12 +23,20 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
-      - name: Build
+      - name: Build dashboard docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./dockerfiles/dashboard-prod
-          push: false
+          push: true
+          tags: budget-dashboard:latest
+      - name: Build API docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./dockerfiles/api-prod
+          push: true
+          tags: budget-api:latest
 #      - name: Build Dashboard container
 #        run: |
 #          npm install
