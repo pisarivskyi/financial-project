@@ -23,6 +23,16 @@ jobs:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+      - name: Build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./dockerfiles/dashboard-prod
+          push: false
+#      - name: Build Dashboard container
+#        run: |
+#          npm install
+
 #      - name: Deploy using ssh
 #        uses: appleboy/ssh-action@master
 #        env:
