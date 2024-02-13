@@ -43,6 +43,9 @@ jobs:
       - name: Deploy using SSH
         uses: appleboy/ssh-action@master
         env:
+          DOCKER_REGISTRY: ${{secrets.DOCKER_REGISTRY}}
+          DOCKER_REGISTRY_USERNAME: ${{secrets.DOCKER_REGISTRY_USERNAME}}
+          DOCKER_REGISTRY_PASSWORD: ${{secrets.DOCKER_REGISTRY_PASSWORD}}
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -60,7 +63,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
-          envs: DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME, REDIS_HOST, REDIS_PORT, KEYCLOAK_SERVER_URL, KEYCLOAK_REALM, KEYCLOAK_CLIENT_ID, KEYCLOAK_SECRET, KEYCLOAK_USE_NEST_LOGGER
+          envs: DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME, REDIS_HOST, REDIS_PORT, KEYCLOAK_SERVER_URL, KEYCLOAK_REALM, KEYCLOAK_CLIENT_ID, KEYCLOAK_SECRET, KEYCLOAK_USE_NEST_LOGGER, DOCKER_REGISTRY, DOCKER_REGISTRY_USERNAME, DOCKER_REGISTRY_PASSWORD
           script: |
             cd ~
             git clone git@github.com-financial-project:pisarivskyi/financial-project.git
@@ -70,5 +73,6 @@ jobs:
             mv financial-project/docker-compose.production.yml budget-app
             rm -rf financial-project
             cd budget-app
+            docker login ${DOCKER_REGISTRY} --username ${DOCKER_REGISTRY_USERNAME} --password ${DOCKER_REGISTRY_PASSWORD}
             docker compose -f docker-compose.production.yml up -d
             ls -la
