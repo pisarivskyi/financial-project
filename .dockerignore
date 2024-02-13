@@ -1,0 +1,8 @@
+node_modules
+.angular
+.data
+.husky
+.nx
+.vscode
+.idea
+dist
