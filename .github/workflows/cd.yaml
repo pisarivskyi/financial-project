@@ -8,82 +8,58 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  build:
+  #  build:
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - name: Checkout
+  #        uses: actions/checkout@v4
+  #      - name: Set up QEMU
+  #        uses: docker/setup-qemu-action@v3
+  #      - name: Set up Docker Buildx
+  #        uses: docker/setup-buildx-action@v3
+  #      - name: Login to Private docker registry
+  #        uses: docker/login-action@v3
+  #        with:
+  #          registry: ${{ secrets.DOCKER_REGISTRY }}
+  #          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+  #          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+  #      - name: Build dashboard docker image
+  #        uses: docker/build-push-action@v5
+  #        with:
+  #          context: .
+  #          file: ./dockerfiles/dashboard-prod
+  #          push: true
+  #          tags: registry.devhub.me/budget-dashboard:latest
+  #      - name: Build API docker image
+  #        uses: docker/build-push-action@v5
+  #        with:
+  #          context: .
+  #          file: ./dockerfiles/api-prod
+  #          push: true
+  #          tags: registry.devhub.me/budget-api:latest
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Login to Private docker registry
-        uses: docker/login-action@v3
+      - name: Deploy using SSH
+        uses: appleboy/ssh-action@master
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          AUTH0_ISSUER_URL: ${{ secrets.AUTH0_ISSUER_URL }}
+          AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
         with:
-          registry: ${{ secrets.DOCKER_REGISTRY }}
-          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
-          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
-      - name: Build dashboard docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./dockerfiles/dashboard-prod
-          push: true
-          tags: registry.devhub.me/budget-dashboard:latest
-      - name: Build API docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./dockerfiles/api-prod
-          push: true
-          tags: registry.devhub.me/budget-api:latest
-#      - name: Build Dashboard container
-#        run: |
-#          npm install
-
-#      - name: Deploy using ssh
-#        uses: appleboy/ssh-action@master
-#        env:
-#          DB_HOST: ${{ secrets.DB_HOST }}
-#          DB_PORT: ${{ secrets.DB_PORT }}
-#          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-#          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-#          DB_NAME: ${{ secrets.DB_NAME }}
-#          REDIS_HOST: ${{ secrets.REDIS_HOST }}
-#          REDIS_PORT: ${{ secrets.REDIS_PORT }}
-#          AUTH0_ISSUER_URL: ${{ secrets.AUTH0_ISSUER_URL }}
-#          AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USERNAME }}
-#          key: ${{ secrets.PRIVATE_KEY }}
-#          port: 22
-#          envs: DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME, REDIS_HOST, REDIS_PORT, AUTH0_ISSUER_URL, AUTH0_AUDIENCE
-#          script: |
-#            cd ~
-#            git clone git@github.com:pisarivskyi/financial-project.git
-#            cd financial-project
-#            npm ci
-#            npx nx run-many --all -t build
-#            touch .env
-#            echo DB_HOST=$DB_HOST >> .env
-#            echo DB_PORT=$DB_PORT >> .env
-#            echo DB_USERNAME=$DB_USERNAME >> .env
-#            echo DB_PASSWORD=$DB_PASSWORD >> .env
-#            echo DB_NAME=$DB_NAME >> .env
-#            echo REDIS_HOST=$REDIS_HOST >> .env
-#            echo REDIS_PORT=$REDIS_PORT >> .env
-#            echo AUTH0_ISSUER_URL=$AUTH0_ISSUER_URL >> .env
-#            echo AUTH0_AUDIENCE=$AUTH0_AUDIENCE >> .env
-#            npm run migration:run
-#            npm run seeds:run
-#            npm run assign-companies
-#            rm -rf /var/www/budget/*
-#            rm -rf /var/www/api-budget/{*,.env}
-#            mv ./dist/apps/dashboard/* /var/www/budget
-#            mv ./dist/apps/api/* /var/www/api-budget
-#            mv ./node_modules /var/www/api-budget
-#            mv ./.env /var/www/api-budget
-#            cd /var/www/api-budget
-#            pm2 reload api-budget
-#            rm -rf ~/financial-project
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          envs: DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME, REDIS_HOST, REDIS_PORT, AUTH0_ISSUER_URL, AUTH0_AUDIENCE
+          script: |
+            cd ~
+            git clone git@github.com-financial-project:pisarivskyi/financial-project.git
+            cd financial-project
+            ls -la
