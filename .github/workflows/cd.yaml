@@ -64,7 +64,9 @@ jobs:
           script: |
             cd ~
             git clone git@github.com-financial-project:pisarivskyi/financial-project.git
+            cd financial-project
             git checkout feature/change-deployment-process
+            cd ..
             mv financial-project/docker-compose.production.yml budget-app
             rm -rf financial-project
             cd budget-app
