@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { UserInterface } from '@financial-project/common';
+import { UserTokenParsedInterface } from '@financial-project/common';
 
 import { CategoriesService } from '../categories/categories.service';
 import { CategoryEntity } from '../categories/entities/category.entity';
@@ -19,10 +19,10 @@ export class RecordsService {
     private categoriesService: CategoriesService,
   ) {}
 
-  findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<RecordEntity>> {
+  findAll(params: PageOptionsDto, user: UserTokenParsedInterface): Promise<PageDto<RecordEntity>> {
     return paginate(this.recordsRepository, params, {
       where: {
-        createdBy: user.id,
+        createdBy: user.sub,
       },
       relations: {
         account: true,
@@ -34,12 +34,12 @@ export class RecordsService {
     });
   }
 
-  async findOne(id: string, user: UserInterface): Promise<RecordEntity> {
+  async findOne(id: string, user: UserTokenParsedInterface): Promise<RecordEntity> {
     try {
       const record = await this.recordsRepository.findOne({
         where: {
           id,
-          createdBy: user.id,
+          createdBy: user.sub,
         },
         relations: {
           account: true,
@@ -57,11 +57,11 @@ export class RecordsService {
     }
   }
 
-  async update(id: string, updateRecordDto: UpdateRecordDto, user: UserInterface): Promise<RecordEntity> {
+  async update(id: string, updateRecordDto: UpdateRecordDto, user: UserTokenParsedInterface): Promise<RecordEntity> {
     const targetRecord = await this.recordsRepository.findOne({
       where: {
         id,
-        createdBy: user.id,
+        createdBy: user.sub,
       },
     });
 

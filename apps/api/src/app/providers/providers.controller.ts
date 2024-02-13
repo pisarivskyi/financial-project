@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } f
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'nest-keycloak-connect';
 
-import { ProviderTypeEnum, UserInterface } from '@financial-project/common';
+import { ProviderTypeEnum, UserTokenParsedInterface } from '@financial-project/common';
 
 import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
@@ -21,13 +21,19 @@ export class ProvidersController {
 
   @Get()
   @UseGuards(AuthGuard)
-  findAll(@Query() params: PageOptionsDto, @CurrentUser() user: UserInterface): Promise<PageDto<ProviderEntity>> {
+  findAll(
+    @Query() params: PageOptionsDto,
+    @CurrentUser() user: UserTokenParsedInterface,
+  ): Promise<PageDto<ProviderEntity>> {
     return this.providersService.findAll(params, user);
   }
 
   @Get(':providerId')
   @UseGuards(AuthGuard)
-  findOne(@Param('providerId') providerId: string, @CurrentUser() user: UserInterface): Promise<ProviderEntity> {
+  findOne(
+    @Param('providerId') providerId: string,
+    @CurrentUser() user: UserTokenParsedInterface,
+  ): Promise<ProviderEntity> {
     return this.providersService.findOne(providerId, user);
   }
 
@@ -36,14 +42,17 @@ export class ProvidersController {
   update(
     @Param('id') id: string,
     @Body() updateProviderDto: UpdateProviderDto,
-    @CurrentUser() user: UserInterface,
+    @CurrentUser() user: UserTokenParsedInterface,
   ): Promise<ProviderEntity> {
     return this.providersService.update(id, updateProviderDto, user);
   }
 
   @Delete(':providerId')
   @UseGuards(AuthGuard)
-  remove(@Param('providerId') providerId: string, @CurrentUser() user: UserInterface): Promise<ProviderEntity> {
+  remove(
+    @Param('providerId') providerId: string,
+    @CurrentUser() user: UserTokenParsedInterface,
+  ): Promise<ProviderEntity> {
     return this.providersService.remove(providerId, user);
   }
 
@@ -52,7 +61,7 @@ export class ProvidersController {
   create(
     @Body() createProviderDto: CreateProviderDto,
     @Param('providerType') providerType: ProviderTypeEnum,
-    @CurrentUser() user: UserInterface,
+    @CurrentUser() user: UserTokenParsedInterface,
   ): Promise<ProviderEntity> {
     return this.providersService.create(createProviderDto, providerType, user);
   }
@@ -61,7 +70,7 @@ export class ProvidersController {
   @UseGuards(AuthGuard)
   getAccounts(
     @Param('providerId') providerId: string,
-    @CurrentUser() user: UserInterface,
+    @CurrentUser() user: UserTokenParsedInterface,
   ): Promise<ProviderAccountsDto> {
     return this.providersService.getAccounts(providerId, user);
   }
@@ -71,7 +80,7 @@ export class ProvidersController {
   saveAccounts(
     @Param('providerId') providerId: string,
     @Body() saveAccountsDto: SaveAccountsDto,
-    @CurrentUser() user: UserInterface,
+    @CurrentUser() user: UserTokenParsedInterface,
   ) {
     return this.providersService.saveAccounts(providerId, saveAccountsDto, user);
   }
