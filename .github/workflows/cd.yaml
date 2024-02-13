@@ -1,4 +1,4 @@
-name: Deploy on server
+name: Build Dashboard and API docker images and deploy them
 
 on:
   workflow_dispatch:
@@ -29,14 +29,14 @@ jobs:
           context: .
           file: ./dockerfiles/dashboard-prod
           push: true
-          tags: budget-dashboard:latest
+          tags: registry.devhub.me/budget-dashboard:latest
       - name: Build API docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./dockerfiles/api-prod
           push: true
-          tags: budget-api:latest
+          tags: registry.devhub.me/budget-api:latest
 #      - name: Build Dashboard container
 #        run: |
 #          npm install
