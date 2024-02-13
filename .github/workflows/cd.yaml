@@ -70,5 +70,5 @@ jobs:
             mv financial-project/docker-compose.production.yml budget-app
             rm -rf financial-project
             cd budget-app
-            docker compose up -d
+            docker compose -d -f docker-compose.production.yml up
             ls -la
