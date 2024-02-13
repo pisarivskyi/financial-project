@@ -41,13 +41,12 @@ services:
     image: budget-dashboard
     ports:
       - '4200:80'
-
-  api:
-    image: budget-api
-    depends_on:
-      - postgresql
-      - redis
-      - keycloak
-    env_file: .env
-    ports:
-      - '3200:3200'
+#  api:
+#    image: budget-api
+#    depends_on:
+#      - postgresql
+#      - redis
+#      - keycloak
+#    env_file: .env
+#    ports:
+#      - '3200:3200'
