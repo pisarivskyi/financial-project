@@ -38,6 +38,7 @@ jobs:
           push: true
           tags: registry.devhub.me/budget-api:latest
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Deploy using SSH
