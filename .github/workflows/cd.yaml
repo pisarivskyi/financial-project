@@ -4,9 +4,6 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-  # DELETE THIS
-  pull_request:
-    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -69,7 +66,7 @@ jobs:
             cd ~
             git clone git@github.com-financial-project:pisarivskyi/financial-project.git
             cd financial-project
-            git checkout feature/change-deployment-process
+            git checkout main
             cd ..
             mv financial-project/docker-compose.production.yml budget-app/docker-compose.yml
             rm -rf financial-project

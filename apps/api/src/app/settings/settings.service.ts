@@ -14,8 +14,6 @@ export class SettingsService {
 
   async find(user: UserTokenParsedInterface): Promise<SettingsEntity> {
     try {
-      // eslint-disable-next-line no-console
-      console.log(user);
       const settings = await this.settingsRepository.findOne({
         where: {
           createdBy: user.sub,
