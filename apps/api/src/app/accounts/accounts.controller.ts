@@ -1,10 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'nest-keycloak-connect';
+import { AuthGuard, AuthenticatedUser } from 'nest-keycloak-connect';
 
 import { ApiPathEnum, UserTokenParsedInterface } from '@financial-project/common';
 
-import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
 import { AccountsService } from './accounts.service';
@@ -22,7 +21,7 @@ export class AccountsController {
   @UseGuards(AuthGuard)
   create(
     @Body() createAccountDto: CreateAccountDto,
-    @CurrentUser() user: UserTokenParsedInterface,
+    @AuthenticatedUser() user: UserTokenParsedInterface,
   ): Promise<AccountEntity> {
     return this.accountsService.create(createAccountDto, user);
   }
@@ -31,14 +30,14 @@ export class AccountsController {
   @UseGuards(AuthGuard)
   findAll(
     @Query() params: PageOptionsDto,
-    @CurrentUser() user: UserTokenParsedInterface,
+    @AuthenticatedUser() user: UserTokenParsedInterface,
   ): Promise<PageDto<AccountEntity>> {
     return this.accountsService.findAll(params, user);
   }
 
   @Get(':id')
   @UseGuards(AuthGuard)
-  findOne(@Param('id') id: string, @CurrentUser() user: UserTokenParsedInterface): Promise<AccountEntity> {
+  findOne(@Param('id') id: string, @AuthenticatedUser() user: UserTokenParsedInterface): Promise<AccountEntity> {
     return this.accountsService.findOne(id, user);
   }
 
@@ -47,14 +46,14 @@ export class AccountsController {
   update(
     @Param('id') id: string,
     @Body() updateAccountDto: UpdateAccountDto,
-    @CurrentUser() user: UserTokenParsedInterface,
+    @AuthenticatedUser() user: UserTokenParsedInterface,
   ): Promise<AccountEntity> {
     return this.accountsService.update(id, updateAccountDto, user);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
-  remove(@Param('id') id: string, @CurrentUser() user: UserTokenParsedInterface): Promise<AccountEntity> {
+  remove(@Param('id') id: string, @AuthenticatedUser() user: UserTokenParsedInterface): Promise<AccountEntity> {
     return this.accountsService.remove(id, user);
   }
 }
