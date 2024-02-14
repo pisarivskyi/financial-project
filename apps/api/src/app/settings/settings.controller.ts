@@ -3,7 +3,6 @@ import { AuthGuard, AuthenticatedUser } from 'nest-keycloak-connect';
 
 import { ApiPathEnum, UserTokenParsedInterface } from '@financial-project/common';
 
-import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { UpdateSettingDto } from './dto/update-setting.dto';
 import { SettingsEntity } from './entities/settings.entity';
 import { SettingsService } from './settings.service';
