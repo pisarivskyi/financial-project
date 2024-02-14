@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'nest-keycloak-connect';
+import { AuthGuard, AuthenticatedUser } from 'nest-keycloak-connect';
 
 import { ApiPathEnum, UserTokenParsedInterface } from '@financial-project/common';
 
@@ -14,7 +14,7 @@ export class SettingsController {
 
   @Get()
   @UseGuards(AuthGuard)
-  find(@CurrentUser() user: UserTokenParsedInterface): Promise<SettingsEntity> {
+  find(@AuthenticatedUser() user: UserTokenParsedInterface): Promise<SettingsEntity> {
     return this.settingsService.find(user);
   }
 
@@ -22,7 +22,7 @@ export class SettingsController {
   @UseGuards(AuthGuard)
   update(
     @Body() updateSettingDto: UpdateSettingDto,
-    @CurrentUser() user: UserTokenParsedInterface,
+    @AuthenticatedUser() user: UserTokenParsedInterface,
   ): Promise<SettingsEntity> {
     return this.settingsService.update(updateSettingDto, user);
   }

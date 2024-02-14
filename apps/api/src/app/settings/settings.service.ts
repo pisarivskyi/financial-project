@@ -14,6 +14,7 @@ export class SettingsService {
 
   async find(user: UserTokenParsedInterface): Promise<SettingsEntity> {
     try {
+      console.log(user);
       const settings = await this.settingsRepository.findOne({
         where: {
           createdBy: user.sub,
