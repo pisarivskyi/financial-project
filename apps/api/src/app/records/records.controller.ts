@@ -1,9 +1,8 @@
 import { Body, Controller, Get, Param, Patch, Query, UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'nest-keycloak-connect';
+import { AuthGuard, AuthenticatedUser } from 'nest-keycloak-connect';
 
-import { ApiPathEnum, UserInterface } from '@financial-project/common';
+import { ApiPathEnum, UserTokenParsedInterface } from '@financial-project/common';
 
-import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
@@ -16,13 +15,16 @@ export class RecordsController {
 
   @Get()
   @UseGuards(AuthGuard)
-  findAll(@Query() params: PageOptionsDto, @CurrentUser() user: UserInterface): Promise<PageDto<RecordEntity>> {
+  findAll(
+    @Query() params: PageOptionsDto,
+    @AuthenticatedUser() user: UserTokenParsedInterface,
+  ): Promise<PageDto<RecordEntity>> {
     return this.recordsService.findAll(params, user);
   }
 
   @Get(':id')
   @UseGuards(AuthGuard)
-  findOne(@Param('id') id: string, @CurrentUser() user: UserInterface) {
+  findOne(@Param('id') id: string, @AuthenticatedUser() user: UserTokenParsedInterface) {
     return this.recordsService.findOne(id, user);
   }
 
@@ -31,7 +33,7 @@ export class RecordsController {
   update(
     @Param('id') id: string,
     @Body() updateRecordDto: UpdateRecordDto,
-    @CurrentUser() user: UserInterface,
+    @AuthenticatedUser() user: UserTokenParsedInterface,
   ): Promise<RecordEntity> {
     return this.recordsService.update(id, updateRecordDto, user);
   }

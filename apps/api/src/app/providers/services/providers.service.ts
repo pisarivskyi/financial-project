@@ -4,7 +4,7 @@ import { plainToClassFromExist } from 'class-transformer';
 import { firstValueFrom, map } from 'rxjs';
 import { Repository } from 'typeorm';
 
-import { AccountTypeEnum, ProviderTypeEnum, UserInterface } from '@financial-project/common';
+import { AccountTypeEnum, ProviderTypeEnum, UserTokenParsedInterface } from '@financial-project/common';
 import { ApiMonobankProviderService } from '@financial-project/providers';
 
 import { AccountsService } from '../../accounts/accounts.service';
@@ -30,10 +30,10 @@ export class ProvidersService {
     @InjectRepository(ProviderEntity) private readonly providersRepository: Repository<ProviderEntity>,
   ) {}
 
-  findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<ProviderEntity>> {
+  findAll(params: PageOptionsDto, user: UserTokenParsedInterface): Promise<PageDto<ProviderEntity>> {
     return paginate(this.providersRepository, params, {
       where: {
-        createdBy: user.id,
+        createdBy: user.sub,
       },
       order: {
         createdAt: 'DESC',
@@ -41,12 +41,12 @@ export class ProvidersService {
     });
   }
 
-  async findOne(id: string, user: UserInterface): Promise<ProviderEntity> {
+  async findOne(id: string, user: UserTokenParsedInterface): Promise<ProviderEntity> {
     try {
       const provider = await this.providersRepository.findOne({
         where: {
           id,
-          createdBy: user.id,
+          createdBy: user.sub,
         },
       });
 
@@ -63,19 +63,23 @@ export class ProvidersService {
   create(
     createProviderDto: CreateProviderDto,
     providerType: ProviderTypeEnum,
-    user: UserInterface,
+    user: UserTokenParsedInterface,
   ): Promise<ProviderEntity> {
     const provider = this.providerFactoryService.create(providerType, createProviderDto);
-    provider.createdBy = user.id;
+    provider.createdBy = user.sub;
 
     return this.providersRepository.save(provider);
   }
 
-  async update(id: string, updateAccountDto: UpdateProviderDto, user: UserInterface): Promise<ProviderEntity> {
+  async update(
+    id: string,
+    updateAccountDto: UpdateProviderDto,
+    user: UserTokenParsedInterface,
+  ): Promise<ProviderEntity> {
     const targetProvider = await this.providersRepository.findOne({
       where: {
         id,
-        createdBy: user.id,
+        createdBy: user.sub,
       },
     });
 
@@ -90,11 +94,11 @@ export class ProvidersService {
     return this.findOne(id, user);
   }
 
-  async remove(id: string, user: UserInterface): Promise<ProviderEntity> {
+  async remove(id: string, user: UserTokenParsedInterface): Promise<ProviderEntity> {
     const targetProvider = await this.providersRepository.findOne({
       where: {
         id,
-        createdBy: user.id,
+        createdBy: user.sub,
       },
     });
 
@@ -105,7 +109,7 @@ export class ProvidersService {
     return this.providersRepository.remove(targetProvider);
   }
 
-  async saveAccounts(providerId: string, saveAccountsDto: SaveAccountsDto, user: UserInterface) {
+  async saveAccounts(providerId: string, saveAccountsDto: SaveAccountsDto, user: UserTokenParsedInterface) {
     try {
       const existingAccounts = await this.accountsService.findAllByBankIds(saveAccountsDto.accountIds, user);
 
@@ -116,7 +120,7 @@ export class ProvidersService {
       const provider = await this.providersRepository.findOne({
         where: {
           id: providerId,
-          createdBy: user.id,
+          createdBy: user.sub,
         },
       });
 
@@ -146,7 +150,7 @@ export class ProvidersService {
         account.balance = monobankAccount.balance;
         account.creditLimit = monobankAccount.creditLimit;
         account.metadata = monobankAccount;
-        account.createdBy = user.id;
+        account.createdBy = user.sub;
 
         return account;
       });
@@ -161,12 +165,12 @@ export class ProvidersService {
     }
   }
 
-  async getAccounts(providerId: string, user: UserInterface): Promise<ProviderAccountsDto> {
+  async getAccounts(providerId: string, user: UserTokenParsedInterface): Promise<ProviderAccountsDto> {
     const provider = await this.providersRepository.findOne({
       where: {
         id: providerId,
         providerType: ProviderTypeEnum.Monobank,
-        createdBy: user.id,
+        createdBy: user.sub,
       },
     });
 

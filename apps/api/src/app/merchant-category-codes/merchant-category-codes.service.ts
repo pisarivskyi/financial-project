@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 
-import { UserInterface } from '@financial-project/common';
+import { UserTokenParsedInterface } from '@financial-project/common';
 
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
@@ -16,10 +16,10 @@ export class MerchantCategoryCodesService {
     private merchantCategoryCodeRepository: Repository<MerchantCategoryCodeEntity>,
   ) {}
 
-  async findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<MerchantCategoryCodeEntity>> {
+  async findAll(params: PageOptionsDto, user: UserTokenParsedInterface): Promise<PageDto<MerchantCategoryCodeEntity>> {
     return paginate(this.merchantCategoryCodeRepository, params, {
       where: {
-        createdBy: In([user.id, 'SYSTEM']),
+        createdBy: In([user.sub, 'SYSTEM']),
       },
       order: {
         createdAt: 'DESC',
@@ -30,12 +30,12 @@ export class MerchantCategoryCodesService {
     });
   }
 
-  async findOne(id: string, user: UserInterface): Promise<MerchantCategoryCodeEntity> {
+  async findOne(id: string, user: UserTokenParsedInterface): Promise<MerchantCategoryCodeEntity> {
     try {
       const category = await this.merchantCategoryCodeRepository.findOne({
         where: {
           id,
-          createdBy: In([user.id, 'SYSTEM']),
+          createdBy: In([user.sub, 'SYSTEM']),
         },
       });
 

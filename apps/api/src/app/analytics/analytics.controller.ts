@@ -1,9 +1,8 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'nest-keycloak-connect';
+import { AuthGuard, AuthenticatedUser } from 'nest-keycloak-connect';
 
-import { ApiPathEnum, UserInterface } from '@financial-project/common';
+import { ApiPathEnum, UserTokenParsedInterface } from '@financial-project/common';
 
-import { CurrentUser } from '../core/decorators/current-user.decorator';
 import { AnalyticsService } from './analytics.service';
 import { GetSummaryDto } from './dto/get-summary.dto';
 import { SummaryDto } from './dto/summary.dto';
@@ -14,7 +13,10 @@ export class AnalyticsController {
 
   @Post('summary')
   @UseGuards(AuthGuard)
-  getSummaryAnalytics(@Body() params: GetSummaryDto, @CurrentUser() user: UserInterface): Promise<SummaryDto> {
+  getSummaryAnalytics(
+    @Body() params: GetSummaryDto,
+    @AuthenticatedUser() user: UserTokenParsedInterface,
+  ): Promise<SummaryDto> {
     return this.analyticsService.getSummaryAnalytics(params, user);
   }
 }

@@ -3,7 +3,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { KeycloakConfig } from 'keycloak-js';
 import { Observable, from } from 'rxjs';
 
-import { UserInterface } from '@financial-project/common';
+import { UserProfileInterface } from '@financial-project/common';
 
 import { ConfigurationService } from '../../configuration/services/configuration.service';
 
@@ -30,7 +30,7 @@ export class AuthenticationService {
     return from(this.keycloakService.logout(redirectUrl));
   }
 
-  getProfile$(): Observable<UserInterface> {
+  getProfile$(): Observable<UserProfileInterface> {
     return from(this.keycloakService.loadUserProfile());
   }
 }

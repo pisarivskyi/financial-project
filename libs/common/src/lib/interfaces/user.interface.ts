@@ -1,3 +1,5 @@
-import { KeycloakProfile } from 'keycloak-js';
+import { KeycloakProfile, KeycloakTokenParsed } from 'keycloak-js';
 
-export type UserInterface = KeycloakProfile;
+export type UserProfileInterface = KeycloakProfile;
+
+export type UserTokenParsedInterface = KeycloakTokenParsed;

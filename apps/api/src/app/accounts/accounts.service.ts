@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { In, Repository } from 'typeorm';
 
-import { UserInterface } from '@financial-project/common';
+import { UserTokenParsedInterface } from '@financial-project/common';
 
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
@@ -20,17 +20,17 @@ export class AccountsService {
     return this.accountsRepository.save(accounts);
   }
 
-  create(createAccountDto: CreateAccountDto, user: UserInterface): Promise<AccountEntity> {
+  create(createAccountDto: CreateAccountDto, user: UserTokenParsedInterface): Promise<AccountEntity> {
     const account = plainToInstance(AccountEntity, createAccountDto);
-    account.createdBy = user.id;
+    account.createdBy = user.sub;
 
     return this.accountsRepository.save(account);
   }
 
-  findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<AccountEntity>> {
+  findAll(params: PageOptionsDto, user: UserTokenParsedInterface): Promise<PageDto<AccountEntity>> {
     return paginate(this.accountsRepository, params, {
       where: {
-        createdBy: user.id,
+        createdBy: user.sub,
       },
       order: {
         createdAt: 'DESC',
@@ -38,11 +38,11 @@ export class AccountsService {
     });
   }
 
-  findAllByBankIds(bankIds: string[], user: UserInterface): Promise<AccountEntity[]> {
+  findAllByBankIds(bankIds: string[], user: UserTokenParsedInterface): Promise<AccountEntity[]> {
     return this.accountsRepository.find({
       where: {
         bankAccountId: In(bankIds),
-        createdBy: user.id,
+        createdBy: user.sub,
       },
       order: {
         createdAt: 'DESC',
@@ -50,12 +50,12 @@ export class AccountsService {
     });
   }
 
-  async findOne(id: string, user: UserInterface): Promise<AccountEntity> {
+  async findOne(id: string, user: UserTokenParsedInterface): Promise<AccountEntity> {
     try {
       const account = await this.accountsRepository.findOne({
         where: {
           id,
-          createdBy: user.id,
+          createdBy: user.sub,
         },
       });
 
@@ -69,11 +69,11 @@ export class AccountsService {
     }
   }
 
-  async update(id: string, updateAccountDto: UpdateAccountDto, user: UserInterface): Promise<AccountEntity> {
+  async update(id: string, updateAccountDto: UpdateAccountDto, user: UserTokenParsedInterface): Promise<AccountEntity> {
     const targetAccount = await this.accountsRepository.findOne({
       where: {
         id,
-        createdBy: user.id,
+        createdBy: user.sub,
       },
     });
 
@@ -88,11 +88,11 @@ export class AccountsService {
     return this.findOne(id, user);
   }
 
-  async remove(id: string, user: UserInterface): Promise<AccountEntity> {
+  async remove(id: string, user: UserTokenParsedInterface): Promise<AccountEntity> {
     const targetAccount = await this.accountsRepository.findOne({
       where: {
         id,
-        createdBy: user.id,
+        createdBy: user.sub,
       },
     });
 

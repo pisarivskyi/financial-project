@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
-import { PeriodEnum, UserInterface } from '@financial-project/common';
+import { PeriodEnum, UserTokenParsedInterface } from '@financial-project/common';
 
 import { CategoriesService } from '../categories/categories.service';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
@@ -20,9 +20,9 @@ export class BudgetsService {
     private categoriesService: CategoriesService,
   ) {}
 
-  async create(createBudgetDto: CreateBudgetDto, user: UserInterface): Promise<BudgetEntity> {
+  async create(createBudgetDto: CreateBudgetDto, user: UserTokenParsedInterface): Promise<BudgetEntity> {
     const budget = plainToInstance(BudgetEntity, createBudgetDto, { excludeExtraneousValues: true });
-    budget.createdBy = user.id;
+    budget.createdBy = user.sub;
 
     try {
       const categories = await this.categoriesService.findByIds(createBudgetDto.categoryIds, user);
@@ -39,10 +39,10 @@ export class BudgetsService {
     return this.budgetsRepository.save(budget);
   }
 
-  findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<BudgetEntity>> {
+  findAll(params: PageOptionsDto, user: UserTokenParsedInterface): Promise<PageDto<BudgetEntity>> {
     return paginate(this.budgetsRepository, params, {
       where: {
-        createdBy: user.id,
+        createdBy: user.sub,
       },
       order: {
         createdAt: 'DESC',
@@ -51,12 +51,12 @@ export class BudgetsService {
     });
   }
 
-  async findOne(id: string, user: UserInterface): Promise<BudgetEntity> {
+  async findOne(id: string, user: UserTokenParsedInterface): Promise<BudgetEntity> {
     try {
       const targetBudget = await this.budgetsRepository.findOne({
         where: {
           id,
-          createdBy: user.id,
+          createdBy: user.sub,
         },
         relations: { categories: true },
       });
@@ -71,11 +71,11 @@ export class BudgetsService {
     }
   }
 
-  async update(id: string, updateBudgetDto: UpdateBudgetDto, user: UserInterface): Promise<BudgetEntity> {
+  async update(id: string, updateBudgetDto: UpdateBudgetDto, user: UserTokenParsedInterface): Promise<BudgetEntity> {
     const targetBudget = await this.budgetsRepository.findOne({
       where: {
         id,
-        createdBy: user.id,
+        createdBy: user.sub,
       },
     });
 
@@ -109,11 +109,11 @@ export class BudgetsService {
     return this.findOne(id, user);
   }
 
-  async remove(id: string, user: UserInterface): Promise<BudgetEntity> {
+  async remove(id: string, user: UserTokenParsedInterface): Promise<BudgetEntity> {
     const targetBudget = await this.budgetsRepository.findOne({
       where: {
         id,
-        createdBy: user.id,
+        createdBy: user.sub,
       },
     });
 

@@ -5,7 +5,7 @@ import { FlowChildJob, FlowProducer, Job, JobNode, Queue } from 'bullmq';
 import { DateTime } from 'luxon';
 import { Repository } from 'typeorm';
 
-import { UserInterface } from '@financial-project/common';
+import { UserTokenParsedInterface } from '@financial-project/common';
 
 import { AccountEntity } from '../../accounts/entities/account.entity';
 import { RecordEntity } from '../../records/entities/record.entity';
@@ -23,12 +23,12 @@ export class JobsService {
     @InjectQueue(RECORDS_SYNC_QUEUE_NAME) private recordsSyncQueue: Queue,
   ) {}
 
-  async create(createJobDto: CreateJobDto, user: UserInterface): Promise<JobNode> {
+  async create(createJobDto: CreateJobDto, user: UserTokenParsedInterface): Promise<JobNode> {
     try {
       const account = await this.accountsRepository.findOne({
         where: {
           id: createJobDto.accountId,
-          createdBy: user.id,
+          createdBy: user.sub,
         },
         relations: {
           provider: true,
@@ -50,11 +50,11 @@ export class JobsService {
           queueName: ACCOUNT_SYNC_QUEUE_NAME,
           data: {
             accountId: account.id,
-            userId: user.id,
+            userId: user.sub,
             fromDate: fromDate.toISODate(),
             toDate: toDate.toISODate(),
           },
-          children: [this.createFlowChildJob(account.id, user.id, fromDate, toDate)],
+          children: [this.createFlowChildJob(account.id, user.sub, fromDate, toDate)],
         });
       } else {
         const jobs: FlowChildJob[] = [];
@@ -62,7 +62,7 @@ export class JobsService {
         let cloneToDate = toDate;
 
         do {
-          jobs.push(this.createFlowChildJob(account.id, user.id, cloneFromDate, cloneToDate));
+          jobs.push(this.createFlowChildJob(account.id, user.sub, cloneFromDate, cloneToDate));
 
           cloneFromDate = cloneFromDate.minus({ days: 31 });
           cloneToDate = cloneToDate.minus({ days: 31 });
@@ -70,14 +70,14 @@ export class JobsService {
 
         cloneFromDate = cloneFromDate.plus({ days: 31 });
 
-        jobs.push(this.createFlowChildJob(account.id, user.id, fromDate, cloneFromDate));
+        jobs.push(this.createFlowChildJob(account.id, user.sub, fromDate, cloneFromDate));
 
         return await this.accountsSyncQueue.add({
           name: 'name',
           queueName: ACCOUNT_SYNC_QUEUE_NAME,
           data: {
             accountId: account.id,
-            userId: user.id,
+            userId: user.sub,
             fromDate: fromDate.toISODate(),
             toDate: toDate.toISODate(),
           },
@@ -89,13 +89,13 @@ export class JobsService {
     }
   }
 
-  async findOne(id: string, user: UserInterface): Promise<JobNode> {
+  async findOne(id: string, user: UserTokenParsedInterface): Promise<JobNode> {
     const jobNode = await this.accountsSyncQueue.getFlow({
       id,
       queueName: ACCOUNT_SYNC_QUEUE_NAME,
     });
 
-    if (!jobNode || jobNode.job.data.userId !== user.id) {
+    if (!jobNode || jobNode.job.data.userId !== user.sub) {
       throw new NotFoundException('Job not found');
     }
 
@@ -104,7 +104,7 @@ export class JobsService {
 
   // TODO: think about implementing this method
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async findAll(user: UserInterface): Promise<Job<JobPayloadInterface>[]> {
+  async findAll(user: UserTokenParsedInterface): Promise<Job<JobPayloadInterface>[]> {
     return [];
     // const jobs = await this.accountsSyncQueue.getFlow([]);
     //

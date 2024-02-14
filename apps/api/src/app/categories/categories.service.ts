@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { In, Repository } from 'typeorm';
 
-import { UserInterface } from '@financial-project/common';
+import { UserTokenParsedInterface } from '@financial-project/common';
 
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
@@ -16,9 +16,9 @@ import { CategoryEntity } from './entities/category.entity';
 export class CategoriesService {
   constructor(@InjectRepository(CategoryEntity) private categoriesRepository: Repository<CategoryEntity>) {}
 
-  async create(createCategoryDto: CreateCategoryDto, user: UserInterface): Promise<CategoryEntity> {
+  async create(createCategoryDto: CreateCategoryDto, user: UserTokenParsedInterface): Promise<CategoryEntity> {
     const category = plainToInstance(CategoryEntity, createCategoryDto);
-    category.createdBy = user.id;
+    category.createdBy = user.sub;
 
     let parentCategory: CategoryEntity;
 
@@ -37,10 +37,10 @@ export class CategoriesService {
     return this.categoriesRepository.save(category);
   }
 
-  async findAll(params: PageOptionsDto, user: UserInterface): Promise<PageDto<CategoryEntity>> {
+  async findAll(params: PageOptionsDto, user: UserTokenParsedInterface): Promise<PageDto<CategoryEntity>> {
     return paginate(this.categoriesRepository, params, {
       where: {
-        createdBy: In([user.id, 'SYSTEM']),
+        createdBy: In([user.sub, 'SYSTEM']),
       },
       order: {
         createdAt: 'DESC',
@@ -49,22 +49,22 @@ export class CategoriesService {
     });
   }
 
-  findByIds(ids: string[], user: UserInterface): Promise<CategoryEntity[]> {
+  findByIds(ids: string[], user: UserTokenParsedInterface): Promise<CategoryEntity[]> {
     return this.categoriesRepository.find({
       where: {
         id: In(ids),
-        createdBy: user.id,
+        createdBy: user.sub,
       },
       relations: { parentCategory: true },
     });
   }
 
-  async findOne(id: string, user: UserInterface): Promise<CategoryEntity> {
+  async findOne(id: string, user: UserTokenParsedInterface): Promise<CategoryEntity> {
     try {
       const category = await this.categoriesRepository.findOne({
         where: {
           id,
-          createdBy: user.id,
+          createdBy: user.sub,
         },
         relations: { parentCategory: true },
       });
@@ -79,11 +79,15 @@ export class CategoriesService {
     }
   }
 
-  async update(id: string, updateCategoryDto: UpdateCategoryDto, user: UserInterface): Promise<CategoryEntity> {
+  async update(
+    id: string,
+    updateCategoryDto: UpdateCategoryDto,
+    user: UserTokenParsedInterface,
+  ): Promise<CategoryEntity> {
     const targetCategory = await this.categoriesRepository.findOne({
       where: {
         id,
-        createdBy: user.id,
+        createdBy: user.sub,
       },
     });
 
@@ -95,7 +99,7 @@ export class CategoriesService {
       const parentCategory = await this.categoriesRepository.findOne({
         where: {
           id: updateCategoryDto.parentCategory,
-          createdBy: user.id,
+          createdBy: user.sub,
         },
       });
 
@@ -111,11 +115,11 @@ export class CategoriesService {
     return this.findOne(id, user);
   }
 
-  async remove(id: string, user: UserInterface): Promise<CategoryEntity> {
+  async remove(id: string, user: UserTokenParsedInterface): Promise<CategoryEntity> {
     const targetCategory = await this.categoriesRepository.findOne({
       where: {
         id,
-        createdBy: user.id,
+        createdBy: user.sub,
       },
     });
 

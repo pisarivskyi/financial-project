@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { Between, In, Repository } from 'typeorm';
 
-import { RecordTypeEnum, UserInterface } from '@financial-project/common';
+import { RecordTypeEnum, UserTokenParsedInterface } from '@financial-project/common';
 
 import { AccountEntity } from '../accounts/entities/account.entity';
 import { RecordEntity } from '../records/entities/record.entity';
@@ -19,13 +19,13 @@ export class AnalyticsService {
     @InjectRepository(AccountEntity) private accountsRepository: Repository<AccountEntity>,
   ) {}
 
-  async getSummaryAnalytics(params: GetSummaryDto, user: UserInterface): Promise<SummaryDto> {
+  async getSummaryAnalytics(params: GetSummaryDto, user: UserTokenParsedInterface): Promise<SummaryDto> {
     const { fromDate, toDate, accountIds } = params;
 
     const accounts = await this.accountsRepository.find({
       where: {
         id: In(accountIds),
-        createdBy: user.id,
+        createdBy: user.sub,
       },
     });
 
@@ -34,7 +34,7 @@ export class AnalyticsService {
         account: {
           id: In(accounts.map((account) => account.id)),
         },
-        createdBy: user.id,
+        createdBy: user.sub,
         bankCreatedAt: Between(fromDate, toDate),
       },
       order: {

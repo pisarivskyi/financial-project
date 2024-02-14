@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClassFromExist } from 'class-transformer';
 import { Repository } from 'typeorm';
 
-import { UserInterface } from '@financial-project/common';
+import { UserTokenParsedInterface } from '@financial-project/common';
 
 import { UpdateSettingDto } from './dto/update-setting.dto';
 import { SettingsEntity } from './entities/settings.entity';
@@ -12,17 +12,17 @@ import { SettingsEntity } from './entities/settings.entity';
 export class SettingsService {
   constructor(@InjectRepository(SettingsEntity) private settingsRepository: Repository<SettingsEntity>) {}
 
-  async find(user: UserInterface): Promise<SettingsEntity> {
+  async find(user: UserTokenParsedInterface): Promise<SettingsEntity> {
     try {
       const settings = await this.settingsRepository.findOne({
         where: {
-          createdBy: user.id,
+          createdBy: user.sub,
         },
       });
 
       if (!settings) {
         const newSettings = this.settingsRepository.create({
-          createdBy: user.id,
+          createdBy: user.sub,
         });
 
         return this.settingsRepository.save(newSettings);
@@ -34,13 +34,13 @@ export class SettingsService {
     }
   }
 
-  async update(updateSettingDto: UpdateSettingDto, user: UserInterface): Promise<SettingsEntity> {
+  async update(updateSettingDto: UpdateSettingDto, user: UserTokenParsedInterface): Promise<SettingsEntity> {
     try {
       const existingSettings = await this.find(user);
 
       const settings = plainToClassFromExist(existingSettings, {
         ...updateSettingDto,
-        createdBy: user.id,
+        createdBy: user.sub,
       });
 
       return this.settingsRepository.save(settings);

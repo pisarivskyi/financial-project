@@ -1,8 +1,26 @@
-FROM node:18.17.1
+# BUILD
+FROM node:18.17.1-alpine as builder
+
+RUN mkdir -p /usr/src/app
+
+WORKDIR /usr/src/app
+
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
+COPY ../package.json /usr/src/app/package.json
+COPY ../package-lock.json /usr/src/app/package-lock.json
+COPY . /usr/src/app
+
+RUN npm ci --ignore-scripts
+
+RUN nx build api --configuration=development
+
+# RUN APPLICATION
+FROM node:18.17.1-alpine
 WORKDIR /app
 
 # copy app deps and app build
-COPY ./dist/apps/api .
+COPY --from=builder /usr/src/app/dist/apps/api .
 COPY package.json package.json
 COPY package-lock.json package-lock.json
 
