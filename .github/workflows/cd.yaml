@@ -24,14 +24,14 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./dockerfiles/dashboard-prod
+          file: ./dockerfiles/dashboard-prod.dockerfile
           push: true
           tags: registry.devhub.me/budget-dashboard:latest
       - name: Build API docker image
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./dockerfiles/api-prod
+          file: ./dockerfiles/api-prod.dockerfile
           push: true
           tags: registry.devhub.me/budget-api:latest
   deploy:
