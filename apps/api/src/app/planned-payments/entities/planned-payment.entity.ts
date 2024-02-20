@@ -17,6 +17,18 @@ export class PlannedPaymentEntity extends BaseEntity implements PlannedPaymentIn
   @ApiProperty()
   name: string;
 
+  @Column({ nullable: true })
+  @IsNotEmpty()
+  @IsString()
+  @ApiPropertyOptional()
+  color?: string;
+
+  @Column({ nullable: true })
+  @IsNotEmpty()
+  @IsString()
+  @ApiPropertyOptional()
+  icon?: string;
+
   @ManyToOne(() => CategoryEntity, { onDelete: 'SET NULL' })
   @JoinColumn()
   @IsNotEmpty()

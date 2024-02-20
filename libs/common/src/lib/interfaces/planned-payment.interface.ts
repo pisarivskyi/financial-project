@@ -5,6 +5,8 @@ import { CategoryInterface } from './category.interface';
 
 export interface PlannedPaymentInterface {
   name: string;
+  color?: string;
+  icon?: string;
   category: CategoryInterface;
   amount: number;
   type: RecordTypeEnum;
