@@ -16,7 +16,11 @@
     "docker:api:build:prod": "docker build -f dockerfiles/api-prod.dockerfile -t budget-api .",
     "docker:api:build:dev": "docker build -f dockerfiles/api-dev.dockerfile -t budget-api .",
     "docker:dashboard:build:prod": "docker build -f dockerfiles/dashboard-prod.dockerfile -t budget-dashboard .",
-    "docker:dashboard:build:dev": "docker build -f dockerfiles/dashboard-dev.dockerfile -t budget-dashboard ."
+    "docker:dashboard:build:dev": "docker build -f dockerfiles/dashboard-dev.dockerfile -t budget-dashboard .",
+    "docker:migration:run": "typeorm migration:run -d apps/api/src/app/configs/typeorm.config.js",
+    "docker:seeds:run": "node apps/api/src/seeds/index.js",
+    "docker:assign-categories": "node apps/api/src/scripts/assign-categories/index.js",
+    "docker:assign-companies": "node apps/api/src/scripts/assign-companies/index.js"
   },
   "husky": {
     "hooks": {
@@ -117,6 +121,7 @@
     "prettier": "^3.2.4",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.8",
     "tsconfig-paths": "^4.2.0",
     "typescript": "5.3.3"
   }

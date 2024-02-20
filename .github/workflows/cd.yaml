@@ -75,4 +75,8 @@ jobs:
             docker pull registry.devhub.me/budget-api:latest
             docker pull registry.devhub.me/budget-dashboard:latest
             docker compose up -d
+            docker compose exec api npm run docker:migration:run
+            docker compose exec api npm run docker:seeds:run
+            docker compose exec api npm run docker:assign-categories
+            docker compose exec api npm run docker:assign-companies
             ls -la
