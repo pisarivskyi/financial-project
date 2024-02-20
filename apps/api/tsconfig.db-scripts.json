@@ -1,14 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
-    "outFile": "../../dist/out-tsc/build.js",
-    "module": "amd",
+    "outDir": "../../dist/scripts",
+    "module": "commonjs",
     "types": ["node"],
     "emitDecoratorMetadata": true,
     "target": "es2021",
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["src/scripts/assign-companies/index.ts","src/scripts/assign-categories/index.ts",  "src/scripts/generate-mcc-data/index.ts", "src/seeds/index.ts"]
+  "include": ["src/scripts/assign-companies/index.ts", "src/scripts/assign-categories/index.ts", "src/seeds/index.ts", "src/migrations/*.ts"]
 }
