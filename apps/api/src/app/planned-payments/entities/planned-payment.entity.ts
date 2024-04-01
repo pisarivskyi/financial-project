@@ -20,12 +20,14 @@ export class PlannedPaymentEntity extends BaseEntity implements PlannedPaymentIn
   @Column({ nullable: true })
   @IsNotEmpty()
   @IsString()
+  @IsOptional()
   @ApiPropertyOptional()
   color?: string;
 
   @Column({ nullable: true })
   @IsNotEmpty()
   @IsString()
+  @IsOptional()
   @ApiPropertyOptional()
   icon?: string;
 

@@ -20,7 +20,7 @@ import { AuthGuard, KeycloakConnectModule } from 'nest-keycloak-connect';
         realm: configService.get('KEYCLOAK_REALM'),
         clientId: configService.get('KEYCLOAK_CLIENT_ID'),
         secret: configService.get('KEYCLOAK_SECRET'),
-        useNestLogger: configService.get('KEYCLOAK_USE_NEST_LOGGER'),
+        useNestLogger: configService.get<boolean>('KEYCLOAK_USE_NEST_LOGGER'),
       }),
     }),
   ],
