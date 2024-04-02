@@ -10,7 +10,9 @@ import { ValidationError } from 'class-validator';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: ['log', 'error', 'warn', 'fatal'],
+  });
   const globalPrefix = 'api';
 
   app.enableCors();
@@ -25,9 +27,9 @@ async function bootstrap() {
           validationErrors.map((error) => ({
             field: error.property,
             errors: error.constraints,
-          }))
+          })),
         ),
-    })
+    }),
   );
 
   const config = new DocumentBuilder()

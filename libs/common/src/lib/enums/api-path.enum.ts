@@ -11,4 +11,5 @@ export enum ApiPathEnum {
   Jobs = 'jobs',
   Analytics = 'analytics',
   MerchantCategoryCodes = 'merchant-category-codes',
+  PlannedPayments = 'planned-payments',
 }

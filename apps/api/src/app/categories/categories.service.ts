@@ -53,7 +53,7 @@ export class CategoriesService {
     return this.categoriesRepository.find({
       where: {
         id: In(ids),
-        createdBy: user.sub,
+        createdBy: In([user.sub, 'SYSTEM']),
       },
       relations: { parentCategory: true },
     });
@@ -64,7 +64,7 @@ export class CategoriesService {
       const category = await this.categoriesRepository.findOne({
         where: {
           id,
-          createdBy: user.sub,
+          createdBy: In([user.sub, 'SYSTEM']),
         },
         relations: { parentCategory: true },
       });

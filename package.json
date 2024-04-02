@@ -12,6 +12,7 @@
     "migration:run": "npm run typeorm -- migration:run -d apps/api/src/app/configs/typeorm.config.ts",
     "migration:initial": "npm run typeorm -- -d apps/api/src/app/configs/typeorm.config.ts migration:generate -n ./initial",
     "migration:generate": "npm run typeorm -- -d apps/api/src/app/configs/typeorm.config.ts migration:generate apps/api/src/migrations/$npm_config_name",
+    "migration:revert": "npm run typeorm -- migration:revert -d apps/api/src/app/configs/typeorm.config.ts",
     "prepare": "npx husky && echo \"npx --no-install lint-staged\" > .husky/pre-commit",
     "docker:api:build:prod": "docker build -f dockerfiles/api-prod.dockerfile -t budget-api .",
     "docker:api:build:dev": "docker build -f dockerfiles/api-dev.dockerfile -t budget-api .",
