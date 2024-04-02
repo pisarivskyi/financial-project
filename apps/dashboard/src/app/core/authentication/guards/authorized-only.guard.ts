@@ -9,7 +9,7 @@ export const authorizedOnlyGuard: CanMatchFn = async (): Promise<boolean | UrlTr
 
   if (!authenticated) {
     await keycloakService.login({
-      redirectUri: window.location.origin,
+      redirectUri: window.location.origin + window.location.pathname + window.location.search,
     });
   }
 

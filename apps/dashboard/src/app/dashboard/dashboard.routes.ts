@@ -37,7 +37,7 @@ export const dashboardRoutes: Route[] = [
         path: RoutePathEnum.Categories,
         loadComponent: () =>
           import('./categories-container/categories-container.component').then(
-            (mod) => mod.CategoriesContainerComponent
+            (mod) => mod.CategoriesContainerComponent,
           ),
       },
       {
@@ -49,6 +49,13 @@ export const dashboardRoutes: Route[] = [
         path: RoutePathEnum.Settings,
         loadComponent: () =>
           import('./settings-container/settings-container.component').then((mod) => mod.SettingsContainerComponent),
+      },
+      {
+        path: RoutePathEnum.PlannedPayments,
+        loadComponent: () =>
+          import('./planned-payments-container/planned-payments-container.component').then(
+            (mod) => mod.PlannedPaymentsContainerComponent,
+          ),
       },
     ],
   },
