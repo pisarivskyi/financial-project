@@ -12,46 +12,54 @@ import { BaseEntity } from '../../core/models/base-entity.abstract';
 @Entity(TableNameEnum.PlannedPayments)
 export class PlannedPaymentEntity extends BaseEntity implements PlannedPaymentInterface {
   @Column()
+  @Expose()
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
   name: string;
 
   @Column({ nullable: true })
+  @Expose()
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
   color?: string;
 
   @Column({ nullable: true })
+  @Expose()
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
   icon?: string;
 
   @ManyToOne(() => CategoryEntity, { onDelete: 'SET NULL' })
+  @Expose()
   @JoinColumn()
   @IsNotEmpty()
   @ApiProperty({ type: () => CategoryEntity })
   category: CategoryEntity;
 
   @Column()
+  @Expose()
   @IsNotEmpty()
   @IsNumber()
   @ApiProperty()
   amount: number;
 
   @Column({ type: 'enum', enum: CurrencyEnum, enumName: 'currency_enum' })
+  @Expose()
   @IsNotEmpty()
   @ApiProperty({ enum: CurrencyEnum, enumName: 'CurrencyEnum' })
   currencyCode: CurrencyEnum;
 
   @Column({ type: 'enum', enum: RecordTypeEnum, enumName: 'record_type_enum' })
+  @Expose()
   @IsNotEmpty()
   @ApiProperty({ enum: RecordTypeEnum, enumName: 'RecordTypeEnum' })
   type: RecordTypeEnum;
 
   @Column({ type: 'enum', enum: PeriodEnum, enumName: 'period_enum' })
+  @Expose()
   @Expose()
   @IsNotEmpty()
   @ApiProperty({ enum: PeriodEnum, enumName: 'PeriodEnum' })
@@ -60,6 +68,7 @@ export class PlannedPaymentEntity extends BaseEntity implements PlannedPaymentIn
   @Column({
     nullable: true,
   })
+  @Expose()
   @IsOptional()
   @ApiPropertyOptional()
   dayOfWeek?: number;
@@ -67,6 +76,7 @@ export class PlannedPaymentEntity extends BaseEntity implements PlannedPaymentIn
   @Column({
     nullable: true,
   })
+  @Expose()
   @IsOptional()
   @ApiPropertyOptional()
   dayOfMonth?: number;
@@ -74,6 +84,7 @@ export class PlannedPaymentEntity extends BaseEntity implements PlannedPaymentIn
   @Column({
     nullable: true,
   })
+  @Expose()
   @IsOptional()
   @IsDate()
   @ApiPropertyOptional()
