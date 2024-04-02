@@ -12,5 +12,5 @@ export class CreatePlannedPaymentDto extends OmitType(PlannedPaymentEntity, [
 ]) {
   @IsOptional()
   @IsString()
-  category?: string;
+  categoryId?: string;
 }

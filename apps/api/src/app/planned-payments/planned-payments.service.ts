@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClassFromExist, plainToInstance } from 'class-transformer';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
-import { UserTokenParsedInterface } from '@financial-project/common';
+import { PeriodEnum, UserTokenParsedInterface } from '@financial-project/common';
 
 import { CategoriesService } from '../categories/categories.service';
 import { CategoryEntity } from '../categories/entities/category.entity';
@@ -30,9 +30,9 @@ export class PlannedPaymentsService {
 
     let category: CategoryEntity;
 
-    if (createCategoryDto.category) {
+    if (createCategoryDto.categoryId) {
       try {
-        category = await this.categoriesService.findOne(createCategoryDto.category, user);
+        category = await this.categoriesService.findOne(createCategoryDto.categoryId, user);
       } catch {
         throw new BadRequestException('No such category');
       }
@@ -93,20 +93,32 @@ export class PlannedPaymentsService {
       throw new NotFoundException();
     }
 
-    if (updatePlannedPaymentDto.category) {
-      const parentCategory = await this.plannedPaymentEntityRepository.findOne({
-        where: {
-          id: updatePlannedPaymentDto.category,
-          createdBy: In([user.sub, 'SYSTEM']),
-        },
-      });
+    let category: CategoryEntity;
 
-      if (!parentCategory) {
-        throw new NotFoundException('Category does not exist');
+    if (updatePlannedPaymentDto.categoryId) {
+      try {
+        category = await this.categoriesService.findOne(updatePlannedPaymentDto.categoryId, user);
+      } catch {
+        throw new BadRequestException('No such category');
       }
     }
 
-    const updatedPlannedPaymentEntity = plainToClassFromExist(targetPlannedPaymentEntity, updatePlannedPaymentDto);
+    const updatedPlannedPaymentEntity = plainToClassFromExist(targetPlannedPaymentEntity, updatePlannedPaymentDto, {
+      excludeExtraneousValues: true,
+    });
+
+    updatedPlannedPaymentEntity.category = category;
+
+    if (
+      updatedPlannedPaymentEntity.period === PeriodEnum.OneTime ||
+      updatedPlannedPaymentEntity.period === PeriodEnum.Yearly
+    ) {
+      updatedPlannedPaymentEntity.dateOfYear = updatePlannedPaymentDto.dateOfYear!;
+    } else if (updatedPlannedPaymentEntity.period === PeriodEnum.Monthly) {
+      updatedPlannedPaymentEntity.dayOfMonth = updatePlannedPaymentDto.dayOfMonth!;
+    } else if (updatedPlannedPaymentEntity.period === PeriodEnum.Weekly) {
+      updatedPlannedPaymentEntity.dayOfWeek = updatePlannedPaymentDto.dayOfWeek!;
+    }
 
     await this.plannedPaymentEntityRepository.update(id, updatedPlannedPaymentEntity);
 

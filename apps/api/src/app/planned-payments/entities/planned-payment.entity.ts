@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
@@ -18,14 +18,12 @@ export class PlannedPaymentEntity extends BaseEntity implements PlannedPaymentIn
   name: string;
 
   @Column({ nullable: true })
-  @IsNotEmpty()
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
   color?: string;
 
   @Column({ nullable: true })
-  @IsNotEmpty()
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
@@ -79,6 +77,7 @@ export class PlannedPaymentEntity extends BaseEntity implements PlannedPaymentIn
   @IsOptional()
   @IsDate()
   @ApiPropertyOptional()
+  @Type(() => Date)
   dateOfYear?: Date;
 
   @Column()
