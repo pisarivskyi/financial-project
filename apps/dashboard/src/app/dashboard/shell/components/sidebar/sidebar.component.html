@@ -32,6 +32,11 @@
     </a>
   </li>
   <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.PlannedPayments]">
+      <span nz-icon [nzType]="IconEnum.PriceChange"></span><span>Planned payments</span>
+    </a>
+  </li>
+  <li nz-menu-item nzMatchRouter>
     <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.Settings]">
       <span nz-icon [nzType]="IconEnum.Settings"></span><span>Settings</span>
     </a>
