@@ -12,4 +12,5 @@ export enum ApiPathEnum {
   Analytics = 'analytics',
   MerchantCategoryCodes = 'merchant-category-codes',
   PlannedPayments = 'planned-payments',
+  PlannedPaymentSnapshots = 'planned-payment-snapshots',
 }
