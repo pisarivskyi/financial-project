@@ -1,6 +1,7 @@
 export enum TableNameEnum {
   Accounts = 'accounts',
   Budgets = 'budgets',
+  BudgetSnapshots = 'budgets-snapshots',
   Categories = 'categories',
   PlannedPayments = 'planned-payments',
   PlannedPaymentSnapshots = 'planned-payment-snapshots',

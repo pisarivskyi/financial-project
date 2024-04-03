@@ -5,6 +5,7 @@ export enum ApiPathEnum {
   Users = 'users',
   Accounts = 'accounts',
   Budgets = 'budgets',
+  BudgetSnapshots = 'budget-snapshots',
   Categories = 'categories',
   Records = 'records',
   Settings = 'settings',
