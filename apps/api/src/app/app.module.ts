@@ -12,6 +12,7 @@ import { CategoriesModule } from './categories/categories.module';
 import typeorm from './configs/typeorm.config';
 import { JobsModule } from './jobs/jobs.module';
 import { MerchantCategoryCodesModule } from './merchant-category-codes/merchant-category-codes.module';
+import { PlannedPaymentSnapshotsModule } from './planned-payment-snapshots/planned-payment-snapshots.module';
 import { PlannedPaymentsModule } from './planned-payments/planned-payments.module';
 import { ProvidersModule } from './providers/providers.module';
 import { RecordsModule } from './records/records.module';
@@ -47,6 +48,7 @@ import { SettingsModule } from './settings/settings.module';
     AnalyticsModule,
     MerchantCategoryCodesModule,
     PlannedPaymentsModule,
+    PlannedPaymentSnapshotsModule,
   ],
 })
 export class AppModule {}
