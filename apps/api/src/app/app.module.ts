@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccountsModule } from './accounts/accounts.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { BudgetSnapshotsModule } from './budget-snapshots/budget-snapshots.module';
 import { BudgetsModule } from './budgets/budgets.module';
 import { CategoriesModule } from './categories/categories.module';
 import typeorm from './configs/typeorm.config';
@@ -49,6 +50,7 @@ import { SettingsModule } from './settings/settings.module';
     MerchantCategoryCodesModule,
     PlannedPaymentsModule,
     PlannedPaymentSnapshotsModule,
+    BudgetSnapshotsModule,
   ],
 })
 export class AppModule {}
