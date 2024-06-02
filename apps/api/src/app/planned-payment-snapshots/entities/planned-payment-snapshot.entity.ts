@@ -2,6 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';
 
+import { BudgetPlanEntity } from '../../budget-plans/entities/budget-plan.entity';
 import { TableNameEnum } from '../../core/enums/table-name.enum';
 import { PlannedPaymentEntity } from '../../planned-payments/entities/planned-payment.entity';
 
@@ -12,4 +13,7 @@ export class PlannedPaymentSnapshotEntity extends PlannedPaymentEntity {
   @IsOptional()
   @ApiPropertyOptional({ type: () => PlannedPaymentEntity })
   original: PlannedPaymentEntity;
+
+  @ManyToOne(() => BudgetPlanEntity, (budgetPlan) => budgetPlan.plannedPaymentSnapshots, { onDelete: 'CASCADE' })
+  budgetPlan: BudgetPlanEntity;
 }
