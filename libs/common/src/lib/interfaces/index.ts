@@ -11,3 +11,6 @@ export * from './synchronization-job.interface';
 export * from './summary.interface';
 export * from './merchant-category-code.interface';
 export * from './planned-payment.interface';
+export * from './planned-payment-snapshot.interface';
+export * from './budget-plan.interface';
+export * from './budget-snapshot.interface';
