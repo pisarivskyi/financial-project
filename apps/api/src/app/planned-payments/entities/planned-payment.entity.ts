@@ -32,7 +32,7 @@ export class PlannedPaymentEntity extends BaseEntity implements PlannedPaymentIn
   @ApiPropertyOptional()
   icon?: string;
 
-  @ManyToOne(() => CategoryEntity, { onDelete: 'SET NULL' })
+  @ManyToOne(() => CategoryEntity, { nullable: true, onDelete: 'SET NULL' })
   @Expose()
   @JoinColumn()
   @IsNotEmpty()

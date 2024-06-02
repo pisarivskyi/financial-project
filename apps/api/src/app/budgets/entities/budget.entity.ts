@@ -32,7 +32,7 @@ export class BudgetEntity extends BaseEntity implements BudgetInterface {
   @ApiProperty({ enum: CurrencyEnum, enumName: 'CurrencyEnum' })
   currencyCode: CurrencyEnum;
 
-  @ManyToMany(() => CategoryEntity, { onDelete: 'SET NULL' })
+  @ManyToMany(() => CategoryEntity, { nullable: true, onDelete: 'SET NULL' })
   @JoinTable()
   @Expose()
   @ApiProperty({ isArray: true, type: CategoryEntity })
