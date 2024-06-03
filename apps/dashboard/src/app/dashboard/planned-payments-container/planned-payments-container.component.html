@@ -1,12 +1,12 @@
 <fpd-page-header [title]="'Planned payments'" [actions]="actions"></fpd-page-header>
 
 <div class="fpd-card">
-  <nz-tabset nzLinkRouter>
-    <nz-tab>
-      <a *nzTabLink nz-tab-link [routerLink]="[RoutePathEnum.Table]">Table view</a>
-    </nz-tab>
+  <nz-tabset nzLinkRouter [nzLinkExact]="false">
     <nz-tab>
       <a *nzTabLink nz-tab-link [routerLink]="[RoutePathEnum.Calendar]">Calendar view</a>
+    </nz-tab>
+    <nz-tab>
+      <a *nzTabLink nz-tab-link [routerLink]="[RoutePathEnum.Table]">Table view</a>
     </nz-tab>
   </nz-tabset>
 

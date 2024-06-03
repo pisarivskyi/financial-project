@@ -11,16 +11,16 @@ export const paymentRoutes: Route[] = [
     component: PlannedPaymentsContainerComponent,
     children: [
       {
-        path: RoutePathEnum.Table,
-        component: PlannedPaymentsTableTabComponent,
-      },
-      {
         path: RoutePathEnum.Calendar,
         component: PlannedPaymentsCalendarTabComponent,
       },
       {
+        path: RoutePathEnum.Table,
+        component: PlannedPaymentsTableTabComponent,
+      },
+      {
         path: '**',
-        redirectTo: RoutePathEnum.Table,
+        redirectTo: RoutePathEnum.Calendar,
       },
     ],
   },

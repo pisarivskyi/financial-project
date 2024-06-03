@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { DateTime } from 'luxon';
 
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
-import { PeriodEnum } from '@financial-project/common';
+import { PeriodEnum, RecordTypeEnum } from '@financial-project/common';
 
 import { PlannedPaymentModel } from '../../../api/planned-payments/models/planned-payment.model';
 import { AmountFormatPipe } from '../../pipes/amount-format/amount-format.pipe';
@@ -12,7 +13,7 @@ import { CurrencyFormatPipe } from '../../pipes/currency-format/currency-format.
 @Component({
   selector: 'fpd-planned-payments-calendar',
   standalone: true,
-  imports: [NzCalendarModule, AmountFormatPipe, CurrencyFormatPipe],
+  imports: [NzCalendarModule, AmountFormatPipe, CurrencyFormatPipe, NzIconModule],
   templateUrl: './planned-payments-calendar.component.html',
   styleUrl: './planned-payments-calendar.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -126,4 +127,6 @@ export class PlannedPaymentsCalendarComponent {
   getOneTimePaymentKey(dateOfYear: Date): string {
     return `${PeriodEnum.OneTime}.${DateTime.fromJSDate(dateOfYear).toFormat('yyyy-MM-dd')}`;
   }
+
+  protected readonly RecordTypeEnum = RecordTypeEnum;
 }
