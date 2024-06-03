@@ -49,4 +49,16 @@ export namespace ApiMonobank {
       counterName: string;
     }
   }
+
+  export namespace Currencies {
+    export type ResponseType = CurrencyInterface[];
+
+    export interface CurrencyInterface {
+      currencyCodeA: CurrencyEnum;
+      currencyCodeB: CurrencyEnum;
+      date: number;
+      rateBuy: number;
+      rateSell: number;
+    }
+  }
 }

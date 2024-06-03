@@ -11,6 +11,7 @@ import { ApiMonobank, ApiMonobankProviderService } from '@financial-project/prov
 
 import { AccountEntity } from '../../accounts/entities/account.entity';
 import { CategoryEntity } from '../../categories/entities/category.entity';
+import { CurrencyRatesService } from '../../currency-rates/currency-rates.service';
 import { RecordEntity } from '../../records/entities/record.entity';
 import { RECORDS_SYNC_QUEUE_NAME } from '../constants/records-sync-queue-name.const';
 import { JobPayloadInterface } from '../interfaces/job-payload.interface';
@@ -27,7 +28,8 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
     @InjectRepository(CategoryEntity) private categoriesRepository: Repository<CategoryEntity>,
     private categoryAssignerService: CategoryAssignerService,
     private companyAssignerService: CompanyAssignerService,
-    private apiMonobankProviderService: ApiMonobankProviderService
+    private apiMonobankProviderService: ApiMonobankProviderService,
+    private currencyRatesService: CurrencyRatesService,
   ) {
     super();
   }
@@ -47,7 +49,7 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
       const records = await this.getRecordsFromMonobankAccount(
         account,
         DateTime.fromISO(job.data.fromDate),
-        DateTime.fromISO(job.data.toDate)
+        DateTime.fromISO(job.data.toDate),
       );
 
       this.debug(job, `received ${records.length} records`);
@@ -73,6 +75,11 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
         recordsToSave = this.categoryAssignerService.assignCategories(recordsToSave, categories);
         // assign to company
         recordsToSave = this.companyAssignerService.assignCompanies(recordsToSave);
+        // assign current currency rates
+        const rates = await this.currencyRatesService.getCurrencies();
+        recordsToSave.forEach((record) => {
+          record.currenciesMetadata = rates;
+        });
 
         const savedRecords = await this.recordsRepository.save(recordsToSave);
 
@@ -102,7 +109,7 @@ export class RecordsSynchronizationProcessorService extends WorkerHost {
     const statements = await firstValueFrom(
       this.apiMonobankProviderService
         .getStatement$(account.provider.data.token, account.bankAccountId, fromDate, toDate)
-        .pipe(map((r) => r.data))
+        .pipe(map((r) => r.data)),
     );
 
     return statements.map((statement) => {

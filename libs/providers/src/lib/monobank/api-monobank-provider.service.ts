@@ -8,12 +8,12 @@ import { ApiMonobank } from './api-monobank.interface';
 
 @Injectable()
 export class ApiMonobankProviderService {
-  private readonly baseUrl = 'https://api.monobank.ua/personal';
+  private readonly baseUrl = 'https://api.monobank.ua';
 
   constructor(private readonly httpService: HttpService) {}
 
   getClientInfo$(token: string): Observable<AxiosResponse<ApiMonobank.ClientInfo.ResponseInterface>> {
-    return this.httpService.get(`${this.baseUrl}/client-info`, {
+    return this.httpService.get(`${this.baseUrl}/personal/client-info`, {
       headers: {
         'X-Token': token,
       },
@@ -24,15 +24,19 @@ export class ApiMonobankProviderService {
     token: string,
     accountId: string,
     fromDate: DateTime,
-    toDate: DateTime
+    toDate: DateTime,
   ): Observable<AxiosResponse<ApiMonobank.Statement.ResponseType>> {
     return this.httpService.get(
-      `${this.baseUrl}/statement/${accountId}/${fromDate.toUnixInteger()}/${toDate.toUnixInteger()}`,
+      `${this.baseUrl}/personal/statement/${accountId}/${fromDate.toUnixInteger()}/${toDate.toUnixInteger()}`,
       {
         headers: {
           'X-Token': token,
         },
-      }
+      },
     );
+  }
+
+  getCurrencies$(): Observable<AxiosResponse<ApiMonobank.Currencies.ResponseType>> {
+    return this.httpService.get(`${this.baseUrl}/bank/currency`);
   }
 }

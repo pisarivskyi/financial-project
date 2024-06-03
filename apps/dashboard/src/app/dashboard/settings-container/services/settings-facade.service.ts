@@ -20,7 +20,7 @@ export class SettingsFacadeService {
     { name: this.storyKey },
     withProps<{ settings: SettingsModel | null }>({
       settings: null,
-    })
+    }),
   );
 
   settings$ = this.store.pipe(select((s) => s.settings));
@@ -31,14 +31,14 @@ export class SettingsFacadeService {
 
   loadSettings(): void {
     this.settingService
-      .getSettings$()
+      .getSettingsFromCache$()
       .pipe(
         tap((settings) => {
           this.store.update(setProp('settings', settings));
         }),
         trackRequestResult([this.requestKeys.getSettings], {
           skipCache: true,
-        })
+        }),
       )
       .subscribe();
   }
@@ -52,7 +52,7 @@ export class SettingsFacadeService {
         }),
         trackRequestResult([this.requestKeys.getSettings], {
           skipCache: true,
-        })
+        }),
       )
       .subscribe();
   }

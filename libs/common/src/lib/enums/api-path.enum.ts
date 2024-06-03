@@ -15,4 +15,5 @@ export enum ApiPathEnum {
   PlannedPayments = 'planned-payments',
   PlannedPaymentSnapshots = 'planned-payment-snapshots',
   BudgetPlans = 'budget-plans',
+  CurrencyRates = 'currency-rates',
 }

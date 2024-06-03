@@ -9,6 +9,7 @@ import {
   RecordInterface,
   RecordTypeEnum,
 } from '@financial-project/common';
+import { ApiMonobank } from '@financial-project/providers';
 
 import { AccountEntity } from '../../accounts/entities/account.entity';
 import { CategoryEntity } from '../../categories/entities/category.entity';
@@ -59,6 +60,9 @@ export class RecordEntity extends BaseEntity implements RecordInterface {
   @Column({ type: 'json', nullable: true })
   @Exclude({ toPlainOnly: true })
   metadata?: object;
+
+  @Column({ type: 'json', default: [] })
+  currenciesMetadata: ApiMonobank.Currencies.ResponseType;
 
   @ManyToOne(() => AccountEntity, { onDelete: 'CASCADE' })
   @JoinColumn()
