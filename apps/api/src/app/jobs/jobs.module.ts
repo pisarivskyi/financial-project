@@ -7,6 +7,7 @@ import { MonobankModule } from '@financial-project/providers';
 import { AccountEntity } from '../accounts/entities/account.entity';
 import { AuthenticationModule } from '../authentication/authentication.module';
 import { CategoryEntity } from '../categories/entities/category.entity';
+import { CurrencyRatesService } from '../currency-rates/currency-rates.service';
 import { RecordEntity } from '../records/entities/record.entity';
 import { ACCOUNT_SYNC_QUEUE_NAME } from './constants/account-sync-queue-name.const';
 import { RECORDS_SYNC_QUEUE_NAME } from './constants/records-sync-queue-name.const';
@@ -26,6 +27,7 @@ import { TaskSchedulerService } from './services/task-scheduler.service';
     TaskSchedulerService,
     CategoryAssignerService,
     CompanyAssignerService,
+    CurrencyRatesService,
   ],
   controllers: [JobsController],
   imports: [

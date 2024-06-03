@@ -12,6 +12,7 @@ import { BudgetSnapshotsModule } from './budget-snapshots/budget-snapshots.modul
 import { BudgetsModule } from './budgets/budgets.module';
 import { CategoriesModule } from './categories/categories.module';
 import typeorm from './configs/typeorm.config';
+import { CurrencyRatesModule } from './currency-rates/currency-rates.module';
 import { JobsModule } from './jobs/jobs.module';
 import { MerchantCategoryCodesModule } from './merchant-category-codes/merchant-category-codes.module';
 import { PlannedPaymentSnapshotsModule } from './planned-payment-snapshots/planned-payment-snapshots.module';
@@ -53,6 +54,7 @@ import { SettingsModule } from './settings/settings.module';
     PlannedPaymentSnapshotsModule,
     BudgetSnapshotsModule,
     BudgetPlansModule,
+    CurrencyRatesModule,
   ],
 })
 export class AppModule {}
