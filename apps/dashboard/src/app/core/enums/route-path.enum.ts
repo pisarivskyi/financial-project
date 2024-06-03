@@ -15,4 +15,6 @@ export enum RoutePathEnum {
   Profile = 'profile',
   Analytics = 'analytics',
   PlannedPayments = 'planned-payments',
+  Table = 'table',
+  Calendar = 'calendar',
 }

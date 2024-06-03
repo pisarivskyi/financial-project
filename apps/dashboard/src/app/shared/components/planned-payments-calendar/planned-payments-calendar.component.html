@@ -1,0 +1,10 @@
+<nz-calendar>
+  <div *nzDateCell="let date">
+    @for (plannedPayment of getPlannedPaymentsForDate(date); track plannedPayment.id) {
+      <p>
+        {{ plannedPayment.name }} -
+        {{ plannedPayment.amount | amountFormat | currencyFormat: plannedPayment.currencyCode }}
+      </p>
+    }
+  </div>
+</nz-calendar>
