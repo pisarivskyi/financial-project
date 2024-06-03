@@ -1,0 +1,54 @@
+:host {
+  ::ng-deep {
+    .ant-picker-calendar-mode-switch {
+      display: none;
+    }
+  }
+}
+
+.payment {
+  display: flex;
+  font-size: 12px;
+  margin-bottom: 10px;
+
+  &-header {
+    display: flex;
+  }
+
+  .icon {
+    margin-right: 5px;
+    flex-shrink: 0;
+  }
+
+  &-name,
+  &-amount {
+    margin: 0;
+  }
+
+  &-name {
+  }
+
+  &-amount {
+  }
+}
+
+@size: 20px;
+
+.icon {
+  width: @size;
+  height: @size;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: @size - 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.income {
+  color: var(--ant-success-color);
+}
+
+.outcome {
+  color: var(--ant-warning-color);
+}
