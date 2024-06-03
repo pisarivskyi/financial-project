@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 
 import { RoutePathEnum } from '../core/enums/route-path.enum';
+import { paymentRoutes } from './planned-payments-container/planned-payments-container.routes';
 import { ShellComponent } from './shell/shell.component';
 
 export const dashboardRoutes: Route[] = [
@@ -52,10 +53,7 @@ export const dashboardRoutes: Route[] = [
       },
       {
         path: RoutePathEnum.PlannedPayments,
-        loadComponent: () =>
-          import('./planned-payments-container/planned-payments-container.component').then(
-            (mod) => mod.PlannedPaymentsContainerComponent,
-          ),
+        loadChildren: () => paymentRoutes,
       },
     ],
   },

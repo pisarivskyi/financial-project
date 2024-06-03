@@ -1,14 +1,21 @@
 import { Injectable, inject } from '@angular/core';
-import { createStore } from '@ngneat/elf';
+import { ActivatedRoute } from '@angular/router';
+import { createStore, select, setProp, withProps } from '@ngneat/elf';
 import { selectAllEntities, setEntities, withEntities } from '@ngneat/elf-entities';
 import { getRequestResult, trackRequestResult } from '@ngneat/elf-requests';
-import { Observable, map, switchMap, take, tap } from 'rxjs';
+import { Observable, finalize, map, switchMap, take, tap } from 'rxjs';
 
 import { CategoryModel } from '../../../api/categories/models/category.model';
 import { PlannedPaymentModel } from '../../../api/planned-payments/models/planned-payment.model';
+import { RoutePathEnum } from '../../../core/enums/route-path.enum';
 import { updatePaginationData, withPaginationData } from '../../../core/pagination/utils/pagination-utils';
 import { CategoriesService } from '../../services/categories.service';
 import { PlannedPaymentsService } from '../../services/planned-payments.service';
+
+export interface PlannedPaymentsProps {
+  allPlannedPayments: PlannedPaymentModel[];
+  isAllPlannedPaymentsLoading: boolean;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -23,13 +30,25 @@ export class PlannedPaymentsFacadeService {
   private plannedBudgetsService = inject(PlannedPaymentsService);
   private categoriesService = inject(CategoriesService);
 
-  store = createStore({ name: this.storyKey }, withEntities<PlannedPaymentModel>(), withPaginationData());
+  store = createStore(
+    { name: this.storyKey },
+    withEntities<PlannedPaymentModel>(),
+    withPaginationData(),
+    withProps<PlannedPaymentsProps>({
+      isAllPlannedPaymentsLoading: false,
+      allPlannedPayments: [],
+    }),
+  );
 
   plannedPayments$ = this.store.pipe(selectAllEntities());
+
+  allPlannedPayments$ = this.store.pipe(select((state) => state.allPlannedPayments));
 
   pagination$ = this.store.pipe(map((s) => s.pagination));
 
   isLoading$ = getRequestResult([this.requestKeys.getPlannedPayments]).pipe(map(({ isLoading }) => isLoading));
+
+  route = inject(ActivatedRoute);
 
   loadPlannedPayments(): void {
     this.store
@@ -48,6 +67,33 @@ export class PlannedPaymentsFacadeService {
       .subscribe();
   }
 
+  loadAllPlannedPayments(): void {
+    this.store.update(setProp('isAllPlannedPaymentsLoading', true));
+
+    this.getAllPlannedPayments$()
+      .pipe(
+        tap((payments) => {
+          this.store.update(setProp('allPlannedPayments', payments));
+        }),
+        finalize(() => this.store.update(setProp('isAllPlannedPaymentsLoading', false))),
+      )
+      .subscribe();
+  }
+
+  reloadPlannedPayments(): void {
+    let route = this.route;
+
+    while (route.firstChild) {
+      route = route.firstChild;
+    }
+
+    if (route.snapshot.routeConfig?.path === RoutePathEnum.Calendar) {
+      this.loadAllPlannedPayments();
+    } else {
+      this.loadPlannedPayments();
+    }
+  }
+
   savePlannedPayment$(plannedPaymentToSave: PlannedPaymentModel): Observable<PlannedPaymentModel> {
     return this.plannedBudgetsService.savePlannedPayment$(plannedPaymentToSave);
   }
@@ -60,7 +106,7 @@ export class PlannedPaymentsFacadeService {
     return this.plannedBudgetsService.updatePlannedPayment$(plannedPaymentToUpdate);
   }
 
-  getAllBudgets$(): Observable<PlannedPaymentModel[]> {
+  getAllPlannedPayments$(): Observable<PlannedPaymentModel[]> {
     return this.plannedBudgetsService.getPlannedPayments$().pipe(map((response) => response.data));
   }
 

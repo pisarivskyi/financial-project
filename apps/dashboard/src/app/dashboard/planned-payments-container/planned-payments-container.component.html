@@ -1,82 +1,14 @@
 <fpd-page-header [title]="'Planned payments'" [actions]="actions"></fpd-page-header>
 
 <div class="fpd-card">
-  <nz-table
-    #table
-    [nzLoading]="isLoading$ | async"
-    [nzData]="(plannedPayments$ | async) ?? []"
-    [nzFrontPagination]="false"
-    [nzPageIndex]="(pagination$ | async)!.pageIndex"
-    [nzPageSize]="(pagination$ | async)!.pageSize"
-    [nzTotal]="(pagination$ | async)!.total"
-    (nzPageIndexChange)="onPageIndexChanged($event)"
-  >
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Period</th>
-        <th>Date of year</th>
-        <th>Day of month</th>
-        <th>Day of week</th>
-        <th>Category</th>
-        <th>Amount</th>
-        <th>Created</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (plannedPayment of table.data; track plannedPayment.id) {
-        <tr>
-          <td>{{ plannedPayment.name }}</td>
-          <td>{{ RECORD_TYPE_TO_LABEL[plannedPayment.type] }}</td>
-          <td>{{ PERIOD_TO_LABEL[plannedPayment.period] }}</td>
-          <td>
-            @if (plannedPayment.dateOfYear) {
-              {{ plannedPayment.dateOfYear | date }}
-            } @else {
-              -
-            }
-          </td>
-          <td>
-            @if (plannedPayment.dayOfMonth) {
-              {{ plannedPayment.dayOfMonth }}
-            } @else {
-              -
-            }
-          </td>
-          <td>
-            @if (plannedPayment.dayOfWeek) {
-              {{ plannedPayment.dayOfWeek }}
-            } @else {
-              -
-            }
-          </td>
-          <td>
-            @if (plannedPayment.category) {
-              {{ plannedPayment.category.name }}
-            } @else {
-              -
-            }
-          </td>
-          <td>{{ plannedPayment.amount | amountFormat | currencyFormat: plannedPayment.currencyCode }}</td>
-          <td>{{ plannedPayment.createdAt | date }}</td>
-          <td>
-            <button nz-button nzSize="small" (click)="onEditPlannedPayment(plannedPayment)">Edit</button>
-            <button
-              nz-button
-              nzSize="small"
-              nz-popconfirm
-              nzPopconfirmTitle="Are you sure?"
-              nzOkText="ok"
-              nzCancelText="cancel"
-              (nzOnConfirm)="onDeletePlannedPayment(plannedPayment)"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      }
-    </tbody>
-  </nz-table>
+  <nz-tabset nzLinkRouter [nzLinkExact]="false">
+    <nz-tab>
+      <a *nzTabLink nz-tab-link [routerLink]="[RoutePathEnum.Calendar]">Calendar view</a>
+    </nz-tab>
+    <nz-tab>
+      <a *nzTabLink nz-tab-link [routerLink]="[RoutePathEnum.Table]">Table view</a>
+    </nz-tab>
+  </nz-tabset>
+
+  <router-outlet></router-outlet>
 </div>
