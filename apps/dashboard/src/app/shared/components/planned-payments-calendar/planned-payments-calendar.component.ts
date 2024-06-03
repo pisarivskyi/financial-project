@@ -9,17 +9,20 @@ import { PeriodEnum, RecordTypeEnum } from '@financial-project/common';
 import { PlannedPaymentModel } from '../../../api/planned-payments/models/planned-payment.model';
 import { AmountFormatPipe } from '../../pipes/amount-format/amount-format.pipe';
 import { CurrencyFormatPipe } from '../../pipes/currency-format/currency-format.pipe';
+import { ToDefaultCurrencyPipe } from '../../pipes/to-default-currency/to-default-currency.pipe';
 
 @Component({
   selector: 'fpd-planned-payments-calendar',
   standalone: true,
-  imports: [NzCalendarModule, AmountFormatPipe, CurrencyFormatPipe, NzIconModule],
+  imports: [NzCalendarModule, AmountFormatPipe, CurrencyFormatPipe, NzIconModule, ToDefaultCurrencyPipe],
   templateUrl: './planned-payments-calendar.component.html',
   styleUrl: './planned-payments-calendar.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlannedPaymentsCalendarComponent {
   plannedPayments = input.required<PlannedPaymentModel[]>();
+
+  readonly RecordTypeEnum = RecordTypeEnum;
 
   private data = computed(() => {
     const plannedPayments = this.plannedPayments();
@@ -127,6 +130,4 @@ export class PlannedPaymentsCalendarComponent {
   getOneTimePaymentKey(dateOfYear: Date): string {
     return `${PeriodEnum.OneTime}.${DateTime.fromJSDate(dateOfYear).toFormat('yyyy-MM-dd')}`;
   }
-
-  protected readonly RecordTypeEnum = RecordTypeEnum;
 }

@@ -18,6 +18,7 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
 import { IconEnum } from '../../shared/enums/icon.enum';
 import { AmountFormatPipe } from '../../shared/pipes/amount-format/amount-format.pipe';
 import { CurrencyFormatPipe } from '../../shared/pipes/currency-format/currency-format.pipe';
+import { ToDefaultCurrencyPipe } from '../../shared/pipes/to-default-currency/to-default-currency.pipe';
 import { EditRecordModalComponent } from './components/edit-record-modal/edit-record-modal.component';
 import { RecordsFacadeService } from './services/records-facade.service';
 
@@ -36,6 +37,7 @@ import { RecordsFacadeService } from './services/records-facade.service';
     AmountFormatPipe,
     CurrencyFormatPipe,
     PageHeaderComponent,
+    ToDefaultCurrencyPipe,
   ],
   templateUrl: './records-container.component.html',
   styleUrls: ['./records-container.component.less'],
@@ -55,7 +57,7 @@ export class RecordsContainerComponent implements OnInit {
     private modalService: NzModalService,
     private messageService: NzMessageService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {

@@ -23,6 +23,6 @@ export class AmountFormatPipe implements PipeTransform {
   }
 
   private formatDefault(amount: number): string {
-    return this.decimalPipe.transform(amount / 100) ?? '';
+    return this.decimalPipe.transform(amount / 100, '1.2-2') ?? '';
   }
 }

@@ -1,9 +1,13 @@
-<fpd-sidebar></fpd-sidebar>
+@if (isLoading()) {
+  <nz-spin class="preloader" [nzSpinning]="true"></nz-spin>
+} @else {
+  <fpd-sidebar></fpd-sidebar>
 
-<div class="content-wrapper">
-  <fpd-header [user]="user$ | async" (logout)="onLogOut()"></fpd-header>
+  <div class="content-wrapper">
+    <fpd-header [user]="user$ | async" (logout)="onLogOut()"></fpd-header>
 
-  <main class="main-content">
-    <router-outlet></router-outlet>
-  </main>
-</div>
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+}

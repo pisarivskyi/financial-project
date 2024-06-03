@@ -8,6 +8,7 @@ import {
   RecordInterface,
   RecordTypeEnum,
 } from '@financial-project/common';
+import { ApiMonobank } from '@financial-project/providers';
 
 import { BaseModel } from '../../../core/models/base.model';
 import { CategoryModel } from '../../categories/models/category.model';
@@ -34,6 +35,9 @@ export class RecordModel extends BaseModel implements RecordInterface {
 
   @Expose()
   operationCurrencyCode!: CurrencyEnum;
+
+  @Expose()
+  currenciesMetadata!: ApiMonobank.Currencies.ResponseType;
 
   @Expose()
   account!: AccountInterface;

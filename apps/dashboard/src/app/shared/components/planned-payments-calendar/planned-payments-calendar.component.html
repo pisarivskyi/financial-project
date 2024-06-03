@@ -13,7 +13,7 @@
             [class.income]="plannedPayment.type === RecordTypeEnum.Income"
             [class.outcome]="plannedPayment.type === RecordTypeEnum.Outcome"
           >
-            {{ plannedPayment.amount | amountFormat | currencyFormat: plannedPayment.currencyCode }}
+            {{ plannedPayment.amount | toDefaultCurrency: plannedPayment.currencyCode }}
           </p>
         </div>
       </div>
