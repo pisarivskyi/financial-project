@@ -1,7 +1,7 @@
 import { registerLocaleData } from '@angular/common';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import localeUk from '@angular/common/locales/uk';
-import { APP_INITIALIZER, ApplicationConfig, LOCALE_ID, importProvidersFrom } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, ErrorHandler, LOCALE_ID, importProvidersFrom } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { devTools } from '@ngneat/elf-devtools';
@@ -15,6 +15,7 @@ import { appRoutes } from './app.routes';
 import { AuthenticationService } from './core/authentication/services/authentication.service';
 import { ConfigurationService } from './core/configuration/services/configuration.service';
 import { ENVIRONMENT_CONFIG_TOKEN } from './core/configuration/tokens/environment-config.token';
+import { GlobalErrorHandlerService } from './core/error-handler/services/global-error-handler.service';
 import { nzConfigFactory } from './core/nz-config/nz-config.factory';
 
 // for the future
@@ -56,6 +57,10 @@ export const appConfig: ApplicationConfig = {
       provide: HTTP_INTERCEPTORS,
       useClass: KeycloakBearerInterceptor,
       multi: true,
+    },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandlerService,
     },
   ],
 };
