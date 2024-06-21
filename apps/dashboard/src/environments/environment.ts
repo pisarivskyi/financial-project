@@ -2,9 +2,9 @@ import { ConfigurationInterface } from '../app/core/configuration/interfaces/con
 
 export const environment: ConfigurationInterface = {
   production: false,
-  apiHost: 'http://localhost:3200',
+  apiHost: 'http://budget.localhost',
   keycloak: {
-    url: 'http://keycloak:8080',
+    url: 'http://budget.localhost/auth',
     realm: 'budget-app',
     clientId: 'dashboard',
   },

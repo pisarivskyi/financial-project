@@ -1,15 +1,17 @@
 # Financial project
 
-An application to track expanses with Monobank API.
+An application for tracking expanses and building budget plans. It uses [Monobank open API](https://api.monobank.ua/docs/index.html) to obtain client's data.
 
-## How to run
+## Run locally
+
+### With Docker compose
 
 1. Install docker and docker compose.
 2. Install dependencies:
 
-
-    npm install
-
+```sh
+npm install
+```
 
 3. Add the following record to `hosts` file:
 

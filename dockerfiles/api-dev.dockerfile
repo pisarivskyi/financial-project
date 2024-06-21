@@ -32,3 +32,5 @@ RUN npm ci --ignore-scripts
 
 # run application
 CMD [ "node", "main.js" ]
+
+EXPOSE 3200
