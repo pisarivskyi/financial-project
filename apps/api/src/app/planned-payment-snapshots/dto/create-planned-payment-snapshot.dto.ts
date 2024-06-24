@@ -1,6 +1,8 @@
 import { IsString } from 'class-validator';
 
-export class CreatePlannedPaymentSnapshotDto {
+import { CreatePlannedPaymentDto } from '../../planned-payments/dto/create-planned-payment.dto';
+
+export class CreatePlannedPaymentSnapshotDto extends CreatePlannedPaymentDto {
   @IsString()
-  originalId: string;
+  id: string;
 }
