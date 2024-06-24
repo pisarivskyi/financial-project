@@ -70,7 +70,7 @@ export class OutcomeByCategoriesWidgetComponent implements OnChanges {
         rootCategories.map((category) => [category.id, category]),
       );
       const childCategoryIdToParentCategoryIdMap = new Map<string, string>(
-        childrenCategories.map((category) => [category.id, category.parentCategory.id]),
+        childrenCategories.map((category) => [category.id, category.parentCategory!.id]),
       );
       let withoutCategoryAmount = 0;
 

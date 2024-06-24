@@ -8,9 +8,7 @@ export class CategoryModel extends BaseModel implements CategoryInterface {
   name!: string;
   color!: string;
   icon!: string;
-  mccRangeEnd!: number;
-  mccRangeStart!: number;
   @Type(() => CategoryModel)
-  parentCategory!: CategoryModel;
+  parentCategory?: CategoryModel;
   createdBy!: string;
 }
