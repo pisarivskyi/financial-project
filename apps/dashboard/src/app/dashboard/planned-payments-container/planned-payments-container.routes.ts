@@ -12,10 +12,12 @@ export const paymentRoutes: Route[] = [
     children: [
       {
         path: RoutePathEnum.Calendar,
+        title: 'Budget - Planned payments calendar',
         component: PlannedPaymentsCalendarTabComponent,
       },
       {
         path: RoutePathEnum.Table,
+        title: 'Budget - Planned payments table',
         component: PlannedPaymentsTableTabComponent,
       },
       {
