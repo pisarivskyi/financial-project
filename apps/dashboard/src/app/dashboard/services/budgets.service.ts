@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { BudgetModel } from '../../api/budgets/models/budget.model';
@@ -10,7 +10,7 @@ import { PaginationParamsInterface } from '../../core/pagination/interfaces/pagi
   providedIn: 'root',
 })
 export class BudgetsService {
-  constructor(private apiBudgetsService: ApiBudgetsService) {}
+  private apiBudgetsService = inject(ApiBudgetsService);
 
   getBudgets$(pagination?: PaginationParamsInterface): Observable<PaginatedResponse<BudgetModel>> {
     return this.apiBudgetsService.extractBudgets$(pagination);
