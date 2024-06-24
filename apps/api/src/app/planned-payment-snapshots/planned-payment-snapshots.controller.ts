@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard, AuthenticatedUser } from 'nest-keycloak-connect';
 
@@ -7,6 +7,7 @@ import { ApiPathEnum, UserTokenParsedInterface } from '@financial-project/common
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
 import { CreatePlannedPaymentSnapshotDto } from './dto/create-planned-payment-snapshot.dto';
+import { UpdatePlannedPaymentSnapshotDto } from './dto/update-planned-payment-snapshot.dto';
 import { PlannedPaymentSnapshotEntity } from './entities/planned-payment-snapshot.entity';
 import { PlannedPaymentSnapshotsService } from './planned-payment-snapshots.service';
 
@@ -41,6 +42,16 @@ export class PlannedPaymentSnapshotsController {
     @AuthenticatedUser() user: UserTokenParsedInterface,
   ): Promise<PlannedPaymentSnapshotEntity> {
     return this.plannedPaymentSnapshotsService.findOne(id, user);
+  }
+
+  @Patch(':id')
+  @UseGuards(AuthGuard)
+  update(
+    @Param('id') id: string,
+    @Body() updatePlannedPaymentSnapshotDto: UpdatePlannedPaymentSnapshotDto,
+    @AuthenticatedUser() user: UserTokenParsedInterface,
+  ): Promise<PlannedPaymentSnapshotEntity> {
+    return this.plannedPaymentSnapshotsService.update(id, updatePlannedPaymentSnapshotDto, user);
   }
 
   @Delete(':id')
