@@ -1,15 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { instanceToPlain } from 'class-transformer';
+import { plainToClassFromExist, plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
-import { UserTokenParsedInterface } from '@financial-project/common';
+import { PeriodEnum, UserTokenParsedInterface } from '@financial-project/common';
 
+import { CategoriesService } from '../categories/categories.service';
+import { CategoryEntity } from '../categories/entities/category.entity';
 import { PageOptionsDto } from '../core/pagination/dtos/page-options.dto';
 import { PageDto } from '../core/pagination/dtos/page.dto';
 import { paginate } from '../core/pagination/utils/paginate.utils';
 import { PlannedPaymentEntity } from '../planned-payments/entities/planned-payment.entity';
 import { CreatePlannedPaymentSnapshotDto } from './dto/create-planned-payment-snapshot.dto';
+import { UpdatePlannedPaymentSnapshotDto } from './dto/update-planned-payment-snapshot.dto';
 import { PlannedPaymentSnapshotEntity } from './entities/planned-payment-snapshot.entity';
 
 @Injectable()
@@ -17,16 +20,18 @@ export class PlannedPaymentSnapshotsService {
   constructor(
     @InjectRepository(PlannedPaymentSnapshotEntity)
     private plannedPaymentSnapshotEntityRepository: Repository<PlannedPaymentSnapshotEntity>,
-    @InjectRepository(PlannedPaymentEntity) private plannedPaymentEntityRepository: Repository<PlannedPaymentEntity>,
+    @InjectRepository(PlannedPaymentEntity)
+    private plannedPaymentEntityRepository: Repository<PlannedPaymentEntity>,
+    private categoriesService: CategoriesService,
   ) {}
 
   async create(
-    createCategoryDto: CreatePlannedPaymentSnapshotDto,
+    createPlannedPaymentSnapshotDto: CreatePlannedPaymentSnapshotDto,
     user: UserTokenParsedInterface,
   ): Promise<PlannedPaymentSnapshotEntity> {
     const originalPlannedPayment = await this.plannedPaymentEntityRepository.findOne({
       where: {
-        id: createCategoryDto.originalId,
+        id: createPlannedPaymentSnapshotDto.id,
         createdBy: user.sub,
       },
       relations: { category: true },
@@ -36,12 +41,27 @@ export class PlannedPaymentSnapshotsService {
       throw new NotFoundException('Planned payment is not found');
     }
 
-    const cloneData = instanceToPlain(originalPlannedPayment);
+    const plannedPaymentSnapshotEntity = plainToInstance(PlannedPaymentSnapshotEntity, createPlannedPaymentSnapshotDto);
+    plannedPaymentSnapshotEntity.createdBy = user.sub;
 
-    delete cloneData.id;
+    let category: CategoryEntity;
+
+    if (createPlannedPaymentSnapshotDto.categoryId) {
+      try {
+        category = await this.categoriesService.findOne(createPlannedPaymentSnapshotDto.categoryId, user);
+      } catch {
+        throw new BadRequestException('No such category');
+      }
+
+      if (category) {
+        plannedPaymentSnapshotEntity.category = category;
+      }
+    }
+
+    delete plannedPaymentSnapshotEntity.id;
 
     return this.plannedPaymentSnapshotEntityRepository.save({
-      ...cloneData,
+      ...plannedPaymentSnapshotEntity,
       original: originalPlannedPayment,
     });
   }
@@ -79,6 +99,58 @@ export class PlannedPaymentSnapshotsService {
     } catch {
       throw new NotFoundException();
     }
+  }
+
+  async update(
+    id: string,
+    updatePlannedPaymentSnapshotDto: UpdatePlannedPaymentSnapshotDto,
+    user: UserTokenParsedInterface,
+  ): Promise<PlannedPaymentSnapshotEntity> {
+    const targetPlannedPaymentEntity = await this.plannedPaymentSnapshotEntityRepository.findOne({
+      where: {
+        id,
+        createdBy: user.sub,
+      },
+    });
+
+    if (!targetPlannedPaymentEntity) {
+      throw new NotFoundException();
+    }
+
+    let category: CategoryEntity;
+
+    if (updatePlannedPaymentSnapshotDto.categoryId) {
+      try {
+        category = await this.categoriesService.findOne(updatePlannedPaymentSnapshotDto.categoryId, user);
+      } catch {
+        throw new BadRequestException('No such category');
+      }
+    }
+
+    const updatedPlannedPaymentEntity = plainToClassFromExist(
+      targetPlannedPaymentEntity,
+      updatePlannedPaymentSnapshotDto,
+      {
+        excludeExtraneousValues: true,
+      },
+    );
+
+    updatedPlannedPaymentEntity.category = category;
+
+    if (
+      updatedPlannedPaymentEntity.period === PeriodEnum.OneTime ||
+      updatedPlannedPaymentEntity.period === PeriodEnum.Yearly
+    ) {
+      updatedPlannedPaymentEntity.dateOfYear = updatePlannedPaymentSnapshotDto.dateOfYear!;
+    } else if (updatedPlannedPaymentEntity.period === PeriodEnum.Monthly) {
+      updatedPlannedPaymentEntity.dayOfMonth = updatePlannedPaymentSnapshotDto.dayOfMonth!;
+    } else if (updatedPlannedPaymentEntity.period === PeriodEnum.Weekly) {
+      updatedPlannedPaymentEntity.dayOfWeek = updatePlannedPaymentSnapshotDto.dayOfWeek!;
+    }
+
+    await this.plannedPaymentSnapshotEntityRepository.update(id, updatedPlannedPaymentEntity);
+
+    return this.findOne(id, user);
   }
 
   async remove(id: string, user: UserTokenParsedInterface): Promise<PlannedPaymentSnapshotEntity> {

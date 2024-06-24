@@ -1,6 +1,8 @@
 import { IsString } from 'class-validator';
 
-export class CreateBudgetSnapshotDto {
+import { CreateBudgetDto } from '../../budgets/dto/create-budget.dto';
+
+export class CreateBudgetSnapshotDto extends CreateBudgetDto {
   @IsString()
-  originalId: string;
+  id: string;
 }
