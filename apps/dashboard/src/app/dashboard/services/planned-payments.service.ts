@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { PlannedPaymentModel } from '../../api/planned-payments/models/planned-payment.model';
@@ -10,21 +10,21 @@ import { PaginationParamsInterface } from '../../core/pagination/interfaces/pagi
   providedIn: 'root',
 })
 export class PlannedPaymentsService {
-  constructor(private apiBudgetsService: ApiPlannedPaymentsService) {}
+  private apiPlannedPaymentsService = inject(ApiPlannedPaymentsService);
 
   getPlannedPayments$(pagination?: PaginationParamsInterface): Observable<PaginatedResponse<PlannedPaymentModel>> {
-    return this.apiBudgetsService.extractPlannedPayments$(pagination);
+    return this.apiPlannedPaymentsService.extractPlannedPayments$(pagination);
   }
 
   savePlannedPayment$(plannedPaymentToSave: PlannedPaymentModel): Observable<PlannedPaymentModel> {
-    return this.apiBudgetsService.insertPlannedPayment$(plannedPaymentToSave);
+    return this.apiPlannedPaymentsService.insertPlannedPayment$(plannedPaymentToSave);
   }
 
   deletePlannedPayment$(id: string): Observable<PlannedPaymentModel> {
-    return this.apiBudgetsService.deletePlannedPayment$(id);
+    return this.apiPlannedPaymentsService.deletePlannedPayment$(id);
   }
 
   updatePlannedPayment$(plannedPaymentToUpdate: PlannedPaymentModel): Observable<PlannedPaymentModel> {
-    return this.apiBudgetsService.updatePlannedPayment$(plannedPaymentToUpdate);
+    return this.apiPlannedPaymentsService.updatePlannedPayment$(plannedPaymentToUpdate);
   }
 }

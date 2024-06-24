@@ -12,10 +12,10 @@ import { ApiCurrencyRatesService } from '../../api/currency-rates/services/api-c
 export class CurrencyRatesService {
   private currenciesRates$ = new BehaviorSubject<CurrencyRateModel[]>([]);
 
-  private apiSettingsService = inject(ApiCurrencyRatesService);
+  private apiCurrencyRatesService = inject(ApiCurrencyRatesService);
 
   getCurrencyRates$(): Observable<CurrencyRateModel[]> {
-    return this.apiSettingsService.extractCurrencyRates$().pipe(tap((rates) => this.currenciesRates$.next(rates)));
+    return this.apiCurrencyRatesService.extractCurrencyRates$().pipe(tap((rates) => this.currenciesRates$.next(rates)));
   }
 
   getCurrencyRatesSync(): CurrencyRateModel[] {
