@@ -1,7 +1,7 @@
 @if (isLoading()) {
   <nz-spin class="preloader" [nzSpinning]="true"></nz-spin>
 } @else {
-  <fpd-sidebar></fpd-sidebar>
+  <fpd-sidebar class="sidebar"></fpd-sidebar>
 
   <div class="content-wrapper">
     <fpd-header [user]="user$ | async" (logout)="onLogOut()"></fpd-header>

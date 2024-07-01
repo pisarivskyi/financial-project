@@ -8,4 +8,6 @@ export enum IconEnum {
   CreditCard = 'credit_card',
   Settings = 'settings',
   BarChart = 'bar_chart',
+  CalendarMonth = 'calendar_month',
+  Construction = 'construction',
 }

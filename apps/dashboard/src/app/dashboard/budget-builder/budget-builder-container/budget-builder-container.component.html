@@ -1,0 +1,119 @@
+<fpd-page-header [title]="'Budget builder'"></fpd-page-header>
+
+<div class="fpd-card">
+  <nz-form-label>Select month</nz-form-label>
+
+  <div class="month-select">
+    <div class="month-select-control">
+      <nz-form-control>
+        <nz-date-picker [formControl]="monthControl" nzMode="month"></nz-date-picker>
+      </nz-form-control>
+    </div>
+
+    <button nz-button nzType="primary" (click)="onGenerate()">Generate</button>
+  </div>
+
+  @if (initialized$ | async) {
+    <div class="budgets-table">
+      <div class="table-header">
+        <h3>Budgets</h3>
+
+        <button nz-button (click)="onAddBudget()">Add budget</button>
+      </div>
+
+      <nz-table
+        #budgetsTable
+        [nzLoading]="isLoading$ | async"
+        [nzData]="(budgets$ | async) ?? []"
+        [nzFrontPagination]="false"
+      >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Categories</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (budget of budgetsTable.data; track budget.id) {
+            <tr>
+              <td>{{ budget.name }}</td>
+              <td>{{ budget.period }}</td>
+              <td>
+                @for (category of budget.categories; track category) {
+                  {{ category.name }},
+                }
+              </td>
+              <td>
+                <span class="outcome">{{ budget.amount | toDefaultCurrency: budget.currencyCode }}</span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </nz-table>
+    </div>
+
+    <div class="planned-payments-table">
+      <div class="table-header">
+        <h3>Planned payments</h3>
+
+        <button nz-button (click)="onAddPlannedPayment()">Add planned payment</button>
+      </div>
+
+      <nz-table
+        #plannedIncomesTable
+        [nzLoading]="isLoading$ | async"
+        [nzData]="(plannedPayments$ | async) ?? []"
+        [nzFrontPagination]="false"
+      >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Period</th>
+            <th>Category</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (plannedPayment of plannedIncomesTable.data; track plannedPayment.id) {
+            <tr>
+              <td>{{ plannedPayment.name }}</td>
+              <td>{{ PERIOD_TO_LABEL[plannedPayment.period] }}</td>
+              <td>
+                @if (plannedPayment.category) {
+                  {{ plannedPayment.category.name }}
+                } @else {
+                  -
+                }
+              </td>
+              <td>
+                <span
+                  [class.income]="plannedPayment.type === RecordTypeEnum.Income"
+                  [class.outcome]="plannedPayment.type === RecordTypeEnum.Outcome"
+                  >{{ plannedPayment.amount | toDefaultCurrency: plannedPayment.currencyCode }}</span
+                >
+              </td>
+            </tr>
+          }
+        </tbody>
+      </nz-table>
+    </div>
+
+    @if (summary$ | async; as summary) {
+      <div class="summary">
+        <p>
+          <b>Total income:</b>
+          <span class="income"> {{ summary.income | toDefaultCurrency: defaultCurrencyCode() }}</span>
+        </p>
+        <p>
+          <b>Total outcome:</b>
+          <span class="outcome"> {{ summary.outcome | toDefaultCurrency: defaultCurrencyCode() }}</span>
+        </p>
+        <p><b>Difference:</b> {{ summary.difference | toDefaultCurrency: defaultCurrencyCode() }}</p>
+      </div>
+    }
+
+    <!--    <button nz-button (click)="onSave()">Save</button>-->
+  }
+</div>
