@@ -1,10 +1,10 @@
 <fpd-page-header [title]="'Budget builder'"></fpd-page-header>
 
 <div class="fpd-card">
-  <div>
-    <div>
-      <nz-form-label>Select month</nz-form-label>
+  <nz-form-label>Select month</nz-form-label>
 
+  <div class="month-select">
+    <div class="month-select-control">
       <nz-form-control>
         <nz-date-picker [formControl]="monthControl" nzMode="month"></nz-date-picker>
       </nz-form-control>
@@ -15,7 +15,11 @@
 
   @if (initialized$ | async) {
     <div class="budgets-table">
-      <h3>Budgets</h3>
+      <div class="table-header">
+        <h3>Budgets</h3>
+
+        <button nz-button (click)="onAddBudget()">Add budget</button>
+      </div>
 
       <nz-table
         #budgetsTable
@@ -41,7 +45,9 @@
                   {{ category.name }},
                 }
               </td>
-              <td>{{ budget.amount | toDefaultCurrency: budget.currencyCode }}</td>
+              <td>
+                <span class="outcome">{{ budget.amount | toDefaultCurrency: budget.currencyCode }}</span>
+              </td>
             </tr>
           }
         </tbody>
@@ -49,12 +55,16 @@
     </div>
 
     <div class="planned-payments-table">
-      <h3>Planned income</h3>
+      <div class="table-header">
+        <h3>Planned payments</h3>
+
+        <button nz-button (click)="onAddPlannedPayment()">Add planned payment</button>
+      </div>
 
       <nz-table
         #plannedIncomesTable
         [nzLoading]="isLoading$ | async"
-        [nzData]="(plannedIncomePayments$ | async) ?? []"
+        [nzData]="(plannedPayments$ | async) ?? []"
         [nzFrontPagination]="false"
       >
         <thead>
@@ -77,54 +87,33 @@
                   -
                 }
               </td>
-              <td>{{ plannedPayment.amount | toDefaultCurrency: plannedPayment.currencyCode }}</td>
-            </tr>
-          }
-        </tbody>
-      </nz-table>
-    </div>
-
-    <div class="planned-payments-table">
-      <h3>Planned outcome</h3>
-
-      <nz-table
-        #plannedOutcomesTable
-        [nzLoading]="isLoading$ | async"
-        [nzData]="(plannedOutcomePayments$ | async) ?? []"
-        [nzFrontPagination]="false"
-      >
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Period</th>
-            <th>Category</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (plannedPayment of plannedOutcomesTable.data; track plannedPayment.id) {
-            <tr>
-              <td>{{ plannedPayment.name }}</td>
-              <td>{{ PERIOD_TO_LABEL[plannedPayment.period] }}</td>
               <td>
-                @if (plannedPayment.category) {
-                  {{ plannedPayment.category.name }}
-                } @else {
-                  -
-                }
+                <span
+                  [class.income]="plannedPayment.type === RecordTypeEnum.Income"
+                  [class.outcome]="plannedPayment.type === RecordTypeEnum.Outcome"
+                  >{{ plannedPayment.amount | toDefaultCurrency: plannedPayment.currencyCode }}</span
+                >
               </td>
-              <td>{{ plannedPayment.amount | toDefaultCurrency: plannedPayment.currencyCode }}</td>
             </tr>
           }
         </tbody>
       </nz-table>
     </div>
+
     @if (summary$ | async; as summary) {
       <div class="summary">
-        <p>{{ summary.income | amountFormat }}</p>
-        <p>{{ summary.outcome | amountFormat }}</p>
-        <p>{{ summary.difference | amountFormat }}</p>
+        <p>
+          <b>Total income:</b>
+          <span class="income"> {{ summary.income | toDefaultCurrency: defaultCurrencyCode() }}</span>
+        </p>
+        <p>
+          <b>Total outcome:</b>
+          <span class="outcome"> {{ summary.outcome | toDefaultCurrency: defaultCurrencyCode() }}</span>
+        </p>
+        <p><b>Difference:</b> {{ summary.difference | toDefaultCurrency: defaultCurrencyCode() }}</p>
       </div>
     }
+
+    <!--    <button nz-button (click)="onSave()">Save</button>-->
   }
 </div>

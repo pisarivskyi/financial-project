@@ -9,6 +9,8 @@ import { KeycloakAngularModule, KeycloakBearerInterceptor } from 'keycloak-angul
 
 import { NZ_CONFIG } from 'ng-zorro-antd/core/config';
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 import { environment } from '../environments/environment';
 import { appRoutes } from './app.routes';
@@ -40,6 +42,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(appRoutes),
     provideHttpClient(withInterceptorsFromDi()),
     importProvidersFrom(KeycloakAngularModule),
+    importProvidersFrom(NzModalModule),
+    importProvidersFrom(NzMessageModule),
     provideAnimations(),
     {
       provide: APP_INITIALIZER,

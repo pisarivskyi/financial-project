@@ -4,10 +4,15 @@ import { getRequestResult, trackRequestResult } from '@ngneat/elf-requests';
 import { DateTime } from 'luxon';
 import { forkJoin, map, take } from 'rxjs';
 
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
+
 import { PeriodEnum, RecordTypeEnum } from '@financial-project/common';
 
 import { BudgetModel } from '../../../../api/budgets/models/budget.model';
 import { PlannedPaymentModel } from '../../../../api/planned-payments/models/planned-payment.model';
+import { AddBudgetModalComponent } from '../../../budgets-container/components/add-budget-modal/add-budget-modal.component';
+import { AddPlannedPaymentModalComponent } from '../../../planned-payments-container/components/add-planned-payment-modal/add-planned-payment-modal.component';
 import { BudgetSnapshotsService } from '../../../services/budget-snapshots.service';
 import { BudgetsService } from '../../../services/budgets.service';
 import { CurrencyRatesService } from '../../../services/currency-rates.service';
@@ -65,6 +70,9 @@ export class BudgetBuilderFacadeService {
   private budgetsService = inject(BudgetsService);
   private plannedPaymentsService = inject(PlannedPaymentsService);
   private plannedPaymentsHelpersService = inject(PlannedPaymentsHelpersService);
+
+  private modalService = inject(NzModalService);
+  private messageService = inject(NzMessageService);
 
   private budgetSnapshotsService = inject(BudgetSnapshotsService);
   private plannedPaymentSnapshotsService = inject(PlannedPaymentSnapshotsService);
@@ -167,6 +175,38 @@ export class BudgetBuilderFacadeService {
           }),
         );
       });
+  }
+
+  addBudget(): void {
+    const modalRef = this.modalService.create({
+      nzTitle: 'Add new budget',
+      nzContent: AddBudgetModalComponent,
+      nzCentered: true,
+    });
+
+    modalRef.afterClose.subscribe((created: boolean) => {
+      if (created) {
+        this.loadData();
+
+        this.messageService.success('Budget was created');
+      }
+    });
+  }
+
+  addPlannedPayment(): void {
+    const modalRef = this.modalService.create({
+      nzTitle: 'Add new planned payment',
+      nzContent: AddPlannedPaymentModalComponent,
+      nzCentered: true,
+    });
+
+    modalRef.afterClose.subscribe((created: boolean) => {
+      if (created) {
+        this.loadData();
+
+        this.messageService.success('Planned payment was created');
+      }
+    });
   }
 
   reset(): void {
