@@ -51,9 +51,9 @@ export class BudgetBuilderContainerComponent implements OnInit, OnDestroy {
   initialized$ = this.budgetBuilderFacadeService.initialized$;
   budgets$ = this.budgetBuilderFacadeService.budgets$;
   plannedPayments$ = this.budgetBuilderFacadeService.plannedPayments$.pipe(
-    map((plannedPayments) => {
-      return plannedPayments.sort((a) => (a.type === RecordTypeEnum.Income ? -1 : 1));
-    }),
+    map((plannedPayments) =>
+      plannedPayments.sort((a, b) => a.id.localeCompare(b.id)).sort((a) => (a.type === RecordTypeEnum.Income ? -1 : 1)),
+    ),
   );
   summary$ = this.budgetBuilderFacadeService.summary$;
 
