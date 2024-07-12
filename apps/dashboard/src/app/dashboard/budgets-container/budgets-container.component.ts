@@ -6,8 +6,8 @@ import { take } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
@@ -29,8 +29,6 @@ import { BudgetsFacadeService } from './services/budgets-facade.service';
     NzButtonModule,
     NzPopconfirmModule,
     NzTableModule,
-    NzModalModule,
-    NzMessageModule,
     NzIconModule,
     PageHeaderComponent,
     AmountFormatPipe,
@@ -62,7 +60,7 @@ export class BudgetsContainerComponent implements OnInit {
     private modalService: NzModalService,
     private messageService: NzMessageService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {

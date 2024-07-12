@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 import { RoutePathEnum } from '../../core/enums/route-path.enum';
@@ -20,8 +20,6 @@ import { PlannedPaymentsFacadeService } from './services/planned-payments-facade
   imports: [
     CommonModule,
     RouterModule,
-    NzModalModule,
-    NzMessageModule,
     NzTabsModule,
     PageHeaderComponent,
     PlannedPaymentsTableTabComponent,
