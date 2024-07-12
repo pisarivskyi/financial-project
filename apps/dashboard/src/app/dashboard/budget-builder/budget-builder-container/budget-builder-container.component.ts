@@ -6,8 +6,6 @@ import { map } from 'rxjs';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzMessageModule } from 'ng-zorro-antd/message';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
 import { CurrencyEnum, RecordTypeEnum } from '@financial-project/common';
@@ -30,8 +28,6 @@ import { BudgetBuilderFacadeService } from './services/budget-builder-facade.ser
     ReactiveFormsModule,
     NzButtonComponent,
     NzTableModule,
-    NzModalModule,
-    NzMessageModule,
     ToDefaultCurrencyPipe,
     AmountFormatPipe,
   ],

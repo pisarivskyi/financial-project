@@ -5,8 +5,8 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { take } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
@@ -21,16 +21,7 @@ import { ProvidersFacadeService } from './services/providers-facade.service';
 @Component({
   selector: 'fpd-providers-container',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzButtonModule,
-    NzPopconfirmModule,
-    NzTableModule,
-    NzModalModule,
-    NzMessageModule,
-    PageHeaderComponent,
-    NgOptimizedImage,
-  ],
+  imports: [CommonModule, NzButtonModule, NzPopconfirmModule, NzTableModule, PageHeaderComponent, NgOptimizedImage],
   templateUrl: './providers-container.component.html',
   styleUrls: ['./providers-container.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,7 +48,7 @@ export class ProvidersContainerComponent implements OnInit {
     private modalService: NzModalService,
     private messageService: NzMessageService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {

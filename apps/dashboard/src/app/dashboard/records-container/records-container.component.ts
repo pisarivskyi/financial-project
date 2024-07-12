@@ -6,8 +6,8 @@ import { take } from 'rxjs';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
@@ -29,10 +29,8 @@ import { RecordsFacadeService } from './services/records-facade.service';
   imports: [
     CommonModule,
     NzTableModule,
-    NzModalModule,
     NzButtonModule,
     NzPopconfirmModule,
-    NzMessageModule,
     NzIconModule,
     AmountFormatPipe,
     CurrencyFormatPipe,
