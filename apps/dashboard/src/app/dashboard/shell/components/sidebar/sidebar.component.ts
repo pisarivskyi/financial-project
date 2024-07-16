@@ -5,7 +5,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 
-import { RoutePathEnum } from '../../../../core/enums/route-path.enum';
+import { RoutePathEnum } from '../../../../core/routing/enums/route-path.enum';
 import { IconEnum } from '../../../../shared/enums/icon.enum';
 
 @Component({

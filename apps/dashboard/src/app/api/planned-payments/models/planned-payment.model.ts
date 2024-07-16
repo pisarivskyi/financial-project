@@ -2,8 +2,8 @@ import { Expose, Type } from 'class-transformer';
 
 import { CurrencyEnum, PeriodEnum, PlannedPaymentInterface, RecordTypeEnum } from '@financial-project/common';
 
-import { BaseModel } from '../../../core/models/base.model';
 import { CategoryModel } from '../../categories/models/category.model';
+import { BaseModel } from '../../shared/models/base.model';
 
 export class PlannedPaymentModel extends BaseModel implements PlannedPaymentInterface {
   @Expose()
