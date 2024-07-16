@@ -9,6 +9,7 @@ export class CreateCategoryDto extends OmitType(CategoryEntity, [
   'updatedAt',
   'createdBy',
   'parentCategory',
+  'merchantCategoryCodes',
 ]) {
   @IsOptional()
   @IsString()
