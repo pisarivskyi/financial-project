@@ -31,9 +31,14 @@
       <span nz-icon [nzType]="IconEnum.PriceChange"></span><span>Budgets</span>
     </a>
   </li>
-  <li nz-menu-item nzMatchRouter>
+  <li nz-menu-item nzMatchRouter nzMatchRouterExact="true">
     <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.BudgetPlans]">
       <span nz-icon [nzType]="IconEnum.Construction"></span><span>Budget plans</span>
+    </a>
+  </li>
+  <li nz-menu-item nzMatchRouter>
+    <a [routerLink]="['/', RoutePathEnum.Dashboard, RoutePathEnum.BudgetPlans, RoutePathEnum.Builder]">
+      <span nz-icon [nzType]="IconEnum.Construction"></span><span>Budget builder</span>
     </a>
   </li>
   <li nz-menu-item nzMatchRouter>
