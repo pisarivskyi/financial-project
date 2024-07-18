@@ -2,7 +2,7 @@ import { Expose } from 'class-transformer';
 
 import { ProviderDataType, ProviderInterface, ProviderTypeEnum } from '@financial-project/common';
 
-import { BaseModel } from '../../../core/models/base.model';
+import { BaseModel } from '../../shared/models/base.model';
 
 export class ProviderModel extends BaseModel implements ProviderInterface {
   @Expose()

@@ -10,8 +10,8 @@ import {
 } from '@financial-project/common';
 import { ApiMonobank } from '@financial-project/providers';
 
-import { BaseModel } from '../../../core/models/base.model';
 import { CategoryModel } from '../../categories/models/category.model';
+import { BaseModel } from '../../shared/models/base.model';
 
 export class RecordModel extends BaseModel implements RecordInterface {
   @Expose()

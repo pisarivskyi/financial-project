@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 
 import { CategoryInterface } from '@financial-project/common';
 
-import { BaseModel } from '../../../core/models/base.model';
+import { BaseModel } from '../../shared/models/base.model';
 
 export class CategoryModel extends BaseModel implements CategoryInterface {
   name!: string;

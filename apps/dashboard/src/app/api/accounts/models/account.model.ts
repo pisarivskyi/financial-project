@@ -9,7 +9,7 @@ import {
   ProviderTypeEnum,
 } from '@financial-project/common';
 
-import { BaseModel } from '../../../core/models/base.model';
+import { BaseModel } from '../../shared/models/base.model';
 
 export class AccountModel extends BaseModel implements AccountInterface {
   @Expose()
