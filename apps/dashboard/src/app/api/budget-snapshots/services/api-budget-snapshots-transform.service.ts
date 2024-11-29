@@ -7,6 +7,7 @@ import { BudgetSnapshotInterface, PaginatedResponseInterface } from '@financial-
 import { PaginatedResponse } from '../../../core/pagination/classes/paginated-response.class';
 import { PaginationParamsInterface } from '../../../core/pagination/interfaces/pagination-params.interface';
 import { toPaginationQueryParams } from '../../../core/pagination/utils/pagination-utils';
+import { BudgetModel } from '../../budgets/models/budget.model';
 import { BudgetSnapshotModel } from '../models/budget-snapshot.model';
 import { InsertBudgetSnapshotDataType } from '../types/api-budget-snapshots.types';
 
@@ -33,9 +34,15 @@ export class ApiBudgetSnapshotsTransformService {
     return this.toBudgetSnapshotModel(response);
   }
 
-  toInsertBudgetSnapshot({ id }: BudgetSnapshotModel): InsertBudgetSnapshotDataType {
+  toInsertBudgetSnapshot(budgetSnapshotToSave: BudgetSnapshotModel | BudgetModel): InsertBudgetSnapshotDataType {
     return {
-      originalId: id,
+      id: budgetSnapshotToSave.id,
+      name: budgetSnapshotToSave.name,
+      amount: budgetSnapshotToSave.amount,
+      currencyCode: budgetSnapshotToSave.currencyCode,
+      color: budgetSnapshotToSave.color,
+      period: budgetSnapshotToSave.period,
+      categoryIds: budgetSnapshotToSave.categories.map((category) => category.id),
     };
   }
 

@@ -6,7 +6,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
-import { RoutePathEnum } from '../../core/enums/route-path.enum';
+import { RoutePathEnum } from '../../core/routing/enums/route-path.enum';
 import { PageHeaderActionInterface } from '../../shared/components/page-header/interfaces/page-header-action.interface';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { AddPlannedPaymentModalComponent } from './components/add-planned-payment-modal/add-planned-payment-modal.component';

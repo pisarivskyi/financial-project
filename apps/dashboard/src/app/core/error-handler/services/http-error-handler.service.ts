@@ -11,5 +11,7 @@ export class HttpErrorHandlerService extends ErrorHandler {
 
   override handleError(error: HttpErrorResponse): void {
     this.notificationService.error('Network error', error.message);
+
+    super.handleError(error);
   }
 }

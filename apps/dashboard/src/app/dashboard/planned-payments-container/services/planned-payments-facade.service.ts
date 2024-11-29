@@ -7,8 +7,8 @@ import { Observable, finalize, map, switchMap, take, tap } from 'rxjs';
 
 import { CategoryModel } from '../../../api/categories/models/category.model';
 import { PlannedPaymentModel } from '../../../api/planned-payments/models/planned-payment.model';
-import { RoutePathEnum } from '../../../core/enums/route-path.enum';
 import { updatePaginationData, withPaginationData } from '../../../core/pagination/utils/pagination-utils';
+import { RoutePathEnum } from '../../../core/routing/enums/route-path.enum';
 import { CategoriesService } from '../../services/categories.service';
 import { PlannedPaymentsService } from '../../services/planned-payments.service';
 

@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 
 import { BudgetSnapshotModel } from '../../api/budget-snapshots/models/budget-snapshot.model';
 import { ApiBudgetSnapshotsService } from '../../api/budget-snapshots/services/api-budget-snapshots.service';
+import { BudgetModel } from '../../api/budgets/models/budget.model';
 import { PaginatedResponse } from '../../core/pagination/classes/paginated-response.class';
 import { PaginationParamsInterface } from '../../core/pagination/interfaces/pagination-params.interface';
 
@@ -16,8 +17,8 @@ export class BudgetSnapshotsService {
     return this.apiBudgetSnapshotsService.extractBudgetSnapshots$(pagination);
   }
 
-  saveBudgetSnapshot$(categoryToSave: BudgetSnapshotModel): Observable<BudgetSnapshotModel> {
-    return this.apiBudgetSnapshotsService.insertBudgetSnapshot$(categoryToSave);
+  saveBudgetSnapshot$(budgetSnapshotToSave: BudgetSnapshotModel | BudgetModel): Observable<BudgetSnapshotModel> {
+    return this.apiBudgetSnapshotsService.insertBudgetSnapshot$(budgetSnapshotToSave);
   }
 
   deleteBudgetSnapshot$(id: string): Observable<BudgetSnapshotModel> {

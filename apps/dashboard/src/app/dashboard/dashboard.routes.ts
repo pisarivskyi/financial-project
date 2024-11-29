@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 
-import { RoutePathEnum } from '../core/enums/route-path.enum';
-import { budgetBuilderRoutes } from './budget-builder/budget-builder.routes';
+import { RoutePathEnum } from '../core/routing/enums/route-path.enum';
+import { budgetPlansRoutes } from './budget-plans/budget-plans.routes';
 import { paymentRoutes } from './planned-payments-container/planned-payments-container.routes';
 import { ShellComponent } from './shell/shell.component';
 
@@ -54,8 +54,8 @@ export const dashboardRoutes: Route[] = [
           import('./budgets-container/budgets-container.component').then((mod) => mod.BudgetsContainerComponent),
       },
       {
-        path: RoutePathEnum.BudgetBuilder,
-        loadChildren: () => budgetBuilderRoutes,
+        path: RoutePathEnum.BudgetPlans,
+        loadChildren: () => budgetPlansRoutes,
       },
       {
         path: RoutePathEnum.Settings,

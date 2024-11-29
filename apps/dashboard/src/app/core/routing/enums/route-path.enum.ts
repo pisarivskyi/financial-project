@@ -17,5 +17,6 @@ export enum RoutePathEnum {
   PlannedPayments = 'planned-payments',
   Table = 'table',
   Calendar = 'calendar',
-  BudgetBuilder = 'budget-builder',
+  BudgetPlans = 'budget-plans',
+  Builder = 'builder',
 }
