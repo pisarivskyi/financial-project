@@ -33,9 +33,17 @@ export class ApiPlannedPaymentSnapshotsTransformService {
     return this.toPlannedPaymentSnapshotModel(response);
   }
 
-  toInsertPlannedPaymentSnapshot({ id }: PlannedPaymentSnapshotModel): InsertPlannedPaymentSnapshotDataType {
+  toInsertPlannedPaymentSnapshot(
+    plannedPaymentSnapshotToSave: PlannedPaymentSnapshotModel,
+  ): InsertPlannedPaymentSnapshotDataType {
     return {
-      originalId: id,
+      id: plannedPaymentSnapshotToSave.id,
+      name: plannedPaymentSnapshotToSave.name,
+      amount: plannedPaymentSnapshotToSave.amount,
+      type: plannedPaymentSnapshotToSave.type,
+      currencyCode: plannedPaymentSnapshotToSave.currencyCode,
+      period: plannedPaymentSnapshotToSave.period,
+      categoryId: plannedPaymentSnapshotToSave.category.id,
     };
   }
 

@@ -1,18 +1,23 @@
 import { Injectable, inject } from '@angular/core';
 import { createStore, select, setProp, setProps, withProps } from '@ngneat/elf';
 import { getRequestResult, trackRequestResult } from '@ngneat/elf-requests';
+import { instanceToInstance, plainToClassFromExist } from 'class-transformer';
 import { DateTime } from 'luxon';
-import { forkJoin, map, take } from 'rxjs';
+import { forkJoin, map, switchMap, take, tap } from 'rxjs';
 
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 import { PeriodEnum, RecordTypeEnum } from '@financial-project/common';
 
+import { BudgetPlanModel } from '../../../../api/budget-plans/models/budget-plan.model';
+import { BudgetSnapshotModel } from '../../../../api/budget-snapshots/models/budget-snapshot.model';
 import { BudgetModel } from '../../../../api/budgets/models/budget.model';
+import { PlannedPaymentSnapshotModel } from '../../../../api/planned-payment-snapshots/models/planned-payment-snapshot.model';
 import { PlannedPaymentModel } from '../../../../api/planned-payments/models/planned-payment.model';
 import { AddBudgetModalComponent } from '../../../budgets-container/components/add-budget-modal/add-budget-modal.component';
 import { AddPlannedPaymentModalComponent } from '../../../planned-payments-container/components/add-planned-payment-modal/add-planned-payment-modal.component';
+import { BudgetPlansService } from '../../../services/budget-plans.service';
 import { BudgetSnapshotsService } from '../../../services/budget-snapshots.service';
 import { BudgetsService } from '../../../services/budgets.service';
 import { CurrencyRatesService } from '../../../services/currency-rates.service';
@@ -41,6 +46,7 @@ export class BudgetBuilderFacadeService {
 
   private readonly requestKeys = {
     initialize: 'initialize',
+    saveBudgetPlan: 'saveBudgetPlan',
   };
 
   private store = createStore(
@@ -73,6 +79,8 @@ export class BudgetBuilderFacadeService {
 
   private modalService = inject(NzModalService);
   private messageService = inject(NzMessageService);
+
+  private budgetPlansService = inject(BudgetPlansService);
 
   private budgetSnapshotsService = inject(BudgetSnapshotsService);
   private plannedPaymentSnapshotsService = inject(PlannedPaymentSnapshotsService);
@@ -207,6 +215,104 @@ export class BudgetBuilderFacadeService {
         this.messageService.success('Planned payment was created');
       }
     });
+  }
+
+  saveBudgetPlan(): void {
+    console.log('saving...');
+
+    this.store
+      .pipe(
+        take(1),
+        select(({ selectedDate, budgets, plannedPayments }) => ({ selectedDate, budgets, plannedPayments })),
+        switchMap(({ selectedDate, budgets, plannedPayments }) => {
+          return forkJoin([
+            forkJoin([
+              ...budgets.map((budget) => {
+                const budgetSnapshot = plainToClassFromExist(new BudgetSnapshotModel(), budget);
+                // budgetSnapshot.budgetPlan = budgetPlan;
+
+                console.log(budgetSnapshot);
+
+                return this.budgetSnapshotsService.saveBudgetSnapshot$(budget);
+              }),
+            ]),
+            forkJoin([
+              ...plannedPayments
+                .reduce<PlannedPaymentModel[]>((acc, item) => {
+                  if (acc.find((i) => i.id === item.id)) {
+                    return acc;
+                  }
+
+                  acc.push(item);
+
+                  return acc;
+                }, [])
+                .map((plannedPayment) => {
+                  const plannedPaymentSnapshot = plainToClassFromExist(
+                    new PlannedPaymentSnapshotModel(),
+                    plannedPayment,
+                  );
+                  // plannedPaymentSnapshot.budgetPlan = budgetPlan;
+
+                  console.log(plannedPaymentSnapshot);
+
+                  return this.plannedPaymentSnapshotsService.savePlannedPaymentSnapshot$(plannedPaymentSnapshot);
+                }),
+            ]),
+          ]).pipe(
+            switchMap(([budgetSnapshots, plannedPaymentSnapshots]) => {
+              const budgetPlan = new BudgetPlanModel();
+              budgetPlan.month = selectedDate.getMonth() + 1;
+              budgetPlan.year = selectedDate.getFullYear();
+              budgetPlan.budgetSnapshots = budgetSnapshots;
+              budgetPlan.plannedPaymentSnapshots = plannedPaymentSnapshots;
+
+              return this.budgetPlansService.saveBudgetPlan$(budgetPlan);
+            }),
+          );
+
+          // return this.budgetPlansService.saveBudgetPlan$(budgetPlan).pipe(
+          //   switchMap((budgetPlan) =>
+          //     forkJoin([
+          //       forkJoin([
+          //         ...budgets.map((budget) => {
+          //           const budgetSnapshot = plainToClassFromExist(new BudgetSnapshotModel(), budget);
+          //           budgetSnapshot.budgetPlan = budgetPlan;
+          //
+          //           console.log(budgetSnapshot);
+          //
+          //           return this.budgetSnapshotsService.saveBudgetSnapshot$(budget);
+          //         }),
+          //       ]).pipe(tap((budgetSnapshots) => budgetPlan.budgetSnapshots)),
+          //       forkJoin([
+          //         ...plannedPayments
+          //           .reduce<PlannedPaymentModel[]>((acc, item) => {
+          //             if (acc.find((i) => i.id === item.id)) {
+          //               return acc;
+          //             }
+          //
+          //             acc.push(item);
+          //
+          //             return acc;
+          //           }, [])
+          //           .map((plannedPayment) => {
+          //             const plannedPaymentSnapshot = plainToClassFromExist(
+          //               new PlannedPaymentSnapshotModel(),
+          //               plannedPayment,
+          //             );
+          //             plannedPaymentSnapshot.budgetPlan = budgetPlan;
+          //
+          //             console.log(plannedPaymentSnapshot);
+          //
+          //             return this.plannedPaymentSnapshotsService.savePlannedPaymentSnapshot$(plannedPaymentSnapshot);
+          //           }),
+          //       ]),
+          //     ]),
+          //   ),
+          // );
+        }),
+      )
+      .subscribe();
   }
 
   reset(): void {

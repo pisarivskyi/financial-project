@@ -7,6 +7,7 @@ import { HttpMethodEnum } from '../../../core/communication/enums/http-method.en
 import { CommunicationService } from '../../../core/communication/services/communication.service';
 import { PaginatedResponse } from '../../../core/pagination/classes/paginated-response.class';
 import { PaginationParamsInterface } from '../../../core/pagination/interfaces/pagination-params.interface';
+import { BudgetModel } from '../../budgets/models/budget.model';
 import { BudgetSnapshotModel } from '../models/budget-snapshot.model';
 import { ApiBudgetSnapshotsTransformService } from './api-budget-snapshots-transform.service';
 
@@ -34,7 +35,7 @@ export class ApiBudgetSnapshotsService {
       .pipe(map((response) => this.apiBudgetSnapshotsTransformService.fromExtractBudgetSnapshots(response)));
   }
 
-  insertBudgetSnapshot$(budgetSnapshotToSave: BudgetSnapshotModel): Observable<BudgetSnapshotModel> {
+  insertBudgetSnapshot$(budgetSnapshotToSave: BudgetSnapshotModel | BudgetModel): Observable<BudgetSnapshotModel> {
     return this.communicationService
       .makeRequest<BudgetSnapshotInterface>({
         method: HttpMethodEnum.Post,

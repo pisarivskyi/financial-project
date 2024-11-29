@@ -78,5 +78,7 @@ export class BudgetBuilderContainerComponent implements OnInit, OnDestroy {
     this.budgetBuilderFacadeService.addPlannedPayment();
   }
 
-  // onSave(): void {}
+  onSave(): void {
+    this.budgetBuilderFacadeService.saveBudgetPlan();
+  }
 }

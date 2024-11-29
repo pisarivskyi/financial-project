@@ -8,10 +8,14 @@ import { BaseModel } from '../../shared/models/base.model';
 
 export class BudgetPlanModel extends BaseModel implements BudgetPlanInterface {
   year!: number;
+
   month!: number;
+
   @Type(() => BudgetSnapshotModel)
   budgetSnapshots!: BudgetSnapshotModel[];
+
   @Type(() => PlannedPaymentSnapshotModel)
   plannedPaymentSnapshots!: PlannedPaymentSnapshotModel[];
+
   createdBy!: string;
 }

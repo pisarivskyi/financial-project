@@ -17,7 +17,7 @@ export class GlobalErrorHandlerService extends ErrorHandler {
     super();
   }
 
-  override async handleError(error: Error): Promise<void> {
+  override handleError(error: Error): void {
     if (error instanceof HttpErrorResponse) {
       if (error.error?.error) {
         this.apiErrorHandlerService.handleError(error);

@@ -5,8 +5,11 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { take } from 'rxjs';
 
 import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzPopconfirmDirective } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
+import { BudgetPlanModel } from '../../../api/budget-plans/models/budget-plan.model';
 import { RoutePathEnum } from '../../../core/routing/enums/route-path.enum';
 import { PageHeaderActionInterface } from '../../../shared/components/page-header/interfaces/page-header-action.interface';
 import { PageHeaderComponent } from '../../../shared/components/page-header/page-header.component';
@@ -16,7 +19,7 @@ import { BudgetPlansWorkspaceFacadeService } from './services/budget-plans-works
 @Component({
   selector: 'fpd-budget-plans-workspace-container',
   standalone: true,
-  imports: [CommonModule, PageHeaderComponent, NzTableModule, NzButtonModule, NzButtonComponent],
+  imports: [CommonModule, PageHeaderComponent, NzTableModule, NzButtonModule, NzButtonComponent, NzPopconfirmDirective],
   templateUrl: './budget-plans-workspace-container.component.html',
   styleUrl: './budget-plans-workspace-container.component.less',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,6 +28,7 @@ export class BudgetPlansWorkspaceContainerComponent implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private budgetPlansWorkspaceFacadeService = inject(BudgetPlansWorkspaceFacadeService);
+  private messageService = inject(NzMessageService);
 
   budgetPlans$ = this.budgetPlansWorkspaceFacadeService.budgetPlans$;
 
@@ -67,6 +71,14 @@ export class BudgetPlansWorkspaceContainerComponent implements OnInit {
         ...queryParams,
         page: pageIndex,
       });
+    });
+  }
+
+  onDeleteBudgetPlan(budgetPlan: BudgetPlanModel): void {
+    this.budgetPlansWorkspaceFacadeService.deleteBudgetPlan$(budgetPlan.id).subscribe(() => {
+      this.budgetPlansWorkspaceFacadeService.loadBudgetPlans();
+
+      this.messageService.success('Budget plan was deleted');
     });
   }
 
